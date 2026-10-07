@@ -87,9 +87,9 @@ Confidence intervals come from a bootstrap over scenarios. Everything is scored 
 
 ## Compute, timeline and risks
 
-Ada server: RTX 2080 Ti cards with 11 GB, up to 4 at a time, plus our own machines. Qwen3 8B in 4 bit and every small judge fit on one card, served with vLLM. Hours are estimates until measured speed numbers and the pilot's token counts arrive at Gate 1.
+Ada server: RTX 2080 Ti cards with 11 GB, up to 4 at a time, plus our own machines. Measured on one card with Qwen3 8B in 4 bit on vLLM 0.19.1: a 6k prompt prefills in 0.33 s once its 5k of tool docs is cached, decode peaking at about 350 tokens/s over 8 streams, and room for 17,776 cached tokens. A BFCL task takes about 62k tokens, so one card runs about 870 tasks an hour with no judge and about 150 with the reasoning LLM judge.
 
-GPU hours: setup, cleaning and pilot 4; natural training runs 15; directed runs with Qwen3 32B about 40 card hours (10 h on 4 cards, plans reused from the natural runs); test passes and all offline judges 21; finetunes for the main model, ablations and seeds 24; online BFCL 111 (LLM judge baseline 40, full system 16 and 11 each for no judge, plain rules, Laya as is, Granite Guardian and Laya finetuned alone); online AgentDojo for 7 systems with 3 runs 30; correction action ablation 16. Total about 260, 320 with reruns, about 3 days on 4 cards. No paid API.
+Card hours: setup, cleaning and pilot 4; natural training runs 2; directed runs with Qwen3 32B about 10 (estimate, redone at Gate 1); test passes and all offline judges 5; finetunes for the main model, ablations and seeds 24; online BFCL, 1,200 runs per system, 27 (no judge 1.4, plain rules 1.5, LLM judge baseline 8, Laya as is 3, Granite Guardian 6, Laya finetuned alone 3, full system about 4.5); online AgentDojo for 7 systems with 3 runs 8; correction action ablation 5. Total about 85, 110 with reruns, about a day on 4 cards. No paid API.
 
 ![Timeline](figs/d5.png){: style="width:56%"}
 
