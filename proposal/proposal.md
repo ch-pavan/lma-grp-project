@@ -55,7 +55,7 @@ The order is code checks, then Q1 and Q2, then Q3, so Q3 decides only calls Q1 p
 
 ## Training data and labels
 
-**Directed runs (new).** A stronger model acts as the doer in the same BFCL environments with the same planner and tool docs, on training scenarios only: Qwen3 32B in 4 bit, split over 4 Ada cards since its 19.3 GB of weights leave too little cache room on 2. Clean runs solve the task. Directed runs tell it to commit exactly one error of a named type at a named step and otherwise behave normally, with every type spread over every domain that has a fitting tool:
+**Directed runs (new).** A stronger model acts as the doer in the same BFCL environments with the same planner and tool docs, on training scenarios only: Qwen3 32B in 4 bit, split over 4 Ada cards since its roughly 19 GB of weights leave too little cache room on 2. Clean runs solve the task. Directed runs tell it to commit exactly one error of a named type at a named step and otherwise behave normally, with every type spread over every domain that has a fitting tool:
 
 | Error type | Injected as | Confirmed by |
 |---|---|---|
@@ -77,7 +77,7 @@ Online on whole tasks: no judge, plain rules (no evidence is made up, a success 
 | Comparison | Measured by | Where |
 |---|---|---|
 | Every judge per question; as is vs finetuned | F1, precision and recall per class against hand labels; any flag F1 on the wrong steps of AgentProcessBench [26] and AgentHallu [3] | offline |
-| State parts: drop the plan, trace or evidence list | F1, also on turns with 3 or more reference calls (14% of call turns, 405 of 2,924 by our count) | offline, 3 finetunes |
+| State parts: drop the plan, trace or evidence list | F1, also on turns with 3 or more reference calls (about 14% of call turns) | offline, 3 finetunes |
 | Escalation budget 0, 10, 20, 30, 100% | F1 against judge tokens | offline |
 | Directed runs in training or not; Q1 answer fed to Q2 or not | F1 on natural test errors | offline, 2 finetunes |
 | All online systems | task accuracy (BFCL and AgentDojo), tool call accuracy, unneeded irreversible calls run unasked, tokens and time per task | online |
@@ -87,9 +87,9 @@ Confidence intervals come from a bootstrap over scenarios. Everything is scored 
 
 ## Compute, timeline and risks
 
-Ada server: RTX 2080 Ti cards with 11 GB, up to 4 at a time, plus our own machines. Measured on one card with Qwen3 8B in 4 bit on vLLM 0.19.1: a 6k prompt prefills in 0.33 s once its 5k of tool docs is cached, decode peaking at about 350 tokens/s over 8 streams, and room for 17,776 cached tokens. A BFCL task takes about 62k tokens, so one card runs about 870 tasks an hour with no judge and about 150 with the reasoning LLM judge.
+Ada server: RTX 2080 Ti cards with 11 GB, up to 4 at a time, plus our own machines. Qwen3 8B in 4 bit fits one card under vLLM, with the shared tool docs cached across calls. A BFCL task should take roughly 60k tokens, so we expect several hundred tasks per card hour with no judge and around 150 with the reasoning LLM judge.
 
-Card hours: setup, cleaning and pilot 4; natural training runs 2; directed runs with Qwen3 32B about 10 (estimate, redone at Gate 1); test passes and all offline judges 5; finetunes for the main model, ablations and seeds 24; online BFCL, 1,200 runs per system, 27 (no judge 1.4, plain rules 1.5, LLM judge baseline 8, Laya as is 3, Granite Guardian 6, Laya finetuned alone 3, full system about 4.5); online AgentDojo for 7 systems with 3 runs 8; correction action ablation 5. Total about 85, 110 with reruns, about a day on 4 cards. No paid API.
+Card hours, as educated guesses: setup, cleaning and pilot 4; natural training runs 2; directed runs with Qwen3 32B 10; test passes and all offline judges 5; finetunes for the main model, ablations and seeds 24; online BFCL with 1,200 runs per system about 30, mostly the LLM judge baseline and Granite Guardian; online AgentDojo 8; correction action ablation 5. Total about 90, 120 with reruns, about a day on 4 cards. No paid API. The pilot measures real speeds and the plan is redone at Gate 1.
 
 ![Timeline](figs/d5.png){: style="width:56%"}
 
