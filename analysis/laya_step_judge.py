@@ -1,6 +1,7 @@
 # Finetuned Laya as step check plus done check inside Shuban's harness (actions.py, rollback modes such as rb2c).
 # A proposed call is judged by the step head (P(bad) >= LAYA_STEP_THR -> off_track, so the call is rolled back and
-# resampled); a closing message by the done head (P(not done) >= LAYA_DONE_THR -> false_claim), the same as S_layadone.
+# resampled); a closing message passes the gate and is judged by the done head at the done check
+# (P(not done) >= LAYA_DONE_THR -> not done), the same as S_layadone.
 # Selected as system S_layastep; env LAYA_DIR, LAYA_STEP_WEIGHTS, LAYA_STEP_THR, LAYA_DONE_WEIGHTS, LAYA_DONE_THR.
 import asyncio, os, sys, threading
 
@@ -34,6 +35,7 @@ class LayaStepJudge:
         self.step = Head(model_dir, step_w, T.STEP_QUESTION, device)
         self.done = Head(model_dir, done_w, T.QUESTION, device)
         self.step_thr, self.done_thr, self.lock = step_thr, done_thr, threading.Lock()
+        self.gated = {}
 
     def _p(self, head, text):
         with self.lock:
@@ -42,6 +44,15 @@ class LayaStepJudge:
     async def judge(self, ctx, step):
         v = {"q1": "on_track", "q2": "none", "q3": "needed", "jin": 0, "jout": 0}
         if step["kind"] == "msg":
+            # actions.py asks about a closing message twice: first as a gate (a flag throws it away and resamples), then,
+            # once it passed, as the done check with the same text. The done head was trained for the done check only
+            # (job 49671 gated with it: 4.7 closing messages thrown away per task, -5.8 points), so the gate always
+            # passes and the head answers the second call. Keyed by the episode's requests list, one per episode.
+            key = id(ctx["requests"])
+            if self.gated.get(key) != step["text"]:
+                self.gated[key] = step["text"]
+                return v
+            del self.gated[key]
             calls = [{"call": c, "out": str(o)[:300]} for c, o in ctx.get("turn_calls", [])]
             p = await asyncio.to_thread(self._p, self.done, done_text(ctx["requests"], calls, step["text"]))
             return {**v, "q2": "false_claim" if p >= self.done_thr else "none", "p_not_done": round(p, 4)}
