@@ -41,4 +41,4 @@ Before a real run, replay the gold calls (`python test_gold.py`): every task mus
 
 ## Gap against the latest proposal
 
-Q1 to Q3 and the fixed rules are in place: Q3 uses the irreversible tool list in run.py, an ask is counted and the scripted user always approves. The remaining gap is the state layout. Ours puts the proposed step last and does not cap it at 1,024 tokens; the proposal's Laya state needs the proposed step first and a hard 1,024 token budget (about 768 filled by code). Fix that in the state builder before the Laya runs.
+Q1 to Q3, the fixed rules and the state layout now match the proposal. Laya and the LLM judge both get the state with the proposed step first, then the evidence list, requests, plan and the last three calls, trimmed oldest first to 768 tokens filled by code (4 characters per token when the ModernBERT tokenizer is not cached, so the 1,024 token cap holds); `--state legacy` restores the old layout.

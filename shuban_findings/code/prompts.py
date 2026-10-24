@@ -139,3 +139,82 @@ def build_state(requests, plan, recent, step, ev, budget_chars=3000):
     lines.append("EVIDENCE: " + ("; ".join(f"{k}={v!r}: {w}" for k, v, w in ev) if ev else "(no argument values)"))
     s = "\n".join(lines)
     return s[-budget_chars:] if len(s) > budget_chars else s
+
+
+# ---------------- proposal layout (step first, token budget) ----------------
+_TOK = []
+
+
+def count_tokens(s):
+    """ModernBERT tokenizer when it is cached locally, else a conservative 4 characters per token."""
+    if not _TOK:
+        try:
+            from transformers import AutoTokenizer
+            _TOK.append(AutoTokenizer.from_pretrained("answerdotai/ModernBERT-base", local_files_only=True))
+        except Exception:
+            _TOK.append(None)
+    if _TOK[0] is not None:
+        return len(_TOK[0](s, add_special_tokens=False)["input_ids"])
+    return -(-len(s) // 4)
+
+
+def build_state_proposal(requests, plan, recent, step, ev, budget_tokens=768):
+    """Proposal state for Laya: proposed step, evidence, requests, plan, last three calls. Laya keeps the start of
+    its input, so the step goes first and the oldest and least important parts are trimmed first to fit the budget."""
+    n_req, n_calls, call_cut, plan_cut, n_ev, req_cut, step_cut = 4, 3, 200, 600, len(ev), 500, 400
+
+    def render():
+        head = "PROPOSED TOOL CALL" if step["kind"] == "call" else "PROPOSED CLOSING MESSAGE"
+        lines = [f"{head}: {cut(step['text'], step_cut)}"]
+        shown = ev[:n_ev]
+        lines.append("EVIDENCE: " + ("; ".join(f"{k}={v!r}: {w}" for k, v, w in shown) if shown else "(no argument values)")
+                     + (f"; (+{len(ev) - n_ev} more)" if n_ev < len(ev) else ""))
+        lines.append("LATEST USER REQUEST: " + cut(requests[-1] if requests else "(none)", req_cut))
+        earlier = requests[-n_req:-1] if n_req > 1 else []
+        if earlier:
+            lines.append("EARLIER REQUESTS: " + " | ".join(cut(r, 200) for r in earlier))
+        if plan_cut:
+            lines.append("TURN PLAN: " + cut(plan or "(none)", plan_cut))
+        lines.append("LAST CALLS:")
+        for c, o in (recent[-n_calls:] if n_calls else []):
+            lines.append(f"- {cut(c, call_cut)} -> {cut(o, call_cut)}")
+        if not recent or not n_calls:
+            lines.append("- (none)")
+        return "\n".join(lines)
+
+    # each reducer trims one notch; order = least important first
+    def drop_earlier():
+        nonlocal n_req
+        n_req -= 1
+    def shrink_calls():
+        nonlocal call_cut
+        call_cut = max(40, call_cut // 2)
+    def drop_call():
+        nonlocal n_calls
+        n_calls -= 1
+    def shrink_plan():
+        nonlocal plan_cut
+        plan_cut = plan_cut // 2 if plan_cut > 100 else 0
+    def shrink_ev():
+        nonlocal n_ev
+        n_ev = max(1, n_ev - 2) if n_ev > 1 else 0
+    def shrink_req():
+        nonlocal req_cut
+        req_cut = max(100, req_cut // 2)
+    def shrink_step():
+        nonlocal step_cut
+        step_cut = max(100, step_cut // 2)
+
+    reducers = ([(drop_earlier, 3)] + [(shrink_calls, 2)] + [(drop_call, 3)] + [(shrink_plan, 4)] + [(shrink_ev, 20)]
+                + [(shrink_req, 3)] + [(shrink_step, 2)])
+    s = render()
+    for fn, times in reducers:
+        for _ in range(times):
+            if count_tokens(s) <= budget_tokens:
+                return s
+            fn()
+            s = render()
+    # last resort: Laya truncates the end anyway, so cut there and the step stays first
+    while count_tokens(s) > budget_tokens:
+        s = s[:int(len(s) * 0.9)]
+    return s

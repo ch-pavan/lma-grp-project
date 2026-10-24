@@ -25,13 +25,15 @@ class LayaJudge:
         self.agent = laya.load("convaiinnovations/laya-typed-decisions", device=getattr(args, "laya_device", "cuda:0"))
         self.irr = irreversible
         self.lock = threading.Lock()
+        self.state_layout = getattr(args, "state", "proposal")
 
     def _predict(self, state, qs):
         with self.lock:
             return self.agent.predict(state, qs)["answers"]
 
     async def judge(self, ctx, step):
-        state = P.build_state(ctx["requests"], ctx["plan"], ctx["recent"], step, step["ev"])
+        build = P.build_state_proposal if self.state_layout == "proposal" else P.build_state
+        state = build(ctx["requests"], ctx["plan"], ctx["recent"], step, step["ev"])
         qs = {"q1": Q1, "q2": Q2_CALL if step["kind"] == "call" else Q2_MSG}
         if step.get("name") in self.irr:
             qs["q3"] = Q3

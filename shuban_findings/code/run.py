@@ -161,10 +161,12 @@ class RulesJudge:
 VERDICT_RE = re.compile(r"VERDICT\s+Q1\s*=\s*(on_track|off_track)\s+Q2\s*=\s*(none|made_up_value|false_claim)", re.I)
 class LLMJudge:
     name = "S3_llm_judge"
-    def __init__(self, llm):
+    def __init__(self, llm, state_layout="legacy"):
         self.llm = llm
+        self.state_layout = state_layout
     async def judge(self, ctx, step):
-        state = P.build_state(ctx["requests"], ctx["plan"], ctx["recent"], step, step["ev"])
+        build = P.build_state_proposal if self.state_layout == "proposal" else P.build_state
+        state = build(ctx["requests"], ctx["plan"], ctx["recent"], step, step["ev"])
         msg, pin, pout = await self.llm.chat([{"role": "system", "content": P.JUDGE_GUIDE}, {"role": "user", "content": state}],
                                              think=True, max_tokens=1536)
         m = VERDICT_RE.search(strip_think(msg.content)) or VERDICT_RE.search(msg.content or "")
@@ -181,7 +183,7 @@ def make_judge(system, llm, args):
     if system == "S2_rules":
         return RulesJudge()
     if system == "S3_llm_judge":
-        return LLMJudge(llm)
+        return LLMJudge(llm, getattr(args, "state", "proposal"))
     if system == "S4a_laya":
         from judges_small import LayaJudge
         return LayaJudge(args, rule_checks, IRREVERSIBLE)
@@ -363,6 +365,8 @@ async def main():
     ap.add_argument("--model", default="Qwen/Qwen3-8B-AWQ")
     ap.add_argument("--granite-url", default="http://localhost:8001/v1")
     ap.add_argument("--laya-device", default="cuda:0")
+    ap.add_argument("--state", default="proposal", choices=["proposal", "legacy"],
+                    help="judge state for Laya and the LLM judge: proposal = step first, evidence, requests, plan, last calls, 768 token budget")
     ap.add_argument("--out", required=True)
     ap.add_argument("--shard", default="0/1", help="i/n: run every n-th episode starting at i")
     a = ap.parse_args()
