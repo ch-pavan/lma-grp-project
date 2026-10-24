@@ -172,3 +172,20 @@ Same server as before (vLLM 0.27.1, 32k, reasoning off for the agent). Mode `dc`
 - Laya beats the 9B SLM judge offline (F1 0.53 vs 0.41) and online (+2.5 vs +0.0) at almost no judge cost and half the time per task, and gets close to the oracle ceiling.
 - No online difference is significant: 120 tasks is too few, and with this agent the ceiling of the done check alone is small (+3.3). Shuban's oracle with rollback and the done check reached +9.2 on Qwen3.5 4B, so a step checker that drives rollback is the lever with the larger ceiling.
 - The 9B judge thinks about 2,400 tokens per done check (93 s each under load); 20 of 495 offline answers did not parse.
+
+### Annotator guide v2 on val (`annotate.py --guide v2`, about $1.20)
+
+Rewrite aimed at the v1 disagreements (DeepSeek said unsupported_claim where GLM said done in 36 turn ends; DeepSeek called retries, navigation and reads off track in 65 calls). Turn ends: checks in a fixed order, extra detail from earlier turns or values that could sit in a cut output are not unsupported claims, should_ask_user only for state changes, asking for a value a tool could look up is missing_action. Calls: off track only for one of five named reasons (wrong target, unrequested change, goal swap, early stop, should ask), reads, navigation, logins and retries are on track, on track when unsure. Same models, same 495 turn ends and 1,277 calls, blind to the oracle.
+
+| Comparison | v1: agree / kappa / AC1 | v2: agree / kappa / AC1 |
+|---|---|---|
+| Turn ends, DeepSeek vs GLM (done vs not) | 85% / 0.54 / 0.77 | 90% / 0.61 / 0.87 |
+| Turn ends, four typed answers | 84% / 0.54 / 0.82 | 90% / 0.62 / 0.89 |
+| Calls off track, DeepSeek vs GLM | 93% / 0.61 / 0.92 | **98% / 0.73 / 0.98** |
+| Turn ends, both agree, vs oracle | 85% / 0.47 / 0.78 | 86% / 0.44 / 0.81 |
+| Calls off track vs oracle (DeepSeek, GLM) | kappa 0.08, 0.04 | kappa 0.15, 0.11 |
+
+- Calls now clear the 0.7 bar. Flags dropped from 175 and 115 to 45 and 44, and are more precise: 39 and 37 of the 54 calls each flags (off track or made up value) carry one of the four step labels, against 74 of 175 and 51 of 115 under v1.
+- Turn ends improve but stay under 0.7 (0.61). The rest of the split is mostly missing_action vs done when the agent asks the user or stops after an error; the 100 step human pilot decides these.
+- The oracle's off track label still disagrees with both LLMs under v2 (kappa 0.11 to 0.15), so it stays out of training; the narrower step labels replace it.
+- v1 stays the default in `annotate.py` so the earlier numbers reproduce.
