@@ -189,3 +189,13 @@ Rewrite aimed at the v1 disagreements (DeepSeek said unsupported_claim where GLM
 - Turn ends improve but stay under 0.7 (0.61). The rest of the split is mostly missing_action vs done when the agent asks the user or stops after an error; the 100 step human pilot decides these.
 - The oracle's off track label still disagrees with both LLMs under v2 (kappa 0.11 to 0.15), so it stays out of training; the narrower step labels replace it.
 - v1 stays the default in `annotate.py` so the earlier numbers reproduce.
+
+### Deferred: human adjudication round for turn ends (planned, not run yet)
+
+The call labels pass (kappa 0.73) and are used from now on. The turn end labels (kappa 0.61) wait for one human round, done later so it does not block the finetune work:
+
+1. Two of us label about 100 val turn ends blind to the LLM answers and the oracle: the 52 where DeepSeek and GLM split under v2 (listed in `analysis/v2_turn_disagreements.jsonl`: 31 missing_action vs done, 12 unsupported_claim vs done, 4 should_ask_user vs done, 5 other or unparsed) plus about 50 where they agree, as a check. Settle our own differences, then report human vs human and human vs each LLM.
+2. Write guide v3 from those decisions (mainly: when asking the user or stopping after an error counts as done).
+3. No separate paid rerun on val, since tuning and measuring on the same items would inflate kappa. v3 is first measured on fresh items, the 3 recorded test passes, which have to be labelled anyway (about $2). If it reaches 0.7 there, those become the test labels.
+
+Until then the turn end done check keeps training on the oracle labels, as before; the LLM labels only check them.
