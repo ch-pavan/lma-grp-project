@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 tools/ollama/
 .DS_Store
+third_party/
+runs/data/

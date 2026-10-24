@@ -70,6 +70,9 @@ def parse_system(system):
 CTX_TRIMS = [0]
 
 
+AGENT_THINK = os.environ.get("AGENT_THINK") == "1"
+
+
 class LPLLM(R.LLM):
     """run.LLM with the same sampling; judge calls (think=True) also keep token logprobs, doer calls can draw n samples."""
 
@@ -84,6 +87,10 @@ class LPLLM(R.LLM):
         return kw
 
     async def chat(self, messages, tools=None, tool_choice=None, think=False, max_tokens=1024, temperature=None):
+        if AGENT_THINK:  # test condition: every agent call thinks, output uncapped (rest of the context), no logprobs
+            kw = self._kw(messages, tools, tool_choice, True, None, temperature)
+            r = await self.create(kw)
+            return r.choices[0].message, r.usage.prompt_tokens, r.usage.completion_tokens
         if think and "Qwen3.5" in self.model:
             max_tokens = max(max_tokens, 4096)  # Qwen3.5 thinks ~1.1k tokens per verdict; at 1536 half its verdicts were cut off unparsed
         kw = self._kw(messages, tools, tool_choice, think, max_tokens, temperature)

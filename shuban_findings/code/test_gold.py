@@ -59,7 +59,7 @@ class Audit:
             if len(EX) < 12: EX.append((step["text"][:90], [w for _, _, w in step["ev"]]))
         return {**v, "q1": "on_track", "q2": "none"}
 EX = []
-LOG = open("/tmp/claude-1000/-home-orbi8r/0e75442f-34ef-4bec-a9e6-2ddebcc77e41/scratchpad/gold_steps.jsonl", "w")
+LOG = open(__import__("os").environ.get("GOLD_LOG", "gold_steps.jsonl"), "w")
 
 async def main():
     keep = set(range(200)) - R.UNSOUND
