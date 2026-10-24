@@ -1,8 +1,10 @@
 # Per call examples for a Laya step check, from analysis/pool_steps.py output. label 1 = ok, 0 = bad, where bad is
-# breaks_task, unneeded_irreversible, wrong_irreversible, or made_up_value on an irreversible call (a made up value in a
-# read, such as a company name the agent knows, is not counted). Same layout as build_done_data.py: train, dev (held out
-# train scenarios), val. State text puts the proposed call first, since Laya keeps the start of a long state.
-# usage: python analysis/build_step_data.py POOLED.jsonl OUT_DIR [--dev-scenarios 8] [--no-canary]
+# breaks_task, unneeded_irreversible, or made_up_value on an irreversible call (a made up value in a read, such as a
+# company name the agent knows, is not counted). wrong_irreversible is kept as a column but not counted: arguments often
+# differ from the reference for harmless reasons, and the two LLM annotators flag only 7 to 10% of those calls.
+# Same layout as build_done_data.py: train, dev (held out train scenarios), val.
+# State text puts the proposed call first, since Laya keeps the start of a long state.
+# usage: python analysis/build_step_data.py POOLED.jsonl OUT_DIR [--dev-scenarios 16]   (canary runs repeat val tasks and are skipped)
 import argparse, json, os, random, sys
 from collections import Counter
 
@@ -25,13 +27,13 @@ def state_text(st, out_chars=200):
 
 def is_bad(r):
     irr = r["state"]["step"]["name"] in S.R.IRREVERSIBLE
-    return bool(r["breaks_task"] or r["unneeded_irreversible"] or r["wrong_irreversible"] or (r["made_up_value"] and irr))
+    return bool(r["breaks_task"] or r["unneeded_irreversible"] or (r["made_up_value"] and irr))
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("pooled"); ap.add_argument("out_dir")
-    ap.add_argument("--dev-scenarios", type=int, default=8)
+    ap.add_argument("--dev-scenarios", type=int, default=16)
     a = ap.parse_args()
     os.makedirs(a.out_dir, exist_ok=True)
     rows = [json.loads(l) for l in open(a.pooled) if l.strip()]

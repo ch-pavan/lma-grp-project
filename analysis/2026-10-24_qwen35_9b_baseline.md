@@ -199,3 +199,15 @@ The call labels pass (kappa 0.73) and are used from now on. The turn end labels 
 3. No separate paid rerun on val, since tuning and measuring on the same items would inflate kappa. v3 is first measured on fresh items, the 3 recorded test passes, which have to be labelled anyway (about $2). If it reaches 0.7 there, those become the test labels.
 
 Until then the turn end done check keeps training on the oracle labels, as before; the LLM labels only check them.
+
+### Laya step check, first pilot (job 49656, `build_step_data.py`, `eval_step.py`)
+
+Pooled call steps from our 9B runs and Shuban's 8B live steps (`pool_steps.py`), test scenarios dropped. Bad = breaks task, unneeded irreversible, or made up value on an irreversible call; wrong irreversible is left out (the LLM annotators flag only 7 to 10% of it). Train 8,847 calls (408 bad), dev 1,975 from 16 held out train scenarios (55 bad), val 2,427 (186 bad). Full finetune, one seed, 4 epochs, 16 min on one RTX 6000 Ada (mean GPU use 87%). A first job (49646) used labels that still counted wrong irreversible and was stopped after 12 min.
+
+| Val part | calls | bad | rule "flag every irreversible call": AUROC / F1 | Laya finetuned: AUROC / F1 |
+|---|---|---|---|---|
+| all calls | 2,427 | 186 | 0.75 / 0.35 | **0.90 / 0.53** |
+| irreversible calls only | 547 | 129 | 0.50 / 0.38 | **0.74 / 0.58** |
+| reads only | 1,880 | 57 | 0.50 / 0.00 | **0.95 / 0.36** |
+
+Laya as is: AUROC 0.57, F1 0.10. The gain holds on each source (9B 0.91, 9B reasoning on 0.83, 8B 0.93 AUROC) and within both parts the rule cannot split, so it is not only reading function names. One seed, threshold from dev; labels are the replay rules, not yet checked by people.
