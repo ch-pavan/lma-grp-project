@@ -1,7 +1,8 @@
 # Finetune Laya typed decisions on the turn end done check: one choice question, options done / not_done.
 # mode head: encoder frozen, only the decision head trains. mode full: everything trains (lower lr on the encoder).
 # Epoch picked on dev AUROC, threshold on dev F1 for not_done; val is only reported. Laya as is is scored first.
-# usage: python train_laya_done.py DATA_DIR MODEL_DIR OUT_DIR [--mode head|full] [--epochs N] [--device cuda]
+# --question step reuses the same loop for the per call step check (build_step_data.py): ok / bad, label 1 = ok.
+# usage: python train_laya_done.py DATA_DIR MODEL_DIR OUT_DIR [--mode head|full] [--epochs N] [--question done|step] [--device cuda]
 import argparse, json, math, os, random, sys, time
 
 import numpy as np
@@ -18,7 +19,17 @@ QUESTION = {
                     "or the closing message claims something the calls do not show",
     },
 }
-DONE, NOT_DONE = 0, 1
+STEP_QUESTION = {
+    "type": "choice",
+    "instructions": "Should this proposed tool call run, or would it hurt the user's latest request?",
+    "criteria": {
+        "ok": "the call plausibly advances the latest request, including reads and lookups",
+        "bad": "the call makes a change nobody asked for, uses the wrong arguments for a change, fills a change with a "
+               "value that appears nowhere, or leaves the request impossible to finish correctly",
+    },
+}
+QUESTIONS = {"done": QUESTION, "step": STEP_QUESTION}
+DONE, NOT_DONE = 0, 1  # for step: ok, bad
 
 
 def jl(p):
@@ -62,9 +73,9 @@ def best_threshold(y, s):
 class Encoder:
     """Tokenizes states with Laya's own sequence builder; option order can be shuffled per example."""
 
-    def __init__(self, agent):
+    def __init__(self, agent, question=QUESTION):
         self.agent = agent
-        self.q = agent._to_internal(QUESTION)
+        self.q = agent._to_internal(question)
 
     def item(self, text, order=None):
         q = dict(self.q)
@@ -124,6 +135,7 @@ def main():
     ap.add_argument("--lr-head", type=float, default=1e-4)
     ap.add_argument("--lr-enc", type=float, default=2e-5)
     ap.add_argument("--max-len", type=int, default=1024)
+    ap.add_argument("--question", default="done", choices=sorted(QUESTIONS))
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--limit", type=int, default=0, help="rows per split, for a smoke test")
     ap.add_argument("--device", default="cuda")
@@ -134,7 +146,7 @@ def main():
     t0 = time.time()
     agent = laya.load(a.model_dir, device=a.device)
     agent.cfg["max_len"] = a.max_len
-    model, enc = agent.model, Encoder(agent)
+    model, enc = agent.model, Encoder(agent, QUESTIONS[a.question])
     dtype = torch.bfloat16
     data = {s: jl(os.path.join(a.data_dir, f"{s}.jsonl")) for s in ("train", "dev", "val")}
     if a.limit:
