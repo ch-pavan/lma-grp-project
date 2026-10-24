@@ -42,3 +42,21 @@ Before a real run, replay the gold calls (`python test_gold.py`): every task mus
 ## Gap against the latest proposal
 
 Q1 to Q3, the fixed rules and the state layout now match the proposal. Laya and the LLM judge both get the state with the proposed step first, then the evidence list, requests, plan and the last three calls, trimmed oldest first to 768 tokens filled by code (4 characters per token when the ModernBERT tokenizer is not cached, so the 1,024 token cap holds); `--state legacy` restores the old layout.
+
+## Offline scorer
+
+`offline_eval.py` runs one judge over recorded steps and scores it against labels, or compares two label sources. It needs no bfcl_eval and no Ada, so it runs on a laptop. Steps are the judge inputs of an S1_record run (`states_*.jsonl` in a run dir, or any jsonl with the same rows).
+
+```
+python offline_eval.py --steps RUN_DIR --labels RUN_DIR::oracle RUN_DIR::deepseek RUN_DIR::glm RUN_DIR::both --judge laya --device cuda:0 --out out/laya
+python offline_eval.py --steps RUN_DIR --labels RUN_DIR::oracle --judge llm --base-url http://host:8000/v1 --model <name> --reasoning on --trace full --concurrency 16 --out out/llm_think_full
+python offline_eval.py --agree RUN_DIR::deepseek RUN_DIR::glm --steps RUN_DIR --out out/agree
+```
+
+- Judges: `rules`, `laya` (as is), `kev`, `lettuce` (Q2 on closing messages only), `granite` (Q2 only, Ada only, it needs the 3B weights in fp32 or a vLLM server through `--granite-url`), `jev` (classifier.dev, free tier, share_data false, four requests at once), `llm` (any OpenAI compatible endpoint). The llm mode takes `--reasoning on|off`, `--trace proposal|full` and `--max-tokens`; Qwen3.5 needs at least 4096 with reasoning on. Q3 is scored for rules, laya, kev and jev only.
+- Label sets, each scored on its own (a table per set, `metrics_<set>.md` and `.json`). `RUN_DIR::oracle` is labels.jsonl plus step_labels.jsonl, `::deepseek` and `::glm` are the annotator files, `::both` keeps a question only where the two annotators agree. A plain file is also accepted: annotator rows (uid, q1, q2 or a typed turn answer), `oracle_labels.py` rows, or finetune_data rows. Without `--labels` the `oracle_flag` inside the steps is used.
+- Mapping to the proposal questions. A call gives Q1 (off_track under the subset rule, `--label-rule suffix` for the old one), Q2 (made_up_value from step_labels or the annotator) and Q3 (not_needed for an unneeded irreversible call). A turn end gives Q2 (false_claim) and Q1: a false claim stays on track, any other turn that is not done is off track. A question with no label on a step is not scored on that step, and a judge is scored only on the questions it can express.
+- Metrics per class are precision, recall and F1 with 95% CIs from a bootstrap over scenarios (1000 draws, fixed seed). The primary number is the mean F1 of off_track (Q1) and false_claim (Q2). `--kind call|msg` scores only calls or only closing messages, `--reweight turns.jsonl` reweights steps to the real done and not done turn mix, `--limit N` takes N steps in sha256 order for a pilot.
+- `--agree A B` takes two label or prediction files (or `RUN_DIR::source`) and prints agreement, Cohen's kappa and Gwet's AC1 per question with the same bootstrap. Predictions of a judge (`predictions.jsonl`) can be compared with any label set this way.
+- Granite and the rule fallbacks run without the called tool's doc here, because recorded steps do not hold tool docs. The rules judge sees the calls of the current turn rebuilt from the recorded `recent` list.
+- Laya on a 4 GB card: use `runjob -- python offline_eval.py ...`. Check the plumbing with `python test_offline_eval.py` (rules, label shapes, agreement, and the llm mode against a fake server).
