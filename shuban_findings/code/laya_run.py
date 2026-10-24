@@ -45,6 +45,10 @@ def make_judge(system, llm, args):
         sys.path.insert(0, os.environ.get("STAY_ANALYSIS", os.path.join(HERE, "..", "..", "analysis")))
         import laya_done_judge
         return LV.Recorder(laya_done_judge.make(), os.path.join(out, "states_S_layadone.jsonl"))
+    if system == "S_layastep":  # finetuned Laya step check plus done check (analysis/laya_step_judge.py), used with rb2c
+        sys.path.insert(0, os.environ.get("STAY_ANALYSIS", os.path.join(HERE, "..", "..", "analysis")))
+        import laya_step_judge
+        return LV.Recorder(laya_step_judge.make(), os.path.join(out, "states_S_layastep.jsonl"))
     if system == "S_tree":
         import tree_judge
         return LV.Recorder(tree_judge.TreeJudge(os.environ["TREE_MODEL"]), os.path.join(out, "states_S_tree.jsonl"))
