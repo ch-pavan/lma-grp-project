@@ -126,8 +126,11 @@ def write_with_pymupdf(html: str, out: Path) -> None:
             fontname="helv",
             color=(0.55, 0.55, 0.55),
         )
-    doc.saveIncr()
+    # Story writes images uncompressed; rewrite with lossless deflate
+    tmp = out.with_suffix(".tmp.pdf")
+    doc.save(str(tmp), garbage=4, deflate=True, deflate_images=True, deflate_fonts=True)
     doc.close()
+    tmp.replace(out)
 
 
 def main() -> int:

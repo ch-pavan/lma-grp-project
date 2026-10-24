@@ -55,10 +55,10 @@ def save(fig, name):
 def d1():
     fig, ax = canvas(11, 5.2)
     rows = [
-        (3.9, "Baseline: generator and LLM judge", "#333333", GREY, False,
-         "Judge\nLLM, Qwen3.5 9B,\nreasoning on"),
+        (3.9, "Baseline: generator and SLM judge", "#333333", GREY, False,
+         "Judge\nSLM, Qwen3.5 9B,\nreasoning on"),
         (1.2, "Ours: same agents, the judge is a small classifier", BLUE, BLUE, True,
-         "Judge\nLaya 0.4B, unsure\nsteps go to the LLM"),
+         "Judge\nLaya 0.4B, unsure\nsteps go to the SLM"),
     ]
     for y, head, col, ac, hl, judge in rows:
         title(ax, 0.15, y + 1.25, head, col, 11.5)
@@ -93,7 +93,7 @@ def d2():
         arrow(ax, 3.3, 3.75, 3.9, y + 0.5, color="#9aa7c0")
     ax.text(5.75, 1.1, "one forward pass each, every answer\na fixed option with a confidence", ha="center", fontsize=8.8,
             color="#444444")
-    box(ax, 4.2, 0.15, 3.1, 0.55, "low confidence: ask LLM judge", warn=True, size=8.8)
+    box(ax, 4.2, 0.15, 3.1, 0.55, "low confidence: ask SLM judge", warn=True, size=8.8)
     acts = [("All fine", "the call runs", 5.1, False),
             ("Q3 not_needed", "ask the user", 4.25, True),
             ("Off track or hallucination", "block, fixed warning to doer", 3.4, False),
@@ -151,7 +151,7 @@ def d4():
     ax.add_patch(FancyBboxPatch((5.5, 0.2), 4.2, 4.2, boxstyle="round,pad=0,rounding_size=0.1",
                                 ec="#bbbbbb", fc="none", lw=1.4, ls="--"))
     ax.text(7.6, 4.18, "7 online systems, same tasks and runs", ha="center", fontsize=10, fontweight="bold")
-    sy = [("No judge", False), ("Plain rules", False), ("LLM judge, reasoning on", False),
+    sy = [("No judge", False), ("Plain rules", False), ("SLM judge, reasoning on", False),
           ("Laya as is", True), ("Granite Guardian 3B", False), ("Laya finetuned", True),
           ("Full system: finetuned\n+ escalation", True)]
     for i, (t, hl) in enumerate(sy):
