@@ -41,6 +41,10 @@ def make_judge(system, llm, args):
     if system == "S_jev":
         import jev_judge
         return LV.Recorder(jev_judge.JevJudge(json.load(open(os.environ["JEV_CFG"]))), os.path.join(out, "states_S_jev.jsonl"))
+    if system == "S_layadone":  # finetuned Laya done check (analysis/laya_done_judge.py), used with mode dc
+        sys.path.insert(0, os.environ.get("STAY_ANALYSIS", os.path.join(HERE, "..", "..", "analysis")))
+        import laya_done_judge
+        return LV.Recorder(laya_done_judge.make(), os.path.join(out, "states_S_layadone.jsonl"))
     if system == "S_tree":
         import tree_judge
         return LV.Recorder(tree_judge.TreeJudge(os.environ["TREE_MODEL"]), os.path.join(out, "states_S_tree.jsonl"))

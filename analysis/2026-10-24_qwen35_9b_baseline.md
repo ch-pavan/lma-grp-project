@@ -113,3 +113,62 @@ No call here was harmful. Turn 1 is an easy catch (the agent says it could not f
 3. Finetune Laya (head only, then full; tail first state packing; temperature calibration) and one or two other small decision models; compare offline with Laya as is, the 9B SLM judge (4,096+ reasoning tokens), Jev and plain rules.
 4. Online on the 120 val tasks: no judge, SLM judge, finetuned Laya and the oracle, each with rollback and the turn end check.
 5. Revise the proposal to the two check design.
+
+## Update, same day: annotators, Laya finetune, live done check
+
+### LLM annotators on val (OpenCode Go, about $1.20 for 3,544 calls)
+
+DeepSeek V4.1 Flash and GLM-5.3-Flash labelled all 495 val turn ends (typed: done, missing_action, should_ask_user, unsupported_claim) and all 1,277 val calls (Q1, Q2 with the judge guide). Scripts: `analysis/annotate.py`, `analysis/agreement.py`.
+
+| Comparison | Turn ends: agree / kappa / AC1 | Calls (off track): agree / kappa |
+|---|---|---|
+| DeepSeek vs GLM | 85% / 0.54 / 0.77 | 93% / 0.61 |
+| DeepSeek vs oracle | 76% / 0.35 / 0.63 | 85% / 0.08 |
+| GLM vs oracle | 82% / 0.41 / 0.74 | 89% / 0.04 |
+
+- The turn end label holds up moderately: where both LLMs agree, they match the oracle 85% of the time. Disagreements go both ways (the oracle requires every reference read call; the LLMs miss state errors hidden by a confident message).
+- The oracle's per call "off track" label does not match what the LLMs call off track (kappa near 0). It fails the proposal's 80% rule and must be rewritten before training.
+- Concurrency on OpenCode Go: GLM-5.3-Flash ran clean at 64 parallel calls; DeepSeek V4.1 Flash returned many 429s at 96 (retried, nothing lost) and none at 48.
+
+### Narrower step labels (`analysis/step_labels.py`)
+
+| Label (from the reference calls and the code made evidence list) | val calls | train calls | LLMs flag it |
+|---|---|---|---|
+| unneeded irreversible (irreversible function not in the turn's reference) | 57 | 167 | 58 to 68% |
+| wrong irreversible (right function, different arguments) | 73 | 179 | 18 to 33% |
+| made up value (source "nowhere", not a reference value) | 15 | 74 | 33 to 47% |
+| breaks task (current oracle rule) | 63 | 221 | 14 to 25% |
+
+Unneeded irreversible is the clearest step label. All four are below the 300 positives of Gate 1 in train, so directed runs are needed for the step heads.
+
+### Laya finetune on the turn end done check (`analysis/train_laya_done.py`)
+
+Laya typed decisions 0.4B (`convaiinnovations/laya-typed-decisions` at `e929ae5`, laya 0.3.27), one choice question (done, not_done), oracle labels. Train 3,341 turn ends (66 train scenarios), dev 396 (8 held out train scenarios, epoch and threshold choice), val 495 (only reported). One RTX 6000 Ada; head only 6 epochs in 2.5 min (job 49262); full finetune 4 epochs in 5 min with gradient checkpointing and micro batches of 8 (job 49265; the first try without them ran out of memory). Full finetune is best after epoch 2 and overfits after.
+
+Offline, val turn ends, positive class not done, against the oracle:
+
+| Checker | AUROC | F1 not done |
+|---|---|---|
+| Laya as is | 0.53 | 0.20 |
+| Laya head only | 0.59 | 0.34 |
+| **Laya full finetune** (threshold 0.5) | **0.79** | **0.53** |
+| Qwen3.5 9B SLM judge, reasoning on, same prompt as the annotators | | 0.41 |
+| DeepSeek V4.1 Flash | | 0.50 |
+| GLM-5.3-Flash | | 0.52 |
+
+The dev chosen threshold (0.984, from 50 dev positives) gave val F1 0.36; the 0.53 row uses the default 0.5, not tuned on val (the best threshold on val, chosen by peeking, gives 0.55). Next time the threshold should come from grouped cross validation on train.
+
+### Live done check on the 120 val tasks (job 49274, `runs/turing/q9b_dc.sbatch`)
+
+Same server as before (vLLM 0.27.1, 32k, reasoning off for the agent). Mode `dc`: when the agent closes a turn the checker answers done or not; not done drops the closing message and adds "Part of the request may be unfinished. Check it, and continue if something is left." (at most 2 per turn). Laya's threshold 0.5 was fixed before the run. CIs are a paired bootstrap over the 15 scenarios.
+
+| System | Pass | vs no judge [95% CI] | Not done per task | Judge tokens per task | s per task |
+|---|---|---|---|---|---|
+| no judge (rerun; first run was also 43.3) | 43.3% | | 0 | 0 | 207 |
+| **finetuned Laya done check** | **45.8%** | **+2.5 [-5.0, +10.8]** | 1.53 | about 0 (0.4B classifier) | 234 |
+| 9B SLM judge done check, reasoning on | 43.3% | +0.0 [-5.8, +7.5] | 0.85 | 10,334 | 454 |
+| oracle done check (ceiling) | 46.7% | +3.3 [-5.0, +12.5] | 1.95 | 0 | 235 |
+
+- Laya beats the 9B SLM judge offline (F1 0.53 vs 0.41) and online (+2.5 vs +0.0) at almost no judge cost and half the time per task, and gets close to the oracle ceiling.
+- No online difference is significant: 120 tasks is too few, and with this agent the ceiling of the done check alone is small (+3.3). Shuban's oracle with rollback and the done check reached +9.2 on Qwen3.5 4B, so a step checker that drives rollback is the lever with the larger ceiling.
+- The 9B judge thinks about 2,400 tokens per done check (93 s each under load); 20 of 495 offline answers did not parse.
