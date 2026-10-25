@@ -5,3 +5,4 @@ tools/ollama/
 .DS_Store
 third_party/
 runs/data/
+tools/ollama-bin

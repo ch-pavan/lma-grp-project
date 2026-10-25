@@ -211,3 +211,34 @@ Pooled call steps from our 9B runs and Shuban's 8B live steps (`pool_steps.py`),
 | reads only | 1,880 | 57 | 0.50 / 0.00 | **0.95 / 0.36** |
 
 Laya as is: AUROC 0.57, F1 0.10. The gain holds on each source (9B 0.91, 9B reasoning on 0.83, 8B 0.93 AUROC) and within both parts the rule cannot split, so it is not only reading function names. One seed, threshold from dev; labels are the replay rules, not yet checked by people.
+
+### Live step check on val, Laya against the 9B judge (jobs 49671, 49688, 49710, 49719, 49764; `rb_results.py`)
+
+Mode rbh2dc (rollback plus done check, Shuban's best mode), Qwen3.5 9B agent (reasoning off), all 120 val tasks. Laya = finetuned step head (job 49656, dev threshold 0.204) plus done head (job 49265, 0.5). The 9B judge = the same 9B as SLM judge, reasoning on. About 2.3 GPU-hours on node01, never more than 2 GPUs at once.
+
+| System | Pass | vs no judge [95% CI] | Tasks gained / lost | Steps | Interventions | Resamples |
+|---|---|---|---|---|---|---|
+| No judge (49274) | 43.3% | — | — | 13.9 | 0 | 0 |
+| No judge, rerun (49146) | 43.3% | +0.0 [−6.7, +6.7] | +14 / −14 | 14.1 | 0 | 0 |
+| Done check only (49274) | 45.8% | +2.5 [−5.0, +10.8] | +15 / −12 | 16.1 | 1.53 | 0 |
+| Laya, gate bug (49671) | 37.5% | −5.8 [−11.7, +0.0] | +8 / −15 | 15.5 | 6.95 | 4.58 |
+| **Laya, fixed (49719)** | **42.5%** | **−0.8 [−7.5, +6.7]** | +9 / −10 | 15.7 | 3.16 | 1.17 |
+| 9B judge (49710, 49764) | 44.2% | +0.8 [−5.0, +7.5] | +11 / −10 | 14.6 | 2.66 | 1.73 |
+| Oracle (49671) | 47.5% | +4.2 [−1.7, +10.8] | +11 / −6 | 16.3 | 6.34 | 3.55 |
+
+- **The gate bug:** job 49671 used the done head as a gate on every closing message, so a flag threw the message away and resampled (4.6 per task). The head was trained only for the done check. Fixed in `dd90955`: closing messages pass the gate, and the done head answers only the done check. Resamples fell to 1.2 per task and the loss to −0.8.
+- **No live system differs from no judge beyond noise.** The two no-judge runs score the same 43.3% but disagree on 28 of 120 tasks (+14 / −14). At this size, differences under about ±5 points cannot be told apart from run-to-run variation.
+- **The ceiling is low on this agent:** even the oracle gives only +4.2 (CI includes 0), against +9.2 on Shuban's 4B. The 9B makes fewer mistakes that a step checker can fix.
+
+**Offline per step, the same 1,277 val calls (109 bad, step labels of `build_step_data.py`):**
+
+| Checker | Flags | Precision | Recall | F1 | AUROC |
+|---|---|---|---|---|---|
+| 9B judge (Q1 off track or Q2 flag) | 232 | 0.18 | 0.38 | 0.24 | 0.61 (yes/no) |
+| **Laya, dev threshold** | 116 | **0.57** | **0.61** | **0.59** | **0.91** |
+| Laya, top 232 (same flag count as 9B) | 233 | 0.36 | 0.78 | 0.50 | |
+
+- Laya catches more than twice as many bad steps per flag as the 9B judge, from a 0.4B encoder with one forward pass per step. The 9B judge writes about 1,760 output tokens per call (80 s each at 96 at once) and 83 of 1,277 answers (6.5%) did not parse.
+- The better offline checker does not yet turn into a live gain, because the room for gain on this agent (oracle +4.2) is within the noise of one 120-task run.
+
+**Next:** (1) 3 seeds of no judge, Laya and the oracle on val, to bring the CI under the oracle's +4 (about 1 GPU-hour per system); (2) the same comparison on a weaker agent (Shuban's 4B, oracle +9.2), where a step checker has more to fix.
