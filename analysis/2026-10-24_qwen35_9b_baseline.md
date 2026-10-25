@@ -242,3 +242,17 @@ Mode rbh2dc (rollback plus done check, Shuban's best mode), Qwen3.5 9B agent (re
 - The better offline checker does not yet turn into a live gain, because the room for gain on this agent (oracle +4.2) is within the noise of one 120-task run.
 
 **Next:** (1) 3 seeds of no judge, Laya and the oracle on val, to bring the CI under the oracle's +4 (about 1 GPU-hour per system); (2) the same comparison on a weaker agent (Shuban's 4B, oracle +9.2), where a step checker has more to fix.
+
+### Primary metric, off track half, on val calls (`primary_val_calls.py`, Shuban's `offline_eval.py` scorer)
+
+Finetuned Laya step head (job 49656, dev threshold) against the 9B SLM judge (offline, reasoning on) on the 1,277 val calls, scored against the v2 annotator labels (calls kappa 0.73). Unparsed 9B answers (83) count as not flagged. CIs: bootstrap over the 15 val scenarios, paired for the difference.
+
+| Labels | Off track | Laya F1 [CI] | 9B judge F1 [CI] | Laya − 9B [CI] |
+|---|---|---|---|---|
+| DeepSeek v2 | 45 | 0.42 [0.16, 0.60] | 0.28 [0.11, 0.46] | **+14.5 [+2.6, +20.3]** |
+| GLM v2 | 44 | 0.36 [0.10, 0.55] | 0.24 [0.07, 0.44] | +11.8 [−0.7, +17.7] |
+| Both agree | 33 | 0.39 [0.10, 0.58] | 0.23 [0.04, 0.45] | **+15.2 [+3.1, +21.6]** |
+
+- Laya is ahead by 12 to 15 F1 points, above the proposal's 9 point bar, with the CI above 0 on DeepSeek and on both agree, and just touching 0 on GLM.
+- Both judges find most of the off track calls (recall 0.66 to 0.82); Laya wins on precision (116 flags against 193).
+- Caveats: val, not test; only 33 to 45 positives; Laya's head was trained on the replay labels, not on these; the false claim half is still missing for the 9B judge.
