@@ -1,0 +1,18 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+S_layastep@rbh2dc on bfcl: 120 episodes to run (0 already done), concurrency 120
+/scratch/pavan.harshit/pylaya/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+10/120 done, 93s
+20/120 done, 121s
+30/120 done, 149s
+40/120 done, 176s
+50/120 done, 204s
+60/120 done, 212s
+70/120 done, 243s
+80/120 done, 262s
+90/120 done, 276s
+100/120 done, 304s
+110/120 done, 316s
+120/120 done, 361s
+DONE S_layastep@rbh2dc 361s

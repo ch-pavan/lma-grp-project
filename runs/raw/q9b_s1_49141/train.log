@@ -1,0 +1,14 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+S1_record on bfcl: 888 episodes to run (0 already done), concurrency 40
+10/888 done, 65s
+20/888 done, 81s
+30/888 done, 100s
+40/888 done, 128s
+50/888 done, 147s
+60/888 done, 179s
+70/888 done, 212s
+80/888 done, 236s
+90/888 done, 278s
+100/888 done, 300s
+110/888 done, 313s

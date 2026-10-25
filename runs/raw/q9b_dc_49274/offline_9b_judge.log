@@ -1,0 +1,14 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+cyankiwi/Qwen3.5-9B-AWQ-4bit: 495 items to annotate (0 already done), concurrency 24
+50/495 759s 4/min parse_fail 0 http {'other': 8} tok in 31364 out 68711 cached 0
+100/495 1283s 5/min parse_fail 0 http {'other': 15} tok in 65975 out 154958 cached 0
+150/495 1409s 6/min parse_fail 0 http {'other': 16} tok in 100667 out 261715 cached 528
+200/495 1544s 8/min parse_fail 5 http {'other': 16} tok in 134263 out 389596 cached 528
+250/495 1683s 9/min parse_fail 8 http {'other': 16} tok in 166863 out 509053 cached 1584
+300/495 1816s 10/min parse_fail 12 http {'other': 16} tok in 199946 out 620130 cached 2112
+350/495 1953s 11/min parse_fail 13 http {'other': 16} tok in 233219 out 745963 cached 4224
+400/495 2100s 11/min parse_fail 16 http {'other': 16} tok in 269355 out 878946 cached 4752
+450/495 2226s 12/min parse_fail 17 http {'other': 16} tok in 304687 out 1003135 cached 6336
+495/495 2361s 13/min parse_fail 20 http {'other': 16} tok in 334829 out 1170689 cached 6864
+DONE 495 rows in 2361s, parse_fail 20, http {'other': 16}, tok in 334829 out 1170689 cached 6864

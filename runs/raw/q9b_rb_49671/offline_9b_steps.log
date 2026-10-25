@@ -1,0 +1,33 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+cyankiwi/Qwen3.5-9B-AWQ-4bit: 1277 items to annotate (0 already done), concurrency 32
+50/1277 405s 7/min parse_fail 1 http {} tok in 55084 out 39388 cached 7920
+Terminated
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+cyankiwi/Qwen3.5-9B-AWQ-4bit: 1196 items to annotate (81 already done), concurrency 96
+50/1196 40s 75/min parse_fail 3 http {} tok in 48526 out 32716 cached 11616
+100/1196 65s 92/min parse_fail 3 http {} tok in 99246 out 75244 cached 30624
+150/1196 95s 95/min parse_fail 7 http {} tok in 153672 out 125670 cached 53856
+200/1196 135s 89/min parse_fail 9 http {} tok in 205241 out 182504 cached 74448
+250/1196 167s 90/min parse_fail 13 http {} tok in 254881 out 241350 cached 92928
+300/1196 219s 82/min parse_fail 15 http {} tok in 310390 out 304511 cached 112992
+350/1196 268s 78/min parse_fail 16 http {} tok in 360344 out 400160 cached 130416
+400/1196 312s 77/min parse_fail 21 http {} tok in 415601 out 521323 cached 151536
+450/1196 355s 76/min parse_fail 23 http {} tok in 465672 out 636128 cached 171072
+500/1196 393s 76/min parse_fail 24 http {} tok in 517308 out 727787 cached 191664
+550/1196 432s 76/min parse_fail 26 http {} tok in 571637 out 805974 cached 211728
+600/1196 480s 75/min parse_fail 31 http {} tok in 627951 out 897511 cached 229680
+650/1196 516s 76/min parse_fail 34 http {} tok in 686882 out 1000086 cached 255024
+700/1196 558s 75/min parse_fail 35 http {} tok in 740036 out 1077170 cached 278256
+750/1196 600s 75/min parse_fail 39 http {} tok in 790261 out 1174020 cached 297792
+800/1196 638s 75/min parse_fail 44 http {} tok in 844880 out 1265619 cached 318912
+850/1196 680s 75/min parse_fail 50 http {} tok in 898621 out 1344468 cached 339504
+900/1196 718s 75/min parse_fail 55 http {} tok in 950223 out 1442184 cached 359568
+950/1196 762s 75/min parse_fail 56 http {} tok in 1006376 out 1529225 cached 378576
+1000/1196 796s 75/min parse_fail 59 http {} tok in 1053676 out 1634860 cached 400224
+1050/1196 833s 76/min parse_fail 63 http {} tok in 1104626 out 1705162 cached 423456
+1100/1196 870s 76/min parse_fail 67 http {} tok in 1155852 out 1791331 cached 444576
+1150/1196 914s 75/min parse_fail 71 http {} tok in 1205047 out 1900102 cached 464640
+1196/1196 1000s 72/min parse_fail 82 http {} tok in 1255092 out 2173368 cached 485232
+DONE 1196 rows in 1000s, parse_fail 82, http {}, tok in 1255092 out 2173368 cached 485232

@@ -1,0 +1,10 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+S3_llm_judge@rbh2dc on bfcl: 60 episodes to run (0 already done), concurrency 60
+10/60 done, 617s
+20/60 done, 717s
+30/60 done, 968s
+40/60 done, 1107s
+50/60 done, 1429s
+60/60 done, 2711s
+DONE S3_llm_judge@rbh2dc 2711s

@@ -1,0 +1,7 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+S1_record      n=  120 acc= 43.3 [ 27.5, 60.0] int/task=0.00 s/task=376 tok/task=100281
+Traceback (most recent call last):
+  File "/home/pavan.harshit/stay-on-task/code/analyze.py", line 91, in <module>
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'

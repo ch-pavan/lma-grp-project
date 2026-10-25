@@ -1,0 +1,13 @@
+S1_record on bfcl: 3 episodes to run (0 already done), concurrency 3
+Traceback (most recent call last):
+  File "/home/pavan.harshit/stay-on-task/code/actions.py", line 623, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/pavan.harshit/stay-on-task/code/actions.py", line 589, in main
+    llm = LPLLM(a.base_url, a.model)
+  File "/home/pavan.harshit/stay-on-task/code/run.py", line 111, in __init__
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'

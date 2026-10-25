@@ -1,0 +1,7 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+base 189/189 passed, interventions 0, asks 0 []
+miss_param 189/189 passed, interventions 0, asks 0 []
+miss_func 188/189 passed, interventions 0, asks 0 [('multi_turn_miss_func_49', 'multi_turn:execution_response_mismatch', None)]
+long_context 189/189 passed, interventions 0, asks 0 []
+gold false flags: {'call': 4347, 'msg': 3138}

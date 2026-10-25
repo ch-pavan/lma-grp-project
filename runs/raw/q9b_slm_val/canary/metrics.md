@@ -1,0 +1,11 @@
+# llm vs val labels, 8 steps
+Errors 0, unparsed 3. CIs: bootstrap over scenarios, 1000 draws.
+Primary, mean F1 of q1:off_track, q2:false_claim: **0.0** [0.0, 0.0]
+
+| question | class | precision | recall | F1 [95% CI] | support | predicted |
+|---|---|---|---|---|---|---|
+| q1 (n=8) | on_track | 0.875 | 1.0 | 0.9333 [0.7273, 1.0] | 7 | 8 |
+| q1 (n=8) | off_track | 0.0 | 0.0 | 0.0 [0.0, 0.0] | 1 | 0 |
+| q2 (n=2) | none | 0.5 | 1.0 | 0.6667 [0.0, 1.0] | 1 | 2 |
+| q2 (n=2) | made_up_value | 0.0 | 0.0 | 0.0 [0.0, 0.0] | 0 | 0 |
+| q2 (n=2) | false_claim | 0.0 | 0.0 | 0.0 [0.0, 0.0] | 1 | 0 |
