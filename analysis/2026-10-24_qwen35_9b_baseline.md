@@ -256,3 +256,32 @@ Finetuned Laya step head (job 49656, dev threshold) against the 9B SLM judge (of
 - Laya is ahead by 12 to 15 F1 points, above the proposal's 9 point bar, with the CI above 0 on DeepSeek and on both agree, and just touching 0 on GLM.
 - Both judges find most of the off track calls (recall 0.66 to 0.82); Laya wins on precision (116 flags against 193).
 - Caveats: val, not test; only 33 to 45 positives; Laya's head was trained on the replay labels, not on these; the false claim half is still missing for the 9B judge.
+
+### Primary metric, both halves, on all 1,772 val steps (jobs 50247 and 50265, `primary_val.py`)
+
+The 9B SLM judge, run with Shuban's `offline_eval.py --judge llm --reasoning on` (harness judge prompt, proposal state) on all 1,277 calls and 495 closing messages, 1 GPU, 41 min in all. The first pass (4,096 output tokens) left 328 steps without a verdict (reasoning ran out); `rejudge_unparsed.py` judged them again with 8,192 and 295 parsed, so 33 (1.9%) stay unparsed and count as not flagged. Mean output 1,500 tokens on a call and 2,380 on a closing message. Laya: the step head on calls, the done head on closing messages (P(not done) ≥ 0.5, the live threshold). Labels: v2 DeepSeek and GLM. CIs: paired bootstrap over the 15 val scenarios.
+
+**As the proposal maps it** (Laya's "not done" = false claim, on track for Q1, as in the live runs):
+
+| Labels | Laya primary | 9B primary | Laya − 9B [CI] |
+|---|---|---|---|
+| DeepSeek v2 | 0.18 | 0.19 | −1.0 [−7.3, +3.2] |
+| GLM v2 | 0.19 | 0.17 | +2.0 [−5.4, +7.1] |
+| Both agree | 0.19 | 0.18 | +0.5 [−6.7, +5.1] |
+
+**Per class** (Laya's "not done" = off track for Q1 on closing messages):
+
+| Labels | Q1 calls: Laya / 9B, diff [CI] | Q1 closing messages: Laya / 9B, diff [CI] | False claim: Laya / 9B (positives) |
+|---|---|---|---|
+| DeepSeek v2 | 0.42 / 0.34, +8.2 [−1.0, +13.5] | 0.52 / 0.34, **+18.0 [+3.3, +32.2]** | 0.07 / 0.05 (15) |
+| GLM v2 | 0.36 / 0.29, +7.2 [−3.0, +12.8] | 0.42 / 0.28, +14.8 [−2.4, +31.7] | 0.10 / 0.05 (10) |
+| Both agree | 0.39 / 0.29, +9.2 [−0.6, +15.2] | 0.47 / 0.34, +12.5 [−7.5, +33.4] | 0.07 / 0.06 (6) |
+
+With this mapping the primary is Laya 0.20 to 0.24 against 0.17 to 0.19 for the 9B, +2.7 to +4.3 with CIs that include 0.
+
+- **The primary hypothesis is not met on val.** Laya is ahead on off track for both calls and closing messages, by 7 to 18 points, but the primary averages that with false claim, where both judges sit near F1 0.05 to 0.10.
+- **False claim cannot be measured on val:** the annotators find only 6 to 15 false claims among 495 closing messages. The proposal's test set is sized for 300.
+- **Laya has no false-claim head:** its done head answers "done or not", so it calls 105 to 108 closing messages false claims against 6 to 15 real ones. Most "not done" turns are missing actions, which the proposal counts as off track, not false claims. A typed head that tells false claim from missing action is needed for Q2.
+- **The 9B judge is stronger with Shuban's prompt:** on calls its F1 rose from 0.28 (`annotate.py` prompt) to 0.34, so Laya's lead on calls shrank from +14.5 to +8.2 against DeepSeek. This run is the fair SLM baseline, as it uses the harness judge prompt.
+
+**Next:** (1) a Q2 head on closing messages trained to tell false claim from missing action and done; (2) the test labels (3 test passes, sized for 300 false claims), without which the false-claim half stays at a handful of positives.
