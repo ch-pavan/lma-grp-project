@@ -1,0 +1,17 @@
+INFO:    Mounting image with FUSE.
+WARNING: group: unknown groupid 2025701
+/scratch/pavan.harshit/pylaya/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+loaded in 11s; train 8847, dev 1975, val 2427; mode full; laya 0.3.27
+states cut at max_len 1024: 32 of 8847 train rows
+Laya as is (no training):
+  dev                          AUROC 0.726  F1 0.136  P 0.087  R 0.309  acc 0.891  thr 0.284
+  val (dev threshold)          AUROC 0.566  F1 0.098  P 0.073  R 0.151  acc 0.788  thr 0.284
+epoch 1: loss 0.6470, dev AUROC 0.951, 215s
+epoch 2: loss 0.3808, dev AUROC 0.963, 217s
+epoch 3: loss 0.2175, dev AUROC 0.971, 217s
+epoch 4: loss 0.0655, dev AUROC 0.971, 217s
+Finetuned (full, best epoch 3 by dev AUROC):
+  dev                          AUROC 0.971  F1 0.589  P 0.579  R 0.600  acc 0.977  thr 0.204
+  val (dev threshold)          AUROC 0.897  F1 0.529  P 0.521  R 0.538  acc 0.927  thr 0.204
+DONE in 986s

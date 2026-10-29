@@ -3,7 +3,8 @@
 # offline_eval.py against the v2 DeepSeek and GLM labels and where the two agree.
 #   Laya: step head (job 49656, dev threshold) gives Q1 on calls; done head (job 49265, threshold 0.5 as in the live runs)
 #   gives Q2 on closing messages, P(not done) >= 0.5 -> false_claim, on track for Q1 (the live mapping).
-#   9B SLM judge: offline_eval.py --judge llm --reasoning on (job 50247), Q1 and Q2 on every step. Unparsed -> on track, none.
+#   9B SLM judge: offline_eval.py --judge llm --reasoning on (job 50247) merged with the 8,192 token rejudge of its unparsed
+#   steps (job 50265, rejudge_unparsed.py), Q1 and Q2 on every step. Still unparsed -> on track, none.
 # CIs: bootstrap over the 15 val scenarios, the same draws for both judges, so the difference is paired.
 # usage: python analysis/primary_val.py [9B predictions.jsonl]
 import collections, json, os, sys
@@ -57,7 +58,7 @@ def f1_boot(keys, lab, pr, q, cls, scen, names, idx):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else D + "q9b_slm_val/full/predictions.jsonl"
+    path = sys.argv[1] if len(sys.argv) > 1 else D + "q9b_slm_val/merged.jsonl"
     rows = E.load_steps([V])
     scen = {(r["id"], r["run"], r["k"]): r["id"] for r in rows}
     ds, _ = E.load_label_set(V + "annot_v2_deepseek.jsonl", rows)
