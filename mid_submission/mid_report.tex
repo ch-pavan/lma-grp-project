@@ -491,7 +491,7 @@ Step and done checks: oracle & 47.5\% & +4.2 [$-$1.7, +10.8] & 0 & \\
 \subsection{Primary metric on validation}
 \begin{table}[H]
 \centering\tablestyle
-\caption{Primary metric on validation: finetuned Laya against the 9B SLM judge, scored against the guide v2 LLM annotations (which the human check scored at kappa 0.53 and 0.62). CIs: paired bootstrap over scenarios. The proposal's scoring counts Laya's ``not done'' as a false claim and every closing message as on track for Q1, so Laya never marks a closing message off track. The last column scores tool calls only.}\label{tab:primary}
+\caption{Primary metric on validation: finetuned Laya against the 9B SLM judge, scored against the guide v2 LLM annotations (which the human check scored at kappa 0.53 and 0.62). CIs: paired bootstrap over scenarios. The proposal's scoring counts Laya's ``not done'' as a false claim and every closing message as on track for Q1, so Laya never marks a closing message off track. The last column scores tool calls only. The 9B judge used its harness prompt here; 33 of its 1,772 answers (1.9\%) stayed unparsed and count as not flagged.}\label{tab:primary}
 \begin{tabularx}{\linewidth}{P{0.13\linewidth}YYYY}
 \toprule
 \rowcolor{white}\textbf{Labels} & \textbf{Off track, all steps} (Laya / 9B) & \textbf{False claim} (Laya / 9B, positives) & \textbf{Primary,} Laya $-$ 9B [95\% CI] & \textbf{Off track, tool calls only} (Laya / 9B; Laya $-$ 9B [95\% CI]) \\
@@ -521,7 +521,7 @@ Both agree & 0.30 / 0.31 & 0.07 / 0.06 (6) & +0.5 [$-$6.7, +5.1] & 0.39 / 0.29; 
 \midrule
 \textbf{Correction action} (Qwen3 8B, validation) & \textbf{Block and warn does not help even with a perfect judge} (oracle +2.5 [$-$1.7, +6.7]) and hurts with the SLM judge (18.3\% against 25.8\% for no judge). Rollback removes that damage (22.5 to 24.2\%). A vote of 3 with the SLM judge gives nothing (20.8\%). \textbf{Rollback plus the done check moved results with the oracle} on Qwen3.5 4B (+9.2 [+2.5, +15.8]); on Qwen3 8B it is borderline (+5.8 [0.0, +12.5]). No deployable judge has moved results yet. \\
 \textbf{Finetuning gain per question} & Done check: AUROC 0.53 as is, 0.59 head only, 0.79 full finetune. Step check: AUROC 0.57 as is against 0.90 finetuned (2,427 pooled validation calls). \\
-\textbf{Per question against rules} & Not comparable yet: the rules were scored against the guide v1 labels on all steps (primary F1 0.10 to 0.11, Table~\ref{tab:offline}), Laya against the v2 labels (Table~\ref{tab:primary}). Scoring both on the same labels is planned. \\
+\textbf{Per question against rules} & Scored on the same guide v2 labels as Table~\ref{tab:primary} (A / B). Off track over all steps: rules 0.14 / 0.12, Laya 0.30 / 0.27. On tool calls: rules 0.16 / 0.14, Laya 0.42 / 0.36. False claim: rules 0.00 / 0.00, Laya 0.07 / 0.10. Primary: rules 0.07 / 0.06, Laya 0.18 / 0.19. Laya beats the rules on every class; the rules flag 299 calls off track at precision 0.08 to 0.09. \\
 \textbf{Agent model and reasoning} & Qwen3 8B 25.8\%, Qwen3.5 4B 40.0\%, Qwen3.5 9B 43.3\%. Reasoning on is 6.6 points lower and 2.5$\times$ slower. \\
 \textbf{Input format, Laya as is} & 4 state formats and 8 question wordings: AUROC 0.39 to 0.67. Putting the step first fixes the truncation but adds no signal. \\
 \textbf{How the done head is used} & As a gate on every closing message: 37.5\%. Only for the done check: 42.5\%. \\

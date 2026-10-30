@@ -78,12 +78,12 @@ Each task gives:
 |---|---|---|---|---|
 | 3.1 | Deferred (D4): relabel all 1,772 validation steps with guide v3 | Check #2: the full-validation labels are still the failed v2 | For now, the report states the labels are v2 | Pavan |
 | 3.2 | Only if 3.1 runs: rerun the primary metric against the v3 labels | The current primary uses v2 labels | New Table 13 with paired CIs | Pavan |
-| 3.3 | Score the step check against annotator labels with the harness-prompt 9B, unparsed answers reported separately | Check #6 | A table of Laya against 9B with CIs on A, B and both-agree labels | Shuban |
+| 3.3 | **Done (31 Oct).** Score the step check against annotator labels with the harness-prompt 9B, unparsed answers reported separately | Check #6 | Report Table 13, tool-calls column; 33 unparsed answers noted | Shuban |
 | 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | Pavan |
-| 3.5 | Gate 1 table: training counts per proposal class | 2.12 | Table in the report | Swayam |
+| 3.5 | **Done.** Gate 1 table: training counts per proposal class | 2.12 | Report Table 3 and section 5.3 | Swayam |
 | 3.6 | Rebuild the report with Phases 1 to 3 and run the fact-check again | All | Zero open items | Swayam, Aaditya |
 | 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | Pavan |
-| 3.8 | Score the rules and Laya against the same LLM labels (v2, and v3 where available) | Table 10 used v1 labels; rules and Laya are not comparable | One per-question table | Shuban |
+| 3.8 | **Done.** Score the rules and Laya against the same LLM labels (v2) | Table 10 used v1 labels | `analysis/2026-10-30_rules_vs_laya_v2.md`; report Table 14 | Shuban |
 
 ## Phase 4: the experiments the proposal still needs (GPU from 1 Nov)
 
