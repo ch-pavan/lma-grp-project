@@ -26,6 +26,22 @@ Each task gives:
 | D3 | Do fixes rewrite commits or land as new ones? | **New commits:** 30 for the repo attribution fixes, 31 for the corrected report. No force-push. |
 | D4 | Relabel all 1,772 validation steps with guide v3? | **Deferred.** Training uses oracle labels, not LLM labels, so it isn't needed for training. It is a validation-only redo of the v2 job: about 3,140 calls, about $1, about the same as the v2 run. The report states that full-validation labels are still v2. Revisit at Phase 4, together with the test labelling, which is required. |
 
+## Status
+
+| Phase | Status |
+|---|---|
+| 1. Attribution | **Done.** Commit 30 covers 1.1 to 1.3. Items 1.4 and 1.5 are in the report, commit 31. |
+| 2. Report wording | **Done.** Commit 31: all 13 items from `midreport-check.md`, plus 16 more from a second fact-check. |
+| 3. Data gaps without GPUs | **Next.** 3.1 and 3.2 are deferred (D4). |
+| 4. GPU experiments | From 1 Nov |
+
+**Second fact-check, key corrections:**
+- **Off-track result.** Under the proposal's scoring, Laya trails the 9B judge on off-track F1 over all steps (0.27 to 0.30 against 0.29 to 0.34). It leads only on tool calls, by +7 to +9 points.
+- **Training labels.** The step head still trains on the oracle off-track rule ("breaks task", 276 of 408 bad training calls), which failed the 80% agreement rule. This is now Phase 3 item 3.7.
+- **Gate 1 counts.** Pooled over the 9B and 8B steps: off track 310 and false claim 372 pass; unneeded irreversible 217 and made-up values at most 143 do not.
+- **Baselines.** The test baselines used the Qwen3 8B agent and judge, so they must be rerun with the 9B for the task claim. This is now Phase 4 item 4.9.
+- **Rules comparison.** Table 10 was scored against v1 labels, so rules and Laya are not comparable yet. This is now Phase 3 item 3.8.
+
 ## Phase 1: make the attribution true (no new runs)
 
 | ID | What | Files | Done when |
@@ -66,6 +82,8 @@ Each task gives:
 | 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | Pavan |
 | 3.5 | Gate 1 table: training counts per proposal class | 2.12 | Table in the report | Swayam |
 | 3.6 | Rebuild the report with Phases 1 to 3 and run the fact-check again | All | Zero open items | Swayam, Aaditya |
+| 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | Pavan |
+| 3.8 | Score the rules and Laya against the same LLM labels (v2, and v3 where available) | Table 10 used v1 labels; rules and Laya are not comparable | One per-question table | Shuban |
 
 ## Phase 4: the experiments the proposal still needs (GPU from 1 Nov)
 
@@ -78,6 +96,7 @@ Each task gives:
 | 4.5 | Primary metric on test: paired bootstrap, Holm correction | The hypothesis is confirmed or falsified | Shuban |
 | 4.6 | Ablations: state parts (no plan, no recent calls, no evidence list), escalation budget, 3 seeds | Ablation table | Shuban, Swayam |
 | 4.7 | Online test runs with rollback and the done check, plus a 4B pilot | Task accuracy with CIs | Pavan, Aaditya |
+| 4.9 | Rerun the test-set baselines (no judge, rules, SLM judge) with the Qwen3.5 9B agent and judge | The current test baselines used Qwen3 8B | Table 9 on the 9B | Pavan, Shuban |
 | 4.8 | Optional, if time allows: AgentProcessBench and AgentHallu any-flag F1, and Gemma 4 12B as a reference | Results, or listed as future work | Shuban |
 
 ## Phase 5: final submission
