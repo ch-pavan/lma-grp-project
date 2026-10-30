@@ -139,7 +139,7 @@ def fig_timeline():
     d0 = dt.date(2026, 10, 31)
     def day(m, d): return (dt.date(2026, m, d) - d0).days
     rows = [
-        ("Score the two running jobs (step head labels, done threshold)", day(10, 31), day(11, 3) + 1, "run", "Swayam, Pavan"),
+        ("Phase 3 reruns scored (done 31 Oct); step head seeds", day(10, 31), day(11, 3) + 1, "run", "Swayam"),
         ("9B test passes, no judge (stop at 300 false claims or 8 passes)", day(11, 1), day(11, 5) + 1, "plan", "Pavan"),
         ("LLM annotation of test steps, guide v3", day(11, 4), day(11, 7) + 1, "plan", "Pavan"),
         ("Human check of 100 test steps, kappa rule", day(11, 6), day(11, 9) + 1, "plan", "Swayam, Aaditya, Pavan"),
@@ -169,13 +169,13 @@ def fig_timeline():
     ax.axvspan(16, 20.2, color=LGREY, zorder=0)
     ax.text(18.1, n + 0.1, "16 to 19 Nov\nevaluations", ha="center", va="center", fontsize=6.6, color=GREY)
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(color=ORG, label="running"), Patch(color=BLUE, label="planned"), Patch(facecolor="#B5B5B5", hatch="//", edgecolor="#888888", label="stretch, only if time allows")], fontsize=6.5, loc="upper center", bbox_to_anchor=(0.45, -0.1), ncol=3, frameon=False)
+    ax.legend(handles=[Patch(color=ORG, label="in progress"), Patch(color=BLUE, label="planned"), Patch(facecolor="#B5B5B5", hatch="//", edgecolor="#888888", label="stretch, only if time allows")], fontsize=6.5, loc="upper center", bbox_to_anchor=(0.45, -0.1), ncol=3, frameon=False)
     fig.savefig(os.path.join(OUT, "fig_timeline.pdf"), bbox_inches="tight", pad_inches=0.03)
     plt.close(fig)
 
 
 def fig_offline():
-    fig, axs = plt.subplots(1, 3, figsize=(6.7, 2.1), gridspec_kw={"width_ratios": [2.2, 1.2, 1.4]})
+    fig, axs = plt.subplots(1, 3, figsize=(6.7, 2.1), gridspec_kw={"width_ratios": [2.2, 1.2, 1.8]})
     ax = axs[0]
     m = ["Precision", "Recall", "F1", "AUROC"]; slm = [0.18, 0.38, 0.24, 0.61]; lay = [0.57, 0.61, 0.59, 0.91]
     import numpy as np
@@ -192,10 +192,10 @@ def fig_offline():
     ax.set_xticks(range(3)); ax.set_xticklabels(names, fontsize=6.6); ax.set_ylim(0, 1.0)
     ax.set_title("(b) Done check AUROC", fontsize=7.2, loc="left")
     ax = axs[2]
-    names = ["Laya full\nthr 0.5", "Laya full\ndev thr", "9B SLM\njudge"]; f1 = [0.53, 0.36, 0.41]
-    ax.bar(range(3), f1, color=[BLUE, ORG, "#9AA5B1"], width=0.6)
+    names = ["Laya full\nthr 0.5", "Laya full\nCV thr 0.56", "Laya full\ndev thr", "9B SLM\njudge"]; f1 = [0.53, 0.53, 0.36, 0.41]
+    ax.bar(range(4), f1, color=[BLUE, BLUE, ORG, "#9AA5B1"], width=0.6)
     for i, v in enumerate(f1): ax.text(i, v + 0.015, f"{v:.2f}", ha="center", fontsize=6.5)
-    ax.set_xticks(range(3)); ax.set_xticklabels(names, fontsize=6.3); ax.set_ylim(0, 0.7)
+    ax.set_xticks(range(4)); ax.set_xticklabels(names, fontsize=5.8); ax.set_ylim(0, 0.7)
     ax.set_title("(c) Done check F1", fontsize=7.2, loc="left")
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "fig_offline.pdf"), bbox_inches="tight", pad_inches=0.02)

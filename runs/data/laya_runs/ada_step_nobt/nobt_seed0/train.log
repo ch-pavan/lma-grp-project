@@ -1,0 +1,15 @@
+/home2/swayam.goyal/sot/venv/lib/python3.12/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+loaded in 19s; train 8847, dev 1975, val 2427; mode full; laya 0.3.27
+states cut at max_len 1024: 32 of 8847 train rows
+Laya as is (no training):
+  dev                          AUROC 0.776  F1 0.161  P 0.172  R 0.152  acc 0.974  thr 0.450
+  val (dev threshold)          AUROC 0.641  F1 0.029  P 0.050  R 0.021  acc 0.945  thr 0.450
+epoch 1: loss 1.1775, dev AUROC 0.955, 738s
+epoch 2: loss 0.5138, dev AUROC 0.977, 744s
+epoch 3: loss 0.2219, dev AUROC 0.974, 745s
+epoch 4: loss 0.0787, dev AUROC 0.980, 741s
+Finetuned (full, best epoch 4 by dev AUROC):
+  dev                          AUROC 0.980  F1 0.542  P 0.413  R 0.788  acc 0.978  thr 0.003
+  val (dev threshold)          AUROC 0.976  F1 0.542  P 0.397  R 0.856  acc 0.942  thr 0.003
+DONE in 3220s

@@ -1,0 +1,15 @@
+/home2/swayam.goyal/sot/venv/lib/python3.12/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+loaded in 6s; train 2699, dev 642, val 642; mode full; laya 0.3.27
+states cut at max_len 1024: 23 of 2699 train rows
+Laya as is (no training):
+  dev                          AUROC 0.710  F1 0.442  P 0.312  R 0.754  acc 0.650  thr 0.261
+  val (dev threshold)          AUROC 0.710  F1 0.442  P 0.312  R 0.754  acc 0.650  thr 0.261
+/home2/swayam.goyal/sot/venv/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:182: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
+epoch 1: loss 0.4860, dev AUROC 0.869, 187s
+epoch 2: loss 0.2033, dev AUROC 0.831, 185s
+Finetuned (full, best epoch 1 by dev AUROC):
+  dev                          AUROC 0.869  F1 0.590  P 0.571  R 0.610  acc 0.844  thr 0.869
+  val (dev threshold)          AUROC 0.869  F1 0.590  P 0.571  R 0.610  acc 0.844  thr 0.869
+DONE in 444s

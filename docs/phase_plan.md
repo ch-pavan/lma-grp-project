@@ -32,12 +32,12 @@ Each task gives:
 |---|---|
 | 1. Attribution | **Done.** Commit 30 covers 1.1 to 1.3. Items 1.4 and 1.5 are in the report, commit 31. |
 | 2. Report wording | **Done.** Commit 31: all 13 items from `midreport-check.md`, plus 16 more from a second fact-check. |
-| 3. Data gaps without GPUs | **In progress.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, run on Ada under Swayam's account (`pavan_gpu/jobs/ada_*.sbatch`, 31 Oct). |
-| 4. GPU experiments | From 1 Nov. Item 4.1 is `pavan_gpu/` job c. |
+| 3. Data gaps without GPUs | **Done for the mid submission.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, ran on Ada under Swayam's account on 31 Oct (`analysis/2026-10-31_step_nobt_and_done_cv.md`). |
+| 4. GPU experiments | From 1 Nov. Item 4.1 is `runs/turing/q9b_test_passes.sbatch`. |
 
 **Second fact-check, key corrections:**
 - **Off-track result.** Under the proposal's scoring, Laya trails the 9B judge on off-track F1 over all steps (0.27 to 0.30 against 0.29 to 0.34). It leads only on tool calls, by +7 to +9 points.
-- **Training labels.** The step head still trains on the oracle off-track rule ("breaks task", 276 of 408 bad training calls), which failed the 80% agreement rule. This is now Phase 3 item 3.7.
+- **Training labels.** The step head still trains on the oracle off-track rule ("breaks task", 276 of 408 bad training calls), which failed the 80% agreement rule. Phase 3 item 3.7 retrained it without that rule: agreement with the annotators did not change, but seeds vary widely.
 - **Gate 1 counts.** Pooled over the 9B and 8B steps: off track 310 and false claim 372 pass; unneeded irreversible 217 and made-up values at most 143 do not.
 - **Baselines.** The test baselines used the Qwen3 8B agent and judge, so they must be rerun with the 9B for the task claim. This is now Phase 4 item 4.9.
 - **Rules comparison.** The off-the-shelf judges table was scored against v1 labels, so rules and Laya were not comparable. This became item 3.8, now done.
@@ -79,10 +79,10 @@ Each task gives:
 | 3.1 | Deferred (D4): relabel all 1,772 validation steps with guide v3 | Check #2: the full-validation labels are still the failed v2 | For now, the report states the labels are v2 | Pavan |
 | 3.2 | Only if 3.1 runs: rerun the primary metric against the v3 labels | The current primary uses v2 labels | New primary-metric table with paired CIs | Pavan |
 | 3.3 | **Done (31 Oct).** Score the step check against annotator labels with the harness-prompt 9B, unparsed answers reported separately | Check #6 | Report primary-metric table, tool-calls column (printed by `analysis/primary_val.py`); 33 unparsed answers noted | Shuban |
-| 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | Swayam (Ada, `pavan_gpu/jobs/ada_b_done_cv.sbatch`, running 31 Oct) |
+| 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | **Done 31 Oct** (Swayam, Ada). Out-of-fold threshold 0.561 gives validation F1 0.53, the same as 0.5; the dev threshold (F1 0.36) is dropped. `analysis/2026-10-31_step_nobt_and_done_cv.md` |
 | 3.5 | **Done.** Gate 1 table: training counts per proposal class | 2.12 | Report progress table and section 5.3 | Swayam |
 | 3.6 | Rebuild the report with Phases 1 to 3 and run the fact-check again | All | Zero open items | Swayam, Aaditya |
-| 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | Swayam (Ada, `pavan_gpu/jobs/ada_a_step_nobt.sbatch`, running 31 Oct) |
+| 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | **Done 31 Oct** (Swayam, Ada, 3 seeds each). Without "breaks task", off-track F1 against the annotators is unchanged (0.41 / 0.35 / 0.37 against 0.41 / 0.35 / 0.39), but seed spread is large (0.17 to 0.53 with the original labels). Keep the labels and report step-head results over 3 seeds. `analysis/2026-10-31_step_nobt_and_done_cv.md` |
 | 3.8 | **Done.** Score the rules and Laya against the same LLM labels (v2) | Table 10 used v1 labels | `analysis/2026-10-30_rules_vs_laya_v2.md`; report ablations table | Shuban |
 
 ## Phase 4: the experiments the proposal still needs (GPU from 1 Nov)
@@ -103,9 +103,13 @@ Each task gives:
 
 Final report, release of the LLM and human-check labels, and repo clean-up. Every number comes from a script in the repo, and the final PDF gets the same fact-check.
 
-## Pavan's GPU folder
+## GPU job scripts
 
-`pavan_gpu/` holds the job scripts, data-prep scripts and instructions (`pavan_gpu/README.md`) for 3.7 (job a), 3.4 (job b) and 4.1 (job c). Pavan commits only `pavan_gpu/results/`. We score the results on our side, merge them into `runs/` and `analysis/`, and delete the folder.
+The separate `pavan_gpu/` folder was merged on 31 Oct and removed:
+- **Ada jobs.** The jobs for 3.7 and 3.4 are in `runs/ada/`, with a README.
+- **Data-prep scripts.** They are in `analysis/`: `make_step_variant.py` and `make_done_folds.py`.
+- **Results.** They are in `runs/data/laya_runs/ada_step_nobt/` and `ada_done_cv/`.
+- **Test passes for 4.1.** The job is `runs/turing/q9b_test_passes.sbatch`. Its gzipped outputs go into `runs/raw/q9b_test_<job>/`.
 
 ## Rules for every phase
 

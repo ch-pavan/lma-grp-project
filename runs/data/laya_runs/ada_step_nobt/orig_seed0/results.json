@@ -1,0 +1,91 @@
+{
+ "args": {
+  "data_dir": "/home2/swayam.goyal/sot/data/laya_step",
+  "model_dir": "/home2/swayam.goyal/sot/models/laya-typed-decisions",
+  "out_dir": "/home2/swayam.goyal/sot/runs/step_49477/orig_seed0",
+  "mode": "full",
+  "epochs": 4,
+  "bs": 32,
+  "accum": 8,
+  "grad_ckpt": 1,
+  "lr_head": 0.0001,
+  "lr_enc": 2e-05,
+  "max_len": 1024,
+  "question": "step",
+  "seed": 0,
+  "limit": 0,
+  "device": "cuda",
+  "dtype": "fp16"
+ },
+ "as_is": {
+  "dev": {
+   "auroc": 0.7273,
+   "f1_not_done": 0.1354,
+   "precision": 0.0815,
+   "recall": 0.4,
+   "accuracy": 0.8577,
+   "threshold": 0.258,
+   "n": 1975,
+   "n_not_done": 55
+  },
+  "val": {
+   "auroc": 0.5653,
+   "f1_not_done": 0.1344,
+   "precision": 0.0902,
+   "recall": 0.2634,
+   "accuracy": 0.74,
+   "threshold": 0.258,
+   "n": 2427,
+   "n_not_done": 186
+  }
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "loss": 0.7054128526279826,
+   "dev_auroc": 0.9474100378787879,
+   "seconds": 631.4452767372131
+  },
+  {
+   "epoch": 2,
+   "loss": 0.3886359795183084,
+   "dev_auroc": 0.9609090909090909,
+   "seconds": 607.9445381164551
+  },
+  {
+   "epoch": 3,
+   "loss": 0.2191197885146076,
+   "dev_auroc": 0.9654308712121212,
+   "seconds": 608.180760383606
+  },
+  {
+   "epoch": 4,
+   "loss": 0.042165768712247705,
+   "dev_auroc": 0.9625568181818182,
+   "seconds": 603.8134207725525
+  }
+ ],
+ "best": {
+  "epoch": 3,
+  "dev": {
+   "auroc": 0.9654,
+   "f1_not_done": 0.5128,
+   "precision": 0.4839,
+   "recall": 0.5455,
+   "accuracy": 0.9711,
+   "threshold": 0.1775,
+   "n": 1975,
+   "n_not_done": 55
+  },
+  "val": {
+   "auroc": 0.8783,
+   "f1_not_done": 0.4539,
+   "precision": 0.5847,
+   "recall": 0.371,
+   "accuracy": 0.9316,
+   "threshold": 0.1775,
+   "n": 2427,
+   "n_not_done": 186
+  }
+ }
+}

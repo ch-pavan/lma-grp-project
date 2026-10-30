@@ -68,8 +68,8 @@ Small local agents drift, make up values and claim work they did not do. We test
 
 \textbf{Findings so far.}
 \begin{itemize}
-  \item \textbf{Step check.} On the replay step labels the head was trained on, finetuned Laya ranks bad tool calls better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers). That judge used the weaker annotator prompt. With its harness prompt and the LLM annotators' labels, Laya's F1 lead on off track tool calls is +7 to +9 points, and every interval includes zero.
-  \item \textbf{Done check.} Laya's AUROC is 0.79 against 0.53 as is. F1 is 0.53 at threshold 0.5 and 0.36 at the threshold chosen on dev, against 0.41 for the SLM judge. The F1 comparison depends on the threshold.
+  \item \textbf{Step check.} On the replay step labels the head was trained on, finetuned Laya ranks bad tool calls better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers). That judge used the weaker annotator prompt. With its harness prompt and the LLM annotators' labels, Laya's F1 lead on off track tool calls is +7 to +9 points, and every interval includes zero. Three reruns on Ada put the AUROC at 0.87 $\pm$ 0.01 (0.91 is the best run), and one of the three seeds falls below the judge on off track F1, so the lead is not yet reliable. Retraining without the oracle ``breaks task'' label leaves agreement with the annotators unchanged.
+  \item \textbf{Done check.} Laya's AUROC is 0.79 against 0.53 as is. F1 is 0.53 at a threshold chosen by cross validation on train (0.56) and at 0.5, against 0.41 for the SLM judge. The earlier dev threshold, from 8 dev scenarios, gave 0.36 and is dropped.
   \item \textbf{Plain rules.} On the same labels Laya beats them on both classes of the primary metric (primary F1 0.18 to 0.19 against 0.06 to 0.07; no paired interval yet). On made up values, which Laya does not output, the rules score F1 0.44 to 0.52.
   \item \textbf{Primary metric on validation.} Laya minus the SLM judge is $-$1.0 to +2.0 F1, intervals include zero. It is not met on validation. Only 6 to 15 false claims exist there and Laya has no false claim head yet, so the false claim half cannot be measured yet.
   \item \textbf{Task accuracy.} No deployable judge differs from no judge beyond noise. Rollback plus the done check helped with the oracle ceiling on Qwen3.5 4B (+9.2 [+2.5, +15.8]) and was borderline on Qwen3 8B (+5.8 [0.0, +12.5]).
@@ -101,7 +101,7 @@ Updated GitHub with all the code & Section~\ref{sec:repo} \\
 \toprule
 \textbf{Shuban Biswas} & Harness and replay oracle. Qwen3 8B baselines on BFCL test and AgentDojo, Qwen3 8B and Qwen3.5 4B validation runs, correction action study, offline scorer for off the shelf judges and plain rules, blind second pass on contested check steps. \\
 \textbf{Ch Pavan Harshit} & Qwen3.5 9B agent runs on Turing, LLM annotation runs, Laya finetuning of both heads, live checks and primary metric analysis, referee of the human check. \\
-\textbf{Swayam Goyal} & Human check of the LLM annotations (with Aaditya), annotation guide v3, fresh check sample, Gate 1 counts, scorers and Ada job scripts, report. \\
+\textbf{Swayam Goyal} & Human check of the LLM annotations (with Aaditya), annotation guide v3, fresh check sample, Gate 1 counts, Phase 3 reruns of both heads on Ada and their scorers, report. \\
 \textbf{Aaditya Sharma} & Human check of the LLM annotations (with Swayam), review of disagreements by error type. \\
 \bottomrule
 \end{tabularx}
@@ -137,7 +137,7 @@ Offline judges (Kev, LettuceDetect, Laya as is) & \done{} On 1,772 validation st
 Finetuned Laya & \done{} Step head and done head. \plan{} A typed head that separates false claim from missing action. \\
 LLM annotation, two annotators & \done{} All 1,772 validation steps with guide v2. Guide v3 only on the 200 checked steps. \\
 Human check of the annotations & \done{} 200 steps, guide rewritten once. \plan{} 100 more steps from the test runs. \\
-Step head without the oracle ``breaks task'' label; done head threshold by grouped cross validation & \run{} Retrains with 3 seeds each; results for the final submission. \\
+Step head without the oracle ``breaks task'' label; done head threshold by grouped cross validation & \done{} On Ada, 3 seeds per variant and 5 folds (Table~\ref{tab:phase3}). \\
 Gate 1: 300 training examples per class & Not met. Pooled 9B and 8B steps: off track 310 and false claim 372 reach it, unneeded irreversible 217 and made up values at most 143 do not. \\
 Test passes, test labels, primary metric on test & \plan{} Section~\ref{sec:timeline}. \\
 Laya alone and the full system online on test & \plan{} One pass per system. \\
@@ -217,19 +217,19 @@ LettuceDetect (false claim only) & 0.18 & 0.22 & 0.15 \\
 All intervals overlap, so none is reliably ahead. Laya as is stays at AUROC 0.39 to 0.67 across 4 state formats and 8 question wordings. It cuts the end of its input, so on long states it never sees the step it judges, and moving the step first added no signal. Only the hosted Jev classifier showed signal, on closing messages (AUROC 0.81). Off the shelf use is not enough, so Laya is finetuned.
 
 \section{Results: finetuned Laya}\label{sec:laya}
-Both heads are fully finetuned with balanced class weights on one RTX 6000 Ada (step head 16 minutes, done head 5 minutes). The step head trains on 8,847 calls (408 bad) and the done head on 3,341 turn ends. The step head's threshold comes from held out dev scenarios; the done head is reported at 0.5 and at its dev threshold.
+Both heads are fully finetuned with balanced class weights on one RTX 6000 Ada (step head 16 minutes, done head 5 minutes). The step head trains on 8,847 calls (408 bad) and the done head on 3,341 turn ends. The step head's threshold comes from held out dev scenarios. The done head's, 0.56, comes from grouped cross validation on train (Section~\ref{sec:ablations}).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figs/fig_offline.pdf}
-\caption{Finetuned Laya on validation. (a) Replay step labels; the SLM judge used the annotator prompt and 83 of its 1,277 answers did not parse and count as not flagged. (b, c) Done check on 495 turn ends against the oracle, positive class not done; panel (c) shows Laya full at threshold 0.5 and at its dev threshold. 20 of the 9B's 495 done check answers did not parse.}\label{fig:offlinelaya}
+\caption{Finetuned Laya on validation. (a) Replay step labels; the SLM judge used the annotator prompt and 83 of its 1,277 answers did not parse and count as not flagged. (b, c) Done check on 495 turn ends against the oracle, positive class not done; panel (c) shows Laya full at threshold 0.5, at 0.56 from cross validation on train, and at its dev threshold. 20 of the 9B's 495 done check answers did not parse.}\label{fig:offlinelaya}
 \end{figure}
 
-\textbf{Step check.} On the 2,427 pooled validation calls the finetuned AUROC is 0.90 against 0.57 as is. It also beats the rule ``flag every irreversible call'' on irreversible calls only (0.74 against 0.50) and on reads only (0.95 against 0.50), so it is not only reading function names. The labels are the replay rules, not yet checked by people.
+\textbf{Step check.} On the 2,427 pooled validation calls the finetuned AUROC is 0.90 against 0.57 as is. It also beats the rule ``flag every irreversible call'' on irreversible calls only (0.74 against 0.50) and on reads only (0.95 against 0.50), so it is not only reading function names. The labels are the replay rules, not yet checked by people. Figure~\ref{fig:offlinelaya}a shows one run. Three reruns on Ada with the same labels (fp16, 3 seeds) give AUROC 0.87 $\pm$ 0.01 and F1 0.47 $\pm$ 0.07 on the same 1,277 calls.
 
-\textbf{Done check.} The full finetune is the only variant with a clear AUROC gain. Its F1 falls from 0.53 to 0.36 when the threshold is the one chosen on dev (0.98, from 50 positives), below the SLM judge's 0.41. A threshold by grouped cross validation on train is in progress.
+\textbf{Done check.} The full finetune is the only variant with a clear AUROC gain. Its F1 falls from 0.53 to 0.36 when the threshold is the one chosen on dev (0.98, from 50 positives), below the SLM judge's 0.41. A threshold chosen by grouped cross validation on train, without using validation, is 0.56 and gives 0.53, the same as 0.5. The drop came from the small dev split, not the head.
 
-\textbf{Fairer step comparison.} With the SLM judge on its harness prompt and the LLM annotators' labels, Laya's lead on off track tool calls is +8.2 [$-$1.0, +13.5] with Annotator A, +7.2 [$-$3.0, +12.8] with B and +9.2 [$-$0.6, +15.2] where both agree. The harness prompt raised the 9B's call F1 from 0.28 to 0.34, which cut the lead from +14.5 to +8.2 against A. The 9B judge writes about 1,500 output tokens per call and 2,380 per closing message. Laya runs one forward pass of a 0.4B encoder.
+\textbf{Fairer step comparison.} With the SLM judge on its harness prompt and the LLM annotators' labels, Laya's lead on off track tool calls is +8.2 [$-$1.0, +13.5] with Annotator A, +7.2 [$-$3.0, +12.8] with B and +9.2 [$-$0.6, +15.2] where both agree. The harness prompt raised the 9B's call F1 from 0.28 to 0.34, which cut the lead from +14.5 to +8.2 against A. Over the three Ada seeds the mean off track F1 (0.41 / 0.35 / 0.39) is close to this run, but one seed scores 0.17 to 0.22, below the judge's 0.29 to 0.34, so the lead is within seed noise. The 9B judge writes about 1,500 output tokens per call and 2,380 per closing message. Laya runs one forward pass of a 0.4B encoder.
 
 \subsection{Live on the agent}
 \begin{table}[H]
@@ -265,7 +265,7 @@ Both agree & 0.30 / 0.31 & 0.07 / 0.06 (6) & +0.5 [$-$6.7, +5.1] & +9.2 [$-$0.6,
 \bottomrule
 \end{tabularx}
 \end{table}
-The primary hypothesis is not met on validation and not yet tested. Over all steps Laya trails the 9B slightly on off track, because its done head only signals false claims. It leads on tool calls by 7 to 9 points. False claim is near zero for both on 6 to 15 positives, and Laya has no false claim head yet.
+The primary hypothesis is not met on validation and not yet tested. Over all steps Laya trails the 9B slightly on off track, because its done head only signals false claims. It leads on tool calls by 7 to 9 points in this run, less than the spread between seeds. False claim is near zero for both on 6 to 15 positives, and Laya has no false claim head yet.
 
 \section{Ablations}\label{sec:ablations}
 \begin{figure}[H]
@@ -292,9 +292,21 @@ Done head use & As a gate on every closing message 37.5\%, as a done check only 
 \end{tabularx}
 \end{table}
 
-\textbf{In progress} (Ada, RTX 2080 Ti, fp16; results for the final submission). The step head is retrained without the oracle ``breaks task'' label (209 instead of 408 bad training calls) against 3 seeds of the current labels. The done head threshold is chosen from out of fold scores on 5 scenario grouped folds of train.
+\begin{table}[H]
+\centering\tablestyle
+\caption{Phase 3 reruns on Ada (RTX 2080 Ti, fp16), 31 October. Step head: mean $\pm$ sd over 3 seeds on the 1,277 calls of the 9B validation run, AUROC against the replay labels, off track F1 against the v2 annotators (A / B / both agree). Done head: the 495 validation turn ends. Write up: \code{analysis/2026-10-31\_step\_nobt\_and\_done\_cv.md}.}\label{tab:phase3}
+\begin{tabularx}{\linewidth}{P{0.3\linewidth}Y}
+\toprule
+\textbf{Rerun} & \textbf{Result} \\
+\midrule
+Step head, original labels & AUROC 0.87 $\pm$ 0.01 (0.91 in the run of Figure~\ref{fig:offlinelaya}). Off track F1 0.41 / 0.35 / 0.39, but single seeds range from 0.17 to 0.53. \\
+Step head without ``breaks task'' (209 instead of 408 bad training calls) & Off track F1 0.41 / 0.35 / 0.37: agreement with the annotators is unchanged, so the original labels are kept. AUROC 0.79 $\pm$ 0.03 is against labels that still include the rule. \\
+Done head threshold from 5 scenario grouped folds of train & 0.56, chosen without validation: F1 0.53 (precision 0.55, recall 0.51), the same as at 0.5. The dev threshold of 0.98 gives 0.36. Thresholds of single folds range from 0.17 to 0.87, so one small split cannot be trusted. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\textbf{Planned.} Drop the plan, recent calls or evidence list from Laya's input and measure off track detection. Three seeds for every finetune. The escalation budget (0, 10, 20, 30 and 100\% of uncertain steps to the SLM judge) is a stretch item.
+\textbf{Planned.} Drop the plan, recent calls or evidence list from Laya's input and measure off track detection. Three seeds for every remaining finetune, reported as mean $\pm$ sd. The escalation budget (0, 10, 20, 30 and 100\% of uncertain steps to the SLM judge) is a stretch item.
 
 \section{Annotation quality check}\label{sec:annot}
 Swayam and Aaditya each labelled every sampled step blind, and Pavan refereed their disagreements. They saw neither the LLM labels nor the oracle labels. The sample is two rounds of 100 validation steps, half flagged by the annotators, with kappa reweighted to the real mix. The proposal's rule: below 0.6 rewrite the guide, from 0.6 to 0.8 label more steps. The bar is 0.7.
@@ -333,9 +345,10 @@ Checker against checker is computed on the raw sheets before refereeing. The wea
 \textbf{Challenge} & \textbf{Mitigation} \\
 \midrule
 False claims are rare: 6 to 15 on validation by the LLM labels, while the primary metric needs about 300. Laya has no false claim head. & Test passes until 300 false claims or 8 passes, rule fixed before seeing test results. A typed closing message head. \\
-The oracle's off track label disagrees with the annotators (kappa 0.04 to 0.15) yet is set on 276 of the step head's 408 bad training calls. & Retrain without it and compare (in progress). Until then step check results are scored against labels that include it. \\
+The oracle's off track label disagrees with the annotators (kappa 0.04 to 0.15) yet is set on 276 of the step head's 408 bad training calls. & Retrained without it (3 seeds): agreement with the annotators is unchanged, so the labels are kept (Table~\ref{tab:phase3}). Step check results are still scored against labels that include it. \\
 Annotators disagreed on turn ends (kappa 0.54 under guide v1, 0.61 under v2). Under v3 they still agree with each other at only 0.61 to 0.62, and B with the check at 0.60 to 0.61. & 200 step human check, guide v3. Next: 100 more check steps from test, a third annotator for closing messages if false claim agreement stays low. \\
-Dev threshold on 50 positives overfit the done head (F1 0.36 against 0.53 at 0.5). & Thresholds from grouped cross validation on train, fixed before any test look. \\
+Dev threshold on 50 positives overfit the done head (F1 0.36 against 0.53 at 0.5). & Threshold from grouped cross validation on train: 0.56, F1 0.53 on validation. The dev threshold is dropped. \\
+The step head's off track F1 ranges from 0.17 to 0.53 over 3 seeds, wider than its lead over the SLM judge. & Every finetune reported as mean $\pm$ sd over 3 seeds. The test claim rests on the paired bootstrap and the seed spread. \\
 Little room on the 9B agent and a noisy pass rate (oracle +4.2, 28 of 120 tasks flip between identical runs). & Three seeds, the larger test set, paired bootstrap. Online pilot on the 4B agent if time allows. \\
 Compute: Ada 2080 Ti cards are slow and lack fast bf16, and directed runs with a 27B model would cost too many GPU hours. & 9B runs on a 48 GB card on Turing, fp16 jobs on Ada, Granite on CPU. Directed runs dropped by team decision (24 October), so unneeded irreversible calls and made up values stay below Gate 1 and are pooled into one bad step class. \\
 BFCL quality: unsound keys, and the turn where the agent should ask is never scored. & Cleaned split, empty turn check, act or ask decision accuracy reported if time allows. \\
@@ -344,7 +357,7 @@ BFCL quality: unsound keys, and the turn where the agent should ask is never sco
 \end{table}
 
 \section{Changes from the proposal}\label{sec:changes}
-This report is measured against the revised proposal of 24 October. Changes since then: directed runs with Qwen3.8 27B dropped, so the step head trains on pooled natural mistakes of Qwen3.5 9B and Qwen3 8B. Test baselines ran with the Qwen3 8B agent and judge and are to be rerun with the 9B. Test passes go up to 8, stopping at 300 false claims. The planned 350 step check of each automatic label rule was not run as specified. Block and warn became rollback plus the done check, which adds a done head at turn end. The heads are binary: Q3 is folded into the step head and Q1 and Q2 are not yet separate outputs, so the per question comparison is still to come. GLM 5.3 Flash is used in place of GLM 5.3. From proposal v5 to the revision: the agent changed from Qwen3 8B to Qwen3.5 9B, hand labelling of test steps became two LLM annotators with a 200 step human check, and Gemma 4 12B replaced Qwen3 14B as the reference judge.
+This report is measured against the revised proposal of 24 October. Changes since then: directed runs with Qwen3.8 27B dropped, so the step head trains on pooled natural mistakes of Qwen3.5 9B and Qwen3 8B. Test baselines ran with the Qwen3 8B agent and judge and are to be rerun with the 9B. Test passes go up to 8, stopping at 300 false claims. The planned 350 step check of each automatic label rule was not run as specified; retraining the step head without the failed oracle rule did not change agreement with the annotators. Block and warn became rollback plus the done check, which adds a done head at turn end. The heads are binary: Q3 is folded into the step head and Q1 and Q2 are not yet separate outputs, so the per question comparison is still to come. GLM 5.3 Flash is used in place of GLM 5.3. From proposal v5 to the revision: the agent changed from Qwen3 8B to Qwen3.5 9B, hand labelling of test steps became two LLM annotators with a 200 step human check, and Gemma 4 12B replaced Qwen3 14B as the reference judge.
 
 \section{Timeline to the final submission}\label{sec:timeline}
 Final submission is 15 November, evaluations 16 to 19 November. The critical path is test passes, test annotation, human check, then the primary metric on test.
@@ -362,7 +375,7 @@ Final submission is 15 November, evaluations 16 to 19 November. The critical pat
 \toprule
 \textbf{Dates} & \textbf{Work} & \textbf{Owner} \\
 \midrule
-31 Oct to 3 Nov & Score the two running jobs (step head labels, done head threshold). & Swayam, Pavan \\
+31 Oct to 3 Nov & Phase 3 reruns on Ada scored and merged (done 31 Oct). Step head seeds under the final settings. & Swayam \\
 1 to 7 Nov & 9B test passes without a judge, 4 first and up to 8 if short of false claims. LLM annotation of the test steps with guide v3. & Pavan \\
 2 to 9 Nov & Typed closing message head with a false claim class, frozen before test. Human check of 100 test steps, Pavan refereeing. & Pavan; Swayam, Aaditya \\
 3 to 10 Nov & State part ablation, 3 seeds. Rerun of the test baselines with the 9B. & Shuban, Swayam, Pavan \\
@@ -375,12 +388,14 @@ Stretch & Escalation budget, 4B online pilot, AgentProcessBench and AgentHallu, 
 If the test passes slip past 5 November, the online runs and the ablations are cut before the primary metric is.
 
 \section{Repository}\label{sec:repo}
-\url{https://github.com/ch-pavan/lma-grp-project} holds all code, data and results. Key folders: \code{shuban\_findings/} (harness, baselines, correction modes, off the shelf judges), \code{analysis/} (oracle and step labels, annotation, Laya finetuning and evaluation, write ups), \code{human\_check/} (guides, samples, sheets, results), \code{runs/} (run outputs, labels, Laya datasets, job scripts), \code{docs/phase\_plan.md} (plan with owners) and \code{pavan\_gpu/} (GPU job scripts).
+\url{https://github.com/ch-pavan/lma-grp-project} holds all code, data and results. Key folders: \code{shuban\_findings/} (harness, baselines, correction modes, off the shelf judges), \code{analysis/} (oracle and step labels, annotation, Laya finetuning and evaluation, write ups), \code{human\_check/} (guides, samples, sheets, results), \code{runs/} (run outputs, labels, Laya datasets, job scripts), and \code{docs/phase\_plan.md} (plan with owners). GPU job scripts are in \code{runs/turing/} and \code{runs/ada/}.
 
 \begin{tabular}{@{}l@{}}
 \code{sh runs/unpack\_data.sh}\quad rebuild \code{runs/data} from the repository\\
 \code{python analysis/primary\_val.py}\quad primary metric on validation\\
-\code{python human\_check/score.py human\_check/val2 -{}-guide v3}\quad annotation check
+\code{python human\_check/score.py human\_check/val2 -{}-guide v3}\quad annotation check\\
+\code{python analysis/score\_step\_variants.py runs/data/laya\_runs/ada\_step\_nobt}\quad Table~\ref{tab:phase3}, step head\\
+\code{python analysis/done\_threshold\_cv.py runs/data/laya\_runs/ada\_done\_cv}\quad Table~\ref{tab:phase3}, done threshold
 \end{tabular}
 
 \end{document}

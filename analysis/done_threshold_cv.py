@@ -1,8 +1,8 @@
-# Plan item 3.4: choose the done head's threshold from out-of-fold scores on TRAIN (pavan_gpu job b / ada_b: 5
+# Plan item 3.4: choose the done head's threshold from out-of-fold scores on TRAIN (runs/ada/laya_done_cv.sbatch: 5
 # scenario-grouped folds, each fold's val_scores.jsonl = held-out fold), then apply it, unchanged, to the validation
 # scores of the reported done head (job 49265). Validation is not used to choose anything.
 # Positive class: not done (label 0 in the done data). Threshold = the one maximising F1 on the pooled out-of-fold scores.
-# usage: python analysis/done_threshold_cv.py FOLDS_DIR [VAL_SCORES.jsonl] [--out FILE.md]
+# usage: python analysis/done_threshold_cv.py FOLDS_DIR [VAL_SCORES.jsonl] [--out FILE.md]    e.g. runs/data/laya_runs/ada_done_cv
 #        default VAL_SCORES: runs/data/laya_runs/49265/val_scores.jsonl
 import argparse, glob, json, os
 

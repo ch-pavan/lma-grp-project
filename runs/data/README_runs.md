@@ -19,3 +19,11 @@ In git (29 Oct 2026): the raw run outputs live in runs/raw/; the files made from
 
 ## laya_done.tar.gz
 - train/dev/val turn end rows used to finetune Laya (analysis/build_done_data.py)
+
+## laya_runs/ada_step_nobt/ and laya_runs/ada_done_cv/ (Ada, 31 Oct 2026, plan items 3.7 and 3.4)
+- ada_step_nobt/{nobt,orig}_seed{0,1,2}: step head without and with the oracle "breaks task" label, fp16 on an RTX 2080 Ti
+  (runs/ada/laya_step_nobt.sbatch, jobs 49477 and 49597); results.json, val_scores.jsonl.gz, train.log
+- ada_done_cv/fold{0..4}: done head on 5 scenario folds of train, val_scores = the held-out fold's out-of-fold scores
+  (runs/ada/laya_done_cv.sbatch, jobs 49476 and 49598)
+- Scored by analysis/score_step_variants.py and analysis/done_threshold_cv.py; write-up
+  analysis/2026-10-31_step_nobt_and_done_cv.md

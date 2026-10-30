@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build Stay_On_Task_mid_report.pdf from mid_report.tex with pdflatex (MiKTeX or TeX Live).
 
-Runs make_figs.py first if a figure is missing, then pdflatex twice (for cross-references and the page count),
+Runs make_figs.py first if a figure is missing, then pdflatex three times (the contents, cross-references and the page count settle by the third pass),
 then removes the auxiliary files.
 
     python mid_submission/build_report.py
@@ -24,7 +24,7 @@ def main():
     if any(not (HERE / "figs" / f"{f}.pdf").exists() for f in FIGS):
         subprocess.run([sys.executable, str(HERE / "make_figs.py")], check=True)
     cmd = ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", f"-jobname={JOB}", TEX.name]
-    for _ in range(2):
+    for _ in range(3):
         r = subprocess.run(cmd, cwd=HERE, capture_output=True, text=True, errors="replace")
         if r.returncode != 0:
             log = (HERE / f"{JOB}.log").read_text(errors="replace")

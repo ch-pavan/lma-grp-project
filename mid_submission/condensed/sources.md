@@ -17,3 +17,5 @@ Number to source map. Paths are relative to the repo clone lma-grp-project at co
 | Owners and plan items | docs/phase_plan.md lines 88 to 104 |
 | Train sizes 8,847 calls (408 bad), 3,341 turn ends, 16 and 5 minutes, 276 of 408 breaks task | team draft orig/mid_report.tex lines 321, 453, 643 (analysis/ Laya finetune notes) |
 | Timeline dates | made for this report, ends 15 Nov 2026, evaluations 16 to 19 Nov |
+| Phase 3 reruns on Ada (Table phase3): step head AUROC 0.87 / 0.79, off track F1 0.41 / 0.35 / 0.39 and 0.41 / 0.35 / 0.37, seed range 0.17 to 0.53, done threshold 0.56 with F1 0.53 (P 0.55, R 0.51), fold thresholds 0.17 to 0.87 | analysis/2026-10-31_step_nobt_and_done_cv.md, analysis/gpu_2026-10-31/{step_nobt,done_cv}.md; recompute with analysis/score_step_variants.py runs/data/laya_runs/ada_step_nobt and analysis/done_threshold_cv.py runs/data/laya_runs/ada_done_cv |
+| 9B judge off track F1 on tool calls 0.34 / 0.29 / 0.29 | analysis/primary_val.py (tool calls table) |

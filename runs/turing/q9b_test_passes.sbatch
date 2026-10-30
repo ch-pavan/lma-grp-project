@@ -12,10 +12,11 @@
 # scenarios x 4 versions, PASSES passes (default 4). Same server and sampling as job 49146 (vLLM 0.27.1, 32k context,
 # reasoning off). Job 49146 ran 1,128 tasks in 67 min, so 4 passes (1,600 tasks) should take about 1.5 to 2 hours.
 # Oracle labels and LLM annotation are done on our side after merging. These steps are also the S1 test baseline.
-# usage: sbatch [--export=ALL,PASSES=4] pavan_gpu/jobs/c_test_passes.sbatch
+# usage: sbatch [--export=ALL,PASSES=4] runs/turing/q9b_test_passes.sbatch
+# The gzipped outputs in $RES go into the repo as runs/raw/q9b_test_<job>/.
 set -u
 H=/home/pavan.harshit/stay-on-task; S=/scratch/pavan.harshit; R=$H/runs/pg_test_$SLURM_JOB_ID; mkdir -p $R
-RES=$H/pavan_gpu/results/c_test_passes; mkdir -p $RES
+RES=$R/for_repo; mkdir -p $RES
 M=$S/models/Qwen3.5-9B-AWQ-4bit; NAME=cyankiwi/Qwen3.5-9B-AWQ-4bit
 t0=$(date +%s); el() { echo "[$(( $(date +%s)-t0 ))s] $*"; }
 PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1])')

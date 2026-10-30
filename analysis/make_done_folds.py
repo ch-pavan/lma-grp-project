@@ -5,8 +5,8 @@ out-of-fold scores instead of the 50 dev positives (which gave threshold 0.98 an
 For fold k: train = the other folds, dev = val = fold k. train_laya_done.py then writes fold k's out-of-fold scores to
 val_scores.jsonl. Validation (the 15 val scenarios) is never touched here. CPU only, seconds.
 
-    python pavan_gpu/make_done_folds.py IN_DIR OUT_DIR [--k 5]
-    e.g. python pavan_gpu/make_done_folds.py $H/data/laya_done $H/data/laya_done_folds
+    python analysis/make_done_folds.py IN_DIR OUT_DIR [--k 5]
+    e.g. python analysis/make_done_folds.py $H/data/laya_done $H/data/laya_done_folds
 """
 import argparse
 import gzip

@@ -1,0 +1,79 @@
+{
+ "args": {
+  "data_dir": "/home2/swayam.goyal/sot/data/laya_done_folds/fold2",
+  "model_dir": "/home2/swayam.goyal/sot/models/laya-typed-decisions",
+  "out_dir": "/home2/swayam.goyal/sot/runs/done_cv_49476/fold2",
+  "mode": "full",
+  "epochs": 2,
+  "bs": 32,
+  "accum": 8,
+  "grad_ckpt": 1,
+  "lr_head": 0.0001,
+  "lr_enc": 2e-05,
+  "max_len": 1024,
+  "question": "done",
+  "seed": 0,
+  "limit": 0,
+  "device": "cuda",
+  "dtype": "fp16"
+ },
+ "as_is": {
+  "dev": {
+   "auroc": 0.6112,
+   "f1_not_done": 0.3646,
+   "precision": 0.2428,
+   "recall": 0.7319,
+   "accuracy": 0.4971,
+   "threshold": 0.2251,
+   "n": 700,
+   "n_not_done": 138
+  },
+  "val": {
+   "auroc": 0.6112,
+   "f1_not_done": 0.3646,
+   "precision": 0.2428,
+   "recall": 0.7319,
+   "accuracy": 0.4971,
+   "threshold": 0.2251,
+   "n": 700,
+   "n_not_done": 138
+  }
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "loss": 0.49945058032564527,
+   "dev_auroc": 0.8045412347207179,
+   "seconds": 181.5466194152832
+  },
+  {
+   "epoch": 2,
+   "loss": 0.21716502527246975,
+   "dev_auroc": 0.8192145030687503,
+   "seconds": 181.3528072834015
+  }
+ ],
+ "best": {
+  "epoch": 2,
+  "dev": {
+   "auroc": 0.8192,
+   "f1_not_done": 0.5546,
+   "precision": 0.4677,
+   "recall": 0.6812,
+   "accuracy": 0.7843,
+   "threshold": 0.462,
+   "n": 700,
+   "n_not_done": 138
+  },
+  "val": {
+   "auroc": 0.8192,
+   "f1_not_done": 0.5546,
+   "precision": 0.4677,
+   "recall": 0.6812,
+   "accuracy": 0.7843,
+   "threshold": 0.462,
+   "n": 700,
+   "n_not_done": 138
+  }
+ }
+}

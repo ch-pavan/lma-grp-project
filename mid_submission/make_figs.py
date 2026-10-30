@@ -180,7 +180,7 @@ def timeline():
     from matplotlib.patches import Patch
     d0 = dt.date(2026, 10, 31)
     day = lambda m, d: (dt.date(2026, m, d) - d0).days
-    tasks = [("Score the two running jobs", day(10, 31), day(11, 3) + 1, True),
+    tasks = [("Step-head seeds (Ada reruns done)", day(10, 31), day(11, 3) + 1, False),
              ("9B test passes (4, up to 8)", day(11, 1), day(11, 7) + 1, True),
              ("LLM annotation of test steps (v3)", day(11, 3), day(11, 7) + 1, True),
              ("Human check of 100 test steps", day(11, 5), day(11, 9) + 1, True),

@@ -9,8 +9,8 @@ much the step head depends on it.
 CPU only, seconds. Reads train/dev/val.jsonl (or .jsonl.gz) of the current step data, writes the same rows with a new
 "label" (the old one is kept as "label_with_breaks_task").
 
-    python pavan_gpu/make_step_variant.py IN_DIR OUT_DIR
-    e.g. python pavan_gpu/make_step_variant.py $H/data/laya_step $H/data/laya_step_nobt
+    python analysis/make_step_variant.py IN_DIR OUT_DIR
+    e.g. python analysis/make_step_variant.py $H/data/laya_step $H/data/laya_step_nobt
 """
 import gzip
 import json
