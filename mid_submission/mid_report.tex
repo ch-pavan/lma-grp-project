@@ -57,7 +57,7 @@
 \thispagestyle{plain}
 \begin{center}
 {\color{rule}\rule{\linewidth}{1.4pt}}\\[6pt]
-{\small\color{sub}\textsc{LMA Group Project 2026 \enspace·\enspace Mid-submission report \enspace·\enspace 30 October 2026}}\\[8pt]
+{\small\color{sub}\textsc{LMA Group Project 2026 \enspace·\enspace Mid-submission report \enspace·\enspace 31 October 2026}}\\[8pt]
 {\LARGE\bfseries\color{head} Stay on Task: Can a small classifier\\[2pt] correct local agents' drift?}\\[11pt]
 \begin{tabular}{cccc}
 \textbf{Shuban Biswas} & \textbf{Ch Pavan Harshit} & \textbf{Swayam Goyal} & \textbf{Aaditya Sharma}\\
@@ -78,11 +78,30 @@ At mid-term we have built and run:
   \item two finetuned Laya heads
 \end{itemize}
 \smallskip
-On validation, finetuned Laya ranks bad tool calls far better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers, on the replay step labels). Against the LLM annotators, with the judge on its harness prompt, Laya's F1 lead on off-track tool calls is +7 to +9 points, with confidence intervals that include zero. For telling whether a turn is finished, Laya's AUROC is 0.79 (0.53 as is); its F1 beats the SLM judge's 0.41 only at threshold 0.5 (0.53), not at the threshold chosen on dev (0.36). Each Laya check costs one forward pass, where the SLM judge writes about 1,500 to 2,400 tokens. The proposal's primary bar is a gain of 9 F1 points on the mean of off-track and false-claim F1. On validation the gap is only $-1.0$ to $+2.0$. Under the proposal's scoring, Laya trails the judge slightly on off-track F1 over all steps (its ``not done'' answers count as false claims, so it never marks a closing message off track), and both are near zero on false claims, which are rare on validation and which Laya has no head for. The plan to the final submission therefore focuses on test passes sized for false claims, a false-claim head, and the test-set evaluation.
+On validation, finetuned Laya ranks bad tool calls far better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers, on the replay step labels). Against the LLM annotators, with the judge on its harness prompt, Laya's F1 lead on off-track tool calls is +7 to +9 points, with confidence intervals that include zero. For telling whether a turn is finished, Laya's AUROC is 0.79 (0.53 as is); its F1 beats the SLM judge's 0.41 only at threshold 0.5 (0.53), not at the threshold chosen on dev (0.36). Each Laya check costs one forward pass, where the SLM judge writes about 1,500 to 2,400 tokens. Scored on the same labels, Laya beats plain rules on every class (primary F1 0.18 to 0.19 against 0.06 to 0.07). The proposal's primary bar is a gain of 9 F1 points on the mean of off-track and false-claim F1. On validation the gap is only $-1.0$ to $+2.0$. Under the proposal's scoring, Laya trails the judge slightly on off-track F1 over all steps (its ``not done'' answers count as false claims, so it never marks a closing message off track), and both are near zero on false claims, which are rare on validation and which Laya has no head for. The plan to the final submission therefore focuses on test passes sized for false claims, a false-claim head, and the test-set evaluation.
 \end{tcolorbox}
 
 {\small\tableofcontents}
 \vspace{2pt}{\color{rule}\rule{\linewidth}{0.4pt}}
+
+\begin{table}[H]
+\centering\tablestyle
+\caption{Where each required part of the mid-submission is.}\label{tab:required}
+\begin{tabularx}{\linewidth}{P{0.32\linewidth}Y}
+\toprule
+\rowcolor{white}\textbf{Required} & \textbf{Section} \\
+\midrule
+Progress & Section~\ref{sec:progress} (status of every proposal item), Section~\ref{sec:changes} (changes from the proposal) \\
+Datasets being used & Section~\ref{sec:datasets} \\
+Baseline experiments & Section~\ref{sec:baselines} \\
+Ablations & Section~\ref{sec:ablations} \\
+Results from the experiments run & Sections~\ref{sec:baselines}, \ref{sec:laya} and \ref{sec:annot} \\
+Challenges faced and mitigation plans & Section~\ref{sec:challenges} \\
+Timeline for the final submission & Section~\ref{sec:timeline} \\
+Updated GitHub with all the code & Section~\ref{sec:repo}: \url{https://github.com/ch-pavan/lma-grp-project/tree/main} \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 % =====================================================================
 \section{Introduction}
@@ -114,6 +133,7 @@ A large judge on every step is too slow, and a small model judging itself is wea
 \textbf{Key findings at mid-term.}
 \begin{itemize}
   \item \textbf{Laya ranks bad steps much better than the SLM judge offline} (AUROC 0.91 against 0.61), at near-zero cost. Against the LLM annotators its F1 lead on off-track calls is +7 to +9 points, not yet significant (Section~\ref{sec:laya}).
+  \item \textbf{Laya beats plain rules on every class} when both are scored on the same LLM labels: primary F1 0.18 to 0.19 against 0.06 to 0.07 (Section~\ref{sec:ablations}).
   \item \textbf{A judge of single steps cannot see omissions,} which are about half of all failures, so we added a check at the end of each turn (Section~\ref{sec:agent}).
   \item \textbf{Block-and-warn corrections do not help even with a perfect judge,} and they hurt with the SLM judge. Rollback plus the turn-end check moved task accuracy with a perfect (oracle) judge on the weaker Qwen3.5 4B agent; no deployable judge has moved it yet (Section~\ref{sec:ablations}).
   \item \textbf{After one guide rewrite, the LLM annotators reach kappa 0.84 and 0.71 against the human check} on a fresh sample (reweighted; 0.71 is 0.69 unweighted): past the 0.7 bar only after reweighting, and in the proposal's ``label more steps'' band (Section~\ref{sec:annot}).
@@ -177,7 +197,7 @@ The done check instead gets the closing message, the user requests, and every ca
 \textbf{Actions.} A bad step is rolled back and the doer resamples it, at most twice. A ``not done'' answer drops the closing message and tells the agent that part of the request may be unfinished, at most twice per turn.
 
 % =====================================================================
-\section{Progress against the proposal}
+\section{Progress against the proposal}\label{sec:progress}
 
 {\tablestyle
 \begin{xltabular}{\linewidth}{P{0.36\linewidth}Y}
@@ -206,11 +226,14 @@ Test labels and the primary metric on test & \textbf{Not yet.} Starts after the 
 Confidence-gated escalation to the SLM judge; calibration on 200 annotator-labelled validation steps & \textbf{Not yet,} after the test labels. \\
 Laya finetuned alone and the full system, online on test & \textbf{Not yet} (Phase 4 of the plan). \\
 Any-flag F1 on AgentProcessBench and AgentHallu & \textbf{Not yet;} future work if time allows. \\
+Rules and Laya scored on the same LLM labels & \textbf{Done} (Table~\ref{tab:ablations}). \\
+Step head retrained without the oracle ``breaks task'' label, 3 seeds of each variant & \textbf{Running} on Ada (RTX 2080 Ti, fp16), results for the final if not ready. \\
+Done-head threshold chosen by grouped cross-validation on train & \textbf{Running} on Ada, results for the final if not ready. \\
 \bottomrule
 \end{xltabular}}
 
 % =====================================================================
-\section{Datasets}
+\section{Datasets}\label{sec:datasets}
 
 \subsection{Benchmarks}
 \textbf{BFCL multi-turn} (gorilla commit \code{6ea5797}):
@@ -329,7 +352,7 @@ Oracle & \textbf{Ceiling, not deployable:} flags exactly the steps the replay or
 \end{table}
 
 % =====================================================================
-\section{Baseline experiments}
+\section{Baseline experiments}\label{sec:baselines}
 
 \subsection{Choice of agent model}\label{sec:agent}
 \begin{figure}[H]
@@ -411,7 +434,7 @@ LettuceDetect (false claim only) & 0.18 & 0.22 & 0.15 \\
 \end{tabularx}
 \end{table}
 
-Every confidence interval overlaps, so none is reliably ahead, and all score low (primary F1 0.07 to 0.22).
+Every confidence interval overlaps, so none is reliably ahead, and all score low (primary F1 0.07 to 0.22). These scores use the guide v1 labels; the comparison of rules and Laya on the same v2 labels is in Table~\ref{tab:ablations}.
 
 \textbf{Laya as is.} On the Qwen3 8B validation steps against the oracle labels, we swept it across 4 state formats, 8 question wordings, thresholds and a logistic head. Its AUROC stayed at 0.39 to 0.67. It keeps the start of its input and cuts the end, so on long states it never saw the step it was judging. Putting the step first fixed the cut but added no signal.
 
@@ -531,6 +554,12 @@ Both agree & 0.30 / 0.31 & 0.07 / 0.06 (6) & +0.5 [$-$6.7, +5.1] & 0.39 / 0.29; 
 \end{tabularx}
 \end{table}
 
+\textbf{Running now} (Ada, RTX 2080 Ti, fp16; results for the final if not ready):
+\begin{itemize}
+  \item \textbf{Training labels.} The step head retrained without the oracle ``breaks task'' label (which failed the 80\% agreement rule; 209 instead of 408 bad training calls), against 3 seeds of the current labels in the same setup.
+  \item \textbf{Done-head threshold.} Chosen from out-of-fold scores on 5 scenario-grouped folds of train, so validation is never used to choose it.
+\end{itemize}
+
 \textbf{Planned for the final submission} (all offline and cheap):
 \begin{itemize}
   \item \textbf{State parts.} Drop the plan, the recent calls or the evidence list from Laya's input, and measure the effect on off-track detection. This tests our core state design, as the TA asked.
@@ -649,7 +678,7 @@ This report is measured against the revised proposal (\code{proposal/proposal.md
 \end{itemize}
 
 % =====================================================================
-\section{Timeline to the final submission}
+\section{Timeline to the final submission}\label{sec:timeline}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\linewidth]{figs/fig7_timeline.pdf}
@@ -663,6 +692,7 @@ This report is measured against the revised proposal (\code{proposal/proposal.md
 \toprule
 \rowcolor{white}\textbf{Week} & \textbf{Work} & \textbf{Owner} \\
 \midrule
+31 Oct & Finish the two Phase 3 runs on Ada (training labels without ``breaks task''; done-head threshold by cross-validation) and score them. & Swayam \\
 1--7 Nov & Test passes of the 9B agent (about 0.5 GPU-hour each) until 300 false claims; LLM annotation of the test steps with guide v3. & Pavan \\
 8--14 Nov & Typed closing-message head with a false-claim class; thresholds by grouped cross-validation; 3 seeds. Human check of 100 test steps (Pavan referees). & Pavan, Shuban; check: Swayam, Aaditya \\
 15--21 Nov & Primary metric on test with paired bootstrap CIs and Holm correction; state-part and escalation-budget ablations; cost per judge. & Shuban, Swayam \\
@@ -675,7 +705,7 @@ By the deadline & Final report, release of the checked annotations, repository c
 Dates shift with the final deadline. The critical path is the test passes, then the test annotation, then the offline test evaluation.
 
 % =====================================================================
-\section{Repository and reproduction}
+\section{Repository and reproduction}\label{sec:repo}
 \textbf{Repository:} \url{https://github.com/ch-pavan/lma-grp-project/tree/main}
 
 \begin{table}[H]
@@ -692,6 +722,8 @@ Dates shift with the final deadline. The critical path is the test passes, then 
 \code{runs/raw/}, \code{runs/data/} & Run outputs, labels, annotations and Laya datasets \\
 \code{runs/turing/} & Job scripts for the 9B runs and Laya finetunes \\
 \code{mid\_submission/} & This report (LaTeX source), its figures and the build scripts \\
+\code{docs/phase\_plan.md} & Phase-wise plan from now to the final, with owners and done-tests \\
+\code{pavan\_gpu/} & GPU job scripts (Turing and Ada) for the running and Phase 4 jobs, and their results \\
 \bottomrule
 \end{tabularx}
 \end{table}
