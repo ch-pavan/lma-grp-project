@@ -3,7 +3,7 @@
 #SBATCH -A research
 #SBATCH -p u22
 #SBATCH --constraint=2080ti
-#SBATCH --exclude=gnode077   # its GPU fails CUDA init (31 Oct)
+#SBATCH --exclude=gnode077,gnode066   # their GPUs fail CUDA init (31 Oct)
 #SBATCH --gres=gpu:1
 #SBATCH -c 8
 #SBATCH --mem=32G
