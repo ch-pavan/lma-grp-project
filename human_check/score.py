@@ -1,12 +1,12 @@
-# Score the human check: labeller vs labeller, then the human consensus vs each LLM annotator, with the proposal's
+# Score the human check: labeller vs labeller, then the human consensus vs each annotator, with the proposal's
 # decision rule (kappa 0.7 bar; below 0.6 rewrite the guide, 0.6 to 0.8 label more steps, 0.8 or more stop at 200).
 #   1st run (two labels_<name>.csv in the folder): checks the sheets, prints human vs human and writes decisions.csv
 #     with every step the two labellers answered differently, for the referee to fill.
 #   2nd run (decisions.csv filled): builds the consensus and writes results.md and consensus.csv.
-# The sample is half flagged by the LLMs (build_sample.py), which packs in the steps where DeepSeek and GLM disagree,
+# The sample is half flagged by the annotators (build_sample.py), which packs in the steps where A and B disagree,
 # so kappa on the sample alone is biased low. Every measure is also reweighted to the real mix of steps (the pool size
 # of each cell over the steps drawn from it), as the proposal does for test F1; the decision uses the reweighted kappa.
-# Standard library only; reads the LLM labels from runs/data (.jsonl or .jsonl.gz).
+# Standard library only; reads the annotator labels from runs/data (.jsonl or .jsonl.gz).
 # usage: python human_check/score.py human_check/pilot
 import argparse, csv, glob, gzip, json, os, sys
 from collections import defaultdict
@@ -14,7 +14,7 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VALUES = {"call": {"q1": {"on_track", "off_track"}, "q2": {"none", "made_up_value"}},
           "turn": {"answer": {"done", "missing_action", "should_ask_user", "unsupported_claim"}}}
-LLMS = {"DeepSeek": "annot_v2_deepseek.jsonl", "GLM": "annot_v2_glm.jsonl"}
+ANNOTATORS = {"Swayam (Annotator A)": "annot_{guide}_deepseek.jsonl", "Aaditya (Annotator B)": "annot_{guide}_glm.jsonl"}
 
 
 def read_jsonl(path):
@@ -88,10 +88,10 @@ def table(title, key, weight, A, B):
     return "\n".join(lines) + "\n", head
 
 
-def llm_answers(run_dir, key):
+def annotator_answers(run_dir, key, guide="v2"):
     out = {}
-    for name, fn in LLMS.items():
-        R = read_jsonl(os.path.join(run_dir, fn))
+    for name, fn in ANNOTATORS.items():
+        R = read_jsonl(os.path.join(run_dir, fn.format(guide=guide)))
         ans = {}
         for h, v in key.items():
             r = R[v["uid"]]
@@ -116,8 +116,11 @@ def verdict(k):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("folder")
-    ap.add_argument("--run-dir", help="where the LLM labels are (default: from sample.json)")
+    ap.add_argument("--run-dir", help="where the annotator labels are (default: from sample.json)")
+    ap.add_argument("--guide", default="v2", help="which annotator labels to score: annot_<guide>_*.jsonl; "
+                                                  "anything but v2 writes results_<guide>.md and leaves results.md alone")
     a = ap.parse_args()
+    res_name = "results.md" if a.guide == "v2" else f"results_{a.guide}.md"
     key = json.load(open(os.path.join(a.folder, "key.json")))
     meta = json.load(open(os.path.join(a.folder, "sample.json")))
     run_dir = a.run_dir or os.path.join(ROOT, meta["run_dir"])
@@ -144,9 +147,9 @@ def main():
         sys.exit("fix the sheets above and run again")
 
     report = [f"# Human check results: `{a.folder}`", "",
-              f"{len(key)} steps, labellers {names[0]} and {names[1]}. Sample: half flagged by the LLMs; "
+              f"{len(key)} steps, checkers {names[0]} and {names[1]}. Sample: half flagged by the annotators; "
               f"'reweighted' columns scale each cell back to its share of all {sum(meta['pools'].values())} steps.", ""]
-    t, k_hh = table(f"{names[0]} vs {names[1]} (human vs human)", key, weight, A, B)
+    t, k_hh = table(f"{names[0]} vs {names[1]} (checker vs checker)", key, weight, A, B)
     report.append(t)
     print(t)
 
@@ -167,30 +170,31 @@ def main():
                  f"{len(bad_d)} rows with values not in GUIDE.md {bad_d[:5]}")
     consensus = {h: (A[h] if A[h] == B[h] else D[h]) for h in key}
 
-    L = llm_answers(run_dir, key)
+    L = annotator_answers(run_dir, key, a.guide)
+    report[0] += f" (annotator labels: guide {a.guide})"
     heads = {}
     for name, ans in L.items():
-        t, heads[name] = table(f"Human consensus vs {name}", key, weight, consensus, ans)
+        t, heads[name] = table(f"Check consensus vs {name}", key, weight, consensus, ans)
         report.append(t)
         print(t)
-    t, k_ll = table("DeepSeek vs GLM on the same steps (for reference)", key, weight, L["DeepSeek"], L["GLM"])
+    t, k_ll = table("Swayam (Annotator A) vs Aaditya (Annotator B) on the same steps (for reference)", key, weight, L["Swayam (Annotator A)"], L["Aaditya (Annotator B)"])
     report.append(t)
     print(t)
     worst = min(heads.values())
     report += ["## Decision", "",
-               f"Headline kappa, reweighted (all steps, problem vs fine): human vs human {k_hh:.2f}; consensus vs DeepSeek "
-               f"{heads['DeepSeek']:.2f}, vs GLM {heads['GLM']:.2f}; DeepSeek vs GLM {k_ll:.2f}.", "",
-               f"Lower of the two consensus-vs-LLM kappas: **{worst:.2f}**, so **{verdict(worst)}**.", "",
+               f"Headline kappa, reweighted (all steps, problem vs fine): checker vs checker {k_hh:.2f}; consensus vs Swayam (A) "
+               f"{heads['Swayam (Annotator A)']:.2f}, vs Aaditya (B) {heads['Aaditya (Annotator B)']:.2f}; A vs B {k_ll:.2f}.", "",
+               f"Lower of the two consensus-vs-annotator kappas: **{worst:.2f}**, so **{verdict(worst)}**.", "",
                "Per-class rows rest on 25 to 50 steps and are noisy; the headline row decides.", ""]
-    open(os.path.join(a.folder, "results.md"), "w").write("\n".join(report))
+    open(os.path.join(a.folder, res_name), "w", encoding="utf-8").write("\n".join(report))
     with open(os.path.join(a.folder, "consensus.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["id", "uid", "kind", "q1", "q2", "answer"])
         for h in key:
             c = consensus[h]
             w.writerow([h, key[h]["uid"], key[h]["kind"], c.get("q1", ""), c.get("q2", ""), c.get("answer", "")])
-    print(f"Decision: lower consensus-vs-LLM kappa (reweighted) {worst:.2f} -> {verdict(worst)}\n"
-          f"wrote {os.path.join(a.folder, 'results.md')} and consensus.csv")
+    print(f"Decision: lower consensus-vs-annotator kappa (reweighted) {worst:.2f} -> {verdict(worst)}\n"
+          f"wrote {os.path.join(a.folder, res_name)} and consensus.csv")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,7 @@
+--uids: 200 of 200 listed steps found in C:\Users\SWAYAM~1\AppData\Local\Temp/val_unpacked
+deepseek-v4.1-flash: 200 items to annotate (0 already done), concurrency 8
+50/200 27s 111/min parse_fail 0 http {} tok in 74570 out 10293 cached 13568
+100/200 64s 93/min parse_fail 0 http {} tok in 150055 out 29924 cached 32256
+150/200 96s 94/min parse_fail 0 http {} tok in 225719 out 51764 cached 58752
+200/200 126s 95/min parse_fail 0 http {} tok in 300014 out 68529 cached 85504
+DONE 200 rows in 126s, parse_fail 0, http {}, tok in 300014 out 68529 cached 85504

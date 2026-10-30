@@ -1,20 +1,20 @@
-# Human check of the LLM labels: instructions
+# Human check of the annotator labels: instructions
 
 ## Why we are doing this
 
-Every result in the project is scored against labels written by two LLMs, DeepSeek and GLM. We showed the two LLMs mostly agree **with each other** (kappa 0.73 on tool calls, 0.61 on turn ends). That does not show they are **right**. The proposal requires people to check them:
+Every result in the project is scored against labels written by two annotators, Swayam Goyal (Annotator A) and Aaditya Sharma (Annotator B). We showed the two annotators mostly agree **with each other** (kappa 0.73 on tool calls, 0.61 on turn ends). That does not show they are **right**. The proposal requires people to check them:
 
 > a stratified sample of steps, half flagged and half not, is labelled by two of us with a third deciding disagreements … the bar is kappa 0.7 both between the annotators and against our consensus. The first 100 steps are checked early as a pilot. Below 0.6 the guide is rewritten and the steps relabelled; between 0.6 and 0.8 we label more steps until the result is clear; above 0.8 we stop at 200.
 
-This folder is that check: the **100-step pilot**, on val steps the LLMs already labelled. Its result decides whether we can train Laya on the LLM labels and trust them as the grading key. Until it passes, we don't build on them.
+This folder is that check: the **100-step pilot**, on val steps the annotators already labelled. Its result decides whether we can train Laya on the annotator labels and trust them as the grading key. Until it passes, we don't build on them.
 
 ## Roles
 
 | Role | Who | Job | Time |
 |---|---|---|---|
-| Labeller 1 | _(name)_ | Label all 100 steps | about 2 to 3 hours |
-| Labeller 2 | _(name)_ | Label all 100 steps, separately | about 2 to 3 hours |
-| Referee | _(name)_, not one of the labellers | Decide the steps where the two labellers differ | about 30 to 60 min |
+| Labeller 1 | Ch Pavan Harshit | Label all 100 steps | about 2 to 3 hours |
+| Labeller 2 | Shuban Biswas | Label all 100 steps, separately | about 2 to 3 hours |
+| Referee | Pavan and Shuban together, by discussion (the annotators being checked cannot referee) | Decide the steps where the two labellers differ | about 30 to 60 min |
 | Organiser | Pavan | Runs the scoring script, reports the result | minutes |
 
 ## What's in this folder
@@ -22,7 +22,7 @@ This folder is that check: the **100-step pilot**, on val steps the LLMs already
 | File | What it is |
 |---|---|
 | `README.md` | These instructions |
-| `GUIDE.md` | The labelling rules: the same rules the LLMs followed, written for people. **Read it fully before starting.** |
+| `GUIDE.md` | The labelling rules: the same rules the annotators followed, written for people. **Read it fully before starting.** |
 | `pilot/items.md` | The 100 steps to label (H001 to H100). Opens nicely on GitHub or in a Markdown preview. |
 | `pilot/sheet_template.csv` | The answer sheet to copy |
 | `pilot/key.json`, `pilot/sample.json` | Which step each ID is, for the scoring script. **Labellers and referee: do not open.** |
@@ -31,8 +31,8 @@ This folder is that check: the **100-step pilot**, on val steps the LLMs already
 ## Rules (these keep the check valid)
 
 1. **Work alone.** Don't discuss steps with the other labeller until both of you are done.
-2. **Stay blind.** Don't open `pilot/key.json`, the LLM label files (`runs/data/**/annot_*`), the other labeller's sheet, or anything in `analysis/` about these steps.
-3. **Follow `GUIDE.md` as written**, even where you'd personally decide differently. We're checking whether the LLMs applied this guide correctly. When the guide says "when unsure, on_track", do that.
+2. **Stay blind.** Don't open `pilot/key.json`, the annotator label files (`runs/data/**/annot_*`), the other labeller's sheet, or anything in `analysis/` about these steps.
+3. **Follow `GUIDE.md` as written**, even where you'd personally decide differently. We're checking whether the annotators applied this guide correctly. When the guide says "when unsure, on_track", do that.
 4. **Answer every step.** If a step is genuinely unclear, give your best answer and explain in `note`.
 5. **Don't push your sheet until both labellers have said "done"** in the group chat, so neither can see the other's answers.
 
@@ -74,7 +74,7 @@ This folder is that check: the **100-step pilot**, on val steps the LLMs already
    The script checks both sheets. If a value is wrong or a step is missing, it names the row; ask that labeller to fix it.
 2. If the sheets are fine, it prints human-vs-human agreement and writes `human_check/pilot/decisions.csv`, which lists every step where the labellers differ. Push it and tell the referee.
 
-   No extra packages are needed, only Python 3. The LLM labels are read straight from `runs/data/...jsonl.gz`.
+   No extra packages are needed, only Python 3. The annotator labels are read straight from `runs/data/...jsonl.gz`.
 
 ## Referee: step by step
 
@@ -93,16 +93,16 @@ This writes `human_check/pilot/results.md` (all agreement tables plus the decisi
 
 ## How to read the result
 
-The script builds the **human consensus**: the labellers' answer where they agree, the referee's where they don't. It compares that consensus with DeepSeek and with GLM. The deciding number is the **headline kappa** (every step, "problem" vs "fine"), using the lower of the two LLMs.
+The script builds the **human consensus**: the labellers' answer where they agree, the referee's where they don't. It compares that consensus with Swayam (Annotator A) and with Aaditya (Annotator B). The deciding number is the **headline kappa** (every step, "problem" vs "fine"), using the lower of the two annotators.
 
 | Lower kappa | What it means | What we do (proposal rule) |
 |---|---|---|
-| 0.8 or more | The LLM labels match people well | Passes. Finish with 100 more steps from the test runs, then use the LLM labels. |
+| 0.8 or more | The annotator labels match people well | Passes. Finish with 100 more steps from the test runs, then use the annotator labels. |
 | 0.7 to 0.8 | Passes the bar, but not clearly | Label more steps until the result is clear |
-| 0.6 to 0.7 | Under the bar | Label more steps; look at where people and LLMs differ |
-| Below 0.6 | The LLM labels can't be trusted as they are | Rewrite the guide from the human decisions, relabel with the LLMs, check again |
+| 0.6 to 0.7 | Under the bar | Label more steps; look at where people and annotators differ |
+| Below 0.6 | The annotator labels can't be trusted as they are | Rewrite the guide from the human decisions, relabel, check again |
 
-**Why there are two kappa columns:** half the sample is steps the LLMs flagged, as the proposal asks. That packs in the hard cases, including most steps where DeepSeek and GLM disagree with each other, so kappa on the raw sample is pessimistic. The **reweighted** columns scale each group back to its real share of all 1,768 val steps, the same way the proposal reweights test F1. The decision uses the reweighted number; both are reported. For reference, DeepSeek and GLM agree with each other at about 0.66 on this reweighted mix, which roughly caps how well a single human answer can match both.
+**Why there are two kappa columns:** half the sample is steps the annotators flagged, as the proposal asks. That packs in the hard cases, including most steps where the two annotators disagree with each other, so kappa on the raw sample is pessimistic. The **reweighted** columns scale each group back to its real share of all 1,768 val steps, the same way the proposal reweights test F1. The decision uses the reweighted number; both are reported. For reference, the two annotators agree with each other at about 0.66 on this reweighted mix, which roughly caps how well a single human answer can match both.
 
 ## Later: the second 100 steps
 

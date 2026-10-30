@@ -1,0 +1,502 @@
+{
+ "H001": {
+  "uid": "multi_turn_long_context_55|1|10|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H002": {
+  "uid": "multi_turn_miss_func_91|0|2|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H003": {
+  "uid": "multi_turn_miss_func_28|0|11|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H004": {
+  "uid": "multi_turn_miss_func_184|0|14|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H005": {
+  "uid": "multi_turn_miss_func_28|0|4|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H006": {
+  "uid": "multi_turn_long_context_199|0|15|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H007": {
+  "uid": "multi_turn_long_context_199|1|4|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H008": {
+  "uid": "multi_turn_miss_func_160|0|8|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H009": {
+  "uid": "multi_turn_base_28|0|5|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H010": {
+  "uid": "multi_turn_miss_param_2|1|32|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H011": {
+  "uid": "multi_turn_base_2|1|25|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H012": {
+  "uid": "multi_turn_miss_func_2|1|18|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H013": {
+  "uid": "multi_turn_long_context_107|0|2|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H014": {
+  "uid": "multi_turn_miss_func_28|0|9|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H015": {
+  "uid": "multi_turn_long_context_12|1|2|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H016": {
+  "uid": "multi_turn_base_2|1|13|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H017": {
+  "uid": "multi_turn_base_184|1|11|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H018": {
+  "uid": "multi_turn_base_55|1|13|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H019": {
+  "uid": "multi_turn_base_2|1|9|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H020": {
+  "uid": "multi_turn_miss_func_28|1|4|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H021": {
+  "uid": "multi_turn_long_context_19|1|4|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H022": {
+  "uid": "multi_turn_miss_param_199|1|12|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H023": {
+  "uid": "multi_turn_long_context_66|1|4|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H024": {
+  "uid": "multi_turn_miss_func_12|0|1|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H025": {
+  "uid": "multi_turn_miss_param_91|0|1|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H026": {
+  "uid": "multi_turn_miss_param_2|1|29|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H027": {
+  "uid": "multi_turn_miss_func_2|0|29|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H028": {
+  "uid": "multi_turn_miss_param_93|1|5|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H029": {
+  "uid": "multi_turn_miss_param_112|1|4|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H030": {
+  "uid": "multi_turn_long_context_160|0|2|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H031": {
+  "uid": "multi_turn_long_context_2|0|21|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H032": {
+  "uid": "multi_turn_miss_func_107|0|3|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H033": {
+  "uid": "multi_turn_base_199|1|14|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H034": {
+  "uid": "multi_turn_long_context_12|1|8|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H035": {
+  "uid": "multi_turn_miss_param_2|0|11|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H036": {
+  "uid": "multi_turn_long_context_66|0|7|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H037": {
+  "uid": "multi_turn_miss_func_28|1|7|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H038": {
+  "uid": "multi_turn_long_context_107|1|10|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H039": {
+  "uid": "multi_turn_long_context_78|0|5|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H040": {
+  "uid": "multi_turn_miss_param_199|0|15|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H041": {
+  "uid": "multi_turn_miss_param_19|0|7|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H042": {
+  "uid": "multi_turn_long_context_2|1|25|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H043": {
+  "uid": "multi_turn_miss_func_184|1|2|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H044": {
+  "uid": "multi_turn_long_context_184|0|7|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H045": {
+  "uid": "multi_turn_long_context_93|0|11|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H046": {
+  "uid": "multi_turn_long_context_112|0|4|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H047": {
+  "uid": "multi_turn_miss_param_199|0|18|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H048": {
+  "uid": "multi_turn_miss_param_93|0|18|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H049": {
+  "uid": "multi_turn_miss_func_66|1|7|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H050": {
+  "uid": "multi_turn_miss_param_2|0|26|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H051": {
+  "uid": "multi_turn_miss_param_93|0|14|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H052": {
+  "uid": "multi_turn_base_19|1|9|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H053": {
+  "uid": "multi_turn_miss_param_12|0|7|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H054": {
+  "uid": "multi_turn_miss_func_28|1|10|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H055": {
+  "uid": "multi_turn_miss_func_185|1|4|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H056": {
+  "uid": "multi_turn_long_context_184|1|13|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H057": {
+  "uid": "multi_turn_long_context_2|1|38|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H058": {
+  "uid": "multi_turn_base_93|0|5|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H059": {
+  "uid": "multi_turn_miss_func_28|1|19|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H060": {
+  "uid": "multi_turn_base_199|0|12|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H061": {
+  "uid": "multi_turn_miss_func_19|0|8|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H062": {
+  "uid": "multi_turn_base_19|1|16|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H063": {
+  "uid": "multi_turn_miss_func_55|0|8|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H064": {
+  "uid": "multi_turn_miss_func_112|1|32|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H065": {
+  "uid": "multi_turn_miss_param_78|1|6|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H066": {
+  "uid": "multi_turn_miss_param_78|1|1|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H067": {
+  "uid": "multi_turn_base_2|0|15|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H068": {
+  "uid": "multi_turn_miss_param_55|1|15|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H069": {
+  "uid": "multi_turn_miss_func_28|0|12|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H070": {
+  "uid": "multi_turn_miss_func_185|1|8|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H071": {
+  "uid": "multi_turn_miss_func_28|1|18|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H072": {
+  "uid": "multi_turn_base_199|0|13|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H073": {
+  "uid": "multi_turn_miss_func_12|0|2|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H074": {
+  "uid": "multi_turn_miss_param_78|1|2|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H075": {
+  "uid": "multi_turn_miss_func_112|1|24|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H076": {
+  "uid": "multi_turn_miss_func_55|0|14|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H077": {
+  "uid": "multi_turn_miss_func_2|0|5|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H078": {
+  "uid": "multi_turn_long_context_112|0|5|call",
+  "kind": "call",
+  "flagged": false
+ },
+ "H079": {
+  "uid": "multi_turn_miss_param_185|1|4|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H080": {
+  "uid": "multi_turn_miss_func_28|1|15|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H081": {
+  "uid": "multi_turn_miss_param_160|1|0|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H082": {
+  "uid": "multi_turn_miss_func_28|1|13|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H083": {
+  "uid": "multi_turn_base_199|1|4|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H084": {
+  "uid": "multi_turn_miss_param_160|1|2|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H085": {
+  "uid": "multi_turn_long_context_199|0|18|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H086": {
+  "uid": "multi_turn_miss_param_12|0|3|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H087": {
+  "uid": "multi_turn_long_context_91|0|3|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H088": {
+  "uid": "multi_turn_miss_func_2|1|30|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H089": {
+  "uid": "multi_turn_long_context_184|1|2|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H090": {
+  "uid": "multi_turn_miss_func_28|1|17|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H091": {
+  "uid": "multi_turn_miss_param_55|0|11|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H092": {
+  "uid": "multi_turn_miss_func_93|0|3|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H093": {
+  "uid": "multi_turn_miss_func_2|0|12|call",
+  "kind": "call",
+  "flagged": true
+ },
+ "H094": {
+  "uid": "multi_turn_miss_func_78|0|3|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H095": {
+  "uid": "multi_turn_miss_func_199|1|22|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H096": {
+  "uid": "multi_turn_miss_func_78|1|0|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H097": {
+  "uid": "multi_turn_miss_param_112|1|9|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H098": {
+  "uid": "multi_turn_long_context_55|1|13|turn",
+  "kind": "turn",
+  "flagged": false
+ },
+ "H099": {
+  "uid": "multi_turn_base_184|0|13|turn",
+  "kind": "turn",
+  "flagged": true
+ },
+ "H100": {
+  "uid": "multi_turn_long_context_2|0|12|call",
+  "kind": "call",
+  "flagged": false
+ }
+}

@@ -1,0 +1,11 @@
+--uids: 200 of 200 listed steps found in C:\Users\SWAYAM~1\AppData\Local\Temp/val_unpacked
+glm-5.3-flash: 200 items to annotate (0 already done), concurrency 8
+50/200 29s 102/min parse_fail 1 http {} tok in 72590 out 7051 cached 3808
+100/200 58s 104/min parse_fail 1 http {} tok in 145273 out 12824 cached 8160
+150/200 86s 105/min parse_fail 2 http {} tok in 218917 out 18234 cached 15232
+200/200 114s 105/min parse_fail 2 http {} tok in 289467 out 23245 cached 25024
+DONE 200 rows in 114s, parse_fail 2, http {}, tok in 289467 out 23245 cached 25024
+--uids: 200 of 200 listed steps found in C:\Users\SWAYAM~1\AppData\Local\Temp/val_unpacked
+glm-5.3-flash: 2 items to annotate (198 already done), concurrency 2
+2/2 5s 24/min parse_fail 0 http {} tok in 3197 out 148 cached 2720
+DONE 2 rows in 5s, parse_fail 0, http {}, tok in 3197 out 148 cached 2720

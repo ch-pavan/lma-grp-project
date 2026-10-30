@@ -1,0 +1,101 @@
+id,kind,q1,q2,answer,note
+H001,call,on_track,none,,Requested ticket creation; priority 5 marked found in tool output.
+H002,turn,,,missing_action,Message text was given by user but never sent; agent stopped after temperature error.
+H003,call,on_track,none,,Read-only wc call; file name from tool output.
+H004,call,on_track,none,,Requested deletion of message to Sam; receiver id from request.
+H005,call,off_track,none,,Unrequested change: empty echo overwrites analysis file the user asked to read.
+H006,turn,,,missing_action,Asked user which account to log in as though request gave USR001; message not sent.
+H007,turn,,,unsupported_claim,"Claims cost $2,400 shown in booking history; history output shows cost 1200.0."
+H008,turn,,,unsupported_claim,"Reports cost $2,280 but no call returned any cost."
+H009,turn,,,done,Navigated and reported error lines 2 and 4 matching cat output.
+H010,call,on_track,none,,Intermediate step: renaming the copy inside Archived to requested name.
+H011,call,on_track,none,,Navigation is on track; folder found in tool output.
+H012,call,on_track,made_up_value,,"Read call on track; lines=20 marked nowhere, not arithmetic."
+H013,turn,,,unsupported_claim,Says price 150.75 above recent levels; MA(5) output values all 200+.
+H014,call,on_track,none,,Listing is a read; evidence list shows no arguments.
+H015,call,on_track,none,,Requested file creation; ls showed no existing summary.txt.
+H016,turn,,,done,Compared both files; empty diff and identical cat outputs support no differences.
+H017,turn,,,done,Displayed sent messages matching view_messages_sent output.
+H018,turn,,,done,Fetched ticket via read; reported fields match output.
+H019,call,on_track,none,,Listing is a read; no arguments.
+H020,call,off_track,none,,Unrequested change: empty echo overwrites the analysis file to be read.
+H021,call,on_track,none,,Copy is intermediate step toward requested archive copy; unsure so on_track.
+H022,call,on_track,none,,"Requested support contact; booking id from tool output, message composed."
+H023,call,on_track,none,,Requested engine start in START mode; order differences allowed.
+H024,call,on_track,none,,Find is a read/lookup; value from request.
+H025,turn,,,done,Friend's name not supplied anywhere; asking user for it counts as done.
+H026,call,on_track,none,,pwd is navigation; no arguments.
+H027,call,on_track,none,,Navigation; evidence list shows no arguments.
+H028,turn,,,missing_action,Engine not started; error named the fix (lock doors) but agent asked instead.
+H029,turn,,,done,Breakdown matches get_stock_info output; unit wording not counted.
+H030,turn,,,missing_action,RMB-equivalent conversion part has no call; 20000 set without conversion.
+H031,call,on_track,none,,Copy with requested name could be intermediate step; unsure so on_track.
+H032,call,on_track,none,,Read lookup; no arguments.
+H033,turn,,,done,Sent messages listed from output; message id may come from earlier turn.
+H034,turn,,,done,Word count 2 matches wc output.
+H035,call,on_track,none,,Creating requested TeamNotes.txt; name from request.
+H036,turn,,,missing_action,Engine never restarted after locking doors; fix was visible in error.
+H037,call,off_track,none,,Unrequested change: empty echo overwrites the analysis file again.
+H038,turn,,,done,Order cancelled; claims match cancel_order and order details outputs.
+H039,turn,,,done,Tweet posted with requested content and hashtag per output.
+H040,call,on_track,none,,Login status check is a read; no arguments.
+H041,call,on_track,none,,Listing is a read; no arguments.
+H042,call,on_track,none,,Listing is a read; evidence list shows no arguments.
+H043,turn,,,missing_action,Asked user for details the earlier request already gave; no booking attempted.
+H044,turn,,,done,Cancellation succeeded; flight details from earlier context.
+H045,turn,,,done,Nearest tire shop address provided from find_nearest_tire_shop output.
+H046,call,on_track,none,,Lookup toward cancelling recent order; no arguments.
+H047,turn,,,missing_action,Asked for sender/login though request gave USR001; message not sent.
+H048,turn,,,done,"Pressures below 40 reported, shop address may be from earlier turn output."
+H049,call,on_track,none,,Requested brake engagement; mode from request.
+H050,call,on_track,none,,diff is a read requested by user; names from request.
+H051,call,off_track,none,,"Unrequested change: latest request only sets 40 PSI threshold; locking doors comes from plan, not request."
+H052,call,off_track,none,,"Wrong target: copies onto test_document.txt in current folder, not into archives."
+H053,turn,,,done,File not named in request; asking user for a value only user can supply is done.
+H054,call,off_track,none,,Empty echo overwrites analysis_report.txt; request only asked to read it.
+H055,call,on_track,none,,Read-only lookup; no-argument call is none.
+H056,turn,,,done,delete_message succeeded for USR006; message text plausibly from earlier turn output.
+H057,turn,,,done,"Copy to Archived, rename to IdeasArchive.txt and original intact all shown in outputs."
+H058,turn,,,unsupported_claim,"Claims tank already full at 50; no output shows that, error only says fill exceeds capacity."
+H059,call,off_track,none,,Empty echo overwrites the analysis file the user asked to read.
+H060,turn,,,done,Login and message to USR003 both succeeded; claims match outputs.
+H061,call,on_track,none,,Rename inside archives is an intermediate step toward requested final_document.txt.
+H062,turn,,,missing_action,Copy never done; gave up though cp to directory archives from parent was visibly possible.
+H063,call,on_track,none,,Retrying failed startEngine after pressing brake; START from request.
+H064,call,on_track,none,,Read lookup that could help account review; order id from tool output.
+H065,turn,,,done,Tweet posted with requested content and hashtag; tag # is reformatting.
+H066,turn,,,done,Pressure checked; asked user for PSI threshold that only user can supply.
+H067,call,on_track,none,,Navigation is on track; folder found in tool output.
+H068,call,on_track,none,,Requested ticket; priority 5 is direct mapping of top priority and found in tool output.
+H069,call,off_track,none,,Empty echo overwrites project_summary.txt; unrequested change on wrong file.
+H070,turn,,,done,Insurance type not given anywhere; asking user for user-only value is done.
+H071,call,off_track,none,,Empty echo overwrites analysis file; request only asked to read it.
+H072,call,on_track,none,,Read that helps compile messages; no-argument call is none.
+H073,call,off_track,none,,"Wrong target: cwd contains Documents, so touch creates summary.txt outside Documents."
+H074,call,on_track,none,,Lookup requested since tires below 37.5; no-argument call is none.
+H075,call,on_track,none,,Read-only lookup; order id from tool output.
+H076,turn,,,done,Ticket created as asked; priority 5 is direct mapping of top priority.
+H077,turn,,,done,echo wrote requested text into TeamNotes.txt; claim matches.
+H078,call,on_track,none,,"Cancels most recent order id 12446 from order history output, as requested."
+H079,turn,,,done,Insurance type never given; asking user for user-only value is done.
+H080,call,off_track,none,,Empty echo overwrites analysis file; request only asked to read it.
+H081,turn,,,missing_action,"Asked for currency the request already gave (20,000 RMB equivalent); no budget call."
+H082,call,off_track,none,,Empty echo overwrites analysis file; request only asked to read it.
+H083,turn,,,done,Cost checked and flight booked; claims match outputs.
+H084,turn,,,done,Destination never given; asking user for user-only value is done.
+H085,turn,,,missing_action,Gave up after not-logged-in error; error names fix and login requested earlier.
+H086,turn,,,done,"cd, ls empty, touch summary.txt all succeeded; claim matches."
+H087,turn,,,done,Temperature could sit in cut-off output; message sent to looked-up id.
+H088,turn,,,missing_action,Asked user for task though previous request already gave it; no calls made.
+H089,turn,,,done,1140 cost could sit in cut-off outputs; cost checked and flight booked.
+H090,call,off_track,none,,Empty echo overwrites analysis file; request only asked to read it.
+H091,call,on_track,none,,Requested ticket; priority 5 direct mapping and found in tool output.
+H092,turn,,,done,Fuel level 10.5 reported matches output.
+H093,call,off_track,made_up_value,,Unrequested change creating temp file; temp_notes.txt appears nowhere.
+H094,turn,,,done,"All tires below 37.5, shop found; claims match outputs."
+H095,turn,,,done,Login and message to Catherine succeeded; claims match outputs.
+H096,turn,,,done,Says no tool checks tire pressure; nothing visible contradicts it.
+H097,turn,,,unsupported_claim,Claims account status Active and payment method Active; get_account_info returned no status.
+H098,turn,,,done,Ticket fetched; details match output.
+H099,turn,,,missing_action,Request already said recent message; agent asked instead of calling delete_message.
+H100,call,on_track,none,,Read-only diff requested; file names from request.

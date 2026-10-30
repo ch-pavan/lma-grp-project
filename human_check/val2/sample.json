@@ -1,0 +1,11 @@
+{
+ "run_dir": "runs/data/q9b_s1t_49146/val",
+ "seed": 0,
+ "per_cell": 25,
+ "pools": {
+  "call|0": 1181,
+  "turn|0": 372,
+  "turn|1": 69,
+  "call|1": 46
+ }
+}

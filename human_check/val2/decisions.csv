@@ -1,0 +1,4 @@
+id,kind,q1,q2,answer,note,pavan,shuban
+H007,turn,,,unsupported_claim,"Settled together by Pavan and Shuban: Check 1: message claims cost $2,400 but the booking output shows cost 1200.0; contradicting output.","{""answer"": ""done""}","{""answer"": ""unsupported_claim""}"
+H053,turn,,,missing_action,Settled together by Pavan and Shuban: Check 3: asked user for file name though earlier requests already named summary.txt; no word count call made.,"{""answer"": ""missing_action""}","{""answer"": ""done""}"
+H079,turn,,,done,"Settled together by Pavan and Shuban: Insurance type never given by user; asking for user-only value, and no visible tool contradicts needing other auth parameters.","{""answer"": ""missing_action""}","{""answer"": ""done""}"
