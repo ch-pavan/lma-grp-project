@@ -32,8 +32,8 @@ Each task gives:
 |---|---|
 | 1. Attribution | **Done.** Commit 30 covers 1.1 to 1.3. Items 1.4 and 1.5 are in the report, commit 31. |
 | 2. Report wording | **Done.** Commit 31: all 13 items from `midreport-check.md`, plus 16 more from a second fact-check. |
-| 3. Data gaps without GPUs | **Next.** 3.1 and 3.2 are deferred (D4). |
-| 4. GPU experiments | From 1 Nov |
+| 3. Data gaps without GPUs | **In progress.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, are in `pavan_gpu/` jobs b and a. |
+| 4. GPU experiments | From 1 Nov. Item 4.1 is `pavan_gpu/` job c. |
 
 **Second fact-check, key corrections:**
 - **Off-track result.** Under the proposal's scoring, Laya trails the 9B judge on off-track F1 over all steps (0.27 to 0.30 against 0.29 to 0.34). It leads only on tool calls, by +7 to +9 points.
@@ -102,6 +102,10 @@ Each task gives:
 ## Phase 5: final submission
 
 Final report, release of the LLM and human-check labels, and repo clean-up. Every number comes from a script in the repo, and the final PDF gets the same fact-check.
+
+## Pavan's GPU folder
+
+`pavan_gpu/` holds the job scripts, data-prep scripts and instructions (`pavan_gpu/README.md`) for 3.7 (job a), 3.4 (job b) and 4.1 (job c). Pavan commits only `pavan_gpu/results/`. We score the results on our side, merge them into `runs/` and `analysis/`, and delete the folder.
 
 ## Rules for every phase
 
