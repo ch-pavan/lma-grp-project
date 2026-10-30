@@ -167,6 +167,7 @@ def agreement():
         ax.text(i + w / 2, b[i] / 2, f"{b[i]:.2f}", ha="center", va="center", fontsize=7, color="white", fontweight="bold")
     ax.axhline(0.7, color=GREEN, lw=1.0, ls="--"); ax.text(3.75, 0.7, " pass bar 0.7", fontsize=6.5, va="center", color=GREEN)
     ax.axhline(0.6, color=VERM, lw=0.9, ls=":"); ax.text(3.75, 0.6, " rewrite below 0.6", fontsize=6.5, va="center", color=VERM)
+    ax.axhline(0.8, color=GREY, lw=0.8, ls=":"); ax.text(3.75, 0.8, " stop at 200 above 0.8", fontsize=6.5, va="center", color=GREY)
     ax.set_xticks(range(4), groups); ax.set_ylim(0, 1.05); ax.set_xlim(-0.55, 3.75)
     ax.set_ylabel("Kappa vs human check")
     ax.legend(fontsize=7, loc="upper left", ncol=2, bbox_to_anchor=(0, 1.1))

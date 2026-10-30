@@ -87,6 +87,19 @@ def main():
         print(f"| {name} | {prim['Laya finetuned'][0]:.2f} | {prim['9B SLM judge'][0]:.2f} | "
               f"{pt * 100:+.1f} [{np.percentile(d, 2.5) * 100:+.1f}, {np.percentile(d, 97.5) * 100:+.1f}] |")
     print("\nProposal bar: Laya ahead by at least 9 points with the CI above 0.")
+    # Q1 off track split by step kind (mid report, Table 14 last column): on tool calls only, and on closing messages
+    # only (where Laya, under the proposal's mapping, never says off track).
+    kind = {(r["id"], r["run"], r["k"]): r["step"]["kind"] for r in rows}
+    print("\n| labels | steps | positives | Laya F1 | 9B F1 | Laya − 9B, F1 points [95% CI] |\n|---|---|---|---|---|---|")
+    for name, lab in (("DeepSeek v2", ds), ("GLM v2", gl), ("both agree", both)):
+        for sub in ("call", "msg"):
+            keys = sorted(k for k in common if (kind[k] == "call") == (sub == "call") and "q1" in lab.get(k, {}))
+            names = sorted({scen[k] for k in keys}); idx = E.boot_idx(len(names), B)
+            fl = f1_boot(keys, lab, P["Laya finetuned"], "q1", "off_track", scen, names, idx)
+            fn = f1_boot(keys, lab, P["9B SLM judge"], "q1", "off_track", scen, names, idx)
+            d = fl[5] - fn[5]
+            print(f"| {name} | {'tool calls' if sub == 'call' else 'closing messages'} | {fl[3]} | {fl[0]:.2f} | {fn[0]:.2f} | "
+                  f"{(fl[0] - fn[0]) * 100:+.1f} [{np.percentile(d, 2.5) * 100:+.1f}, {np.percentile(d, 97.5) * 100:+.1f}] |")
 
 
 if __name__ == "__main__":

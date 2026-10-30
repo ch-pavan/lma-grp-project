@@ -3,6 +3,7 @@
 
     python pavan_gpu/check_results.py            # checks jobs a and b
     python pavan_gpu/check_results.py --with-c   # also checks the test passes (job c, from 1 Nov)
+    python pavan_gpu/check_results.py --ada      # the Ada runs (jobs/ada_*.sbatch)
 """
 import glob
 import json
@@ -17,15 +18,22 @@ EXPECT = {
 }
 
 
+EXPECT_ADA = {  # jobs/ada_*.sbatch (Swayam's Ada account): fp16, both variants with seeds 0-2, no txt summaries
+    "a_step_nobt_ada": [f"{run}/{f}" for run in ("nobt_seed0", "nobt_seed1", "nobt_seed2", "orig_seed0", "orig_seed1", "orig_seed2")
+                        for f in ("results.json", "val_scores.jsonl")],
+    "b_done_cv_ada": [f"fold{k}/{f}" for k in range(5) for f in ("results.json", "val_scores.jsonl")],
+}
+
+
 def main():
-    jobs = dict(EXPECT)
+    jobs = dict(EXPECT_ADA if "--ada" in sys.argv else EXPECT)
     if "--with-c" in sys.argv:
         jobs["c_test_passes"] = ["test_summary.txt", "test.log"]
     bad = 0
     for job, files in jobs.items():
         miss = [f for f in files if not os.path.exists(os.path.join(R, job, f))]
         rows = ""
-        if job == "a_step_nobt" and not miss:
+        if job.startswith("a_step_nobt") and not miss:
             n = {len(open(os.path.join(R, job, r, "val_scores.jsonl")).readlines()) for r in ("nobt_seed0", "orig_seed1")}
             rows = f", val rows {sorted(n)} (expect 2427)"
         if job == "c_test_passes" and not miss:

@@ -78,7 +78,7 @@ At mid-term we have built and run:
   \item two finetuned Laya heads
 \end{itemize}
 \smallskip
-On validation, finetuned Laya ranks bad tool calls far better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers, on the replay step labels). Against the LLM annotators, with the judge on its harness prompt, Laya's F1 lead on off-track tool calls is +7 to +9 points, with confidence intervals that include zero. For telling whether a turn is finished, Laya's AUROC is 0.79 (0.53 as is); its F1 beats the SLM judge's 0.41 only at threshold 0.5 (0.53), not at the threshold chosen on dev (0.36). Each Laya check costs one forward pass, where the SLM judge writes about 1,500 to 2,400 tokens. Scored on the same labels, Laya beats plain rules on every class (primary F1 0.18 to 0.19 against 0.06 to 0.07). The proposal's primary bar is a gain of 9 F1 points on the mean of off-track and false-claim F1. On validation the gap is only $-1.0$ to $+2.0$. Under the proposal's scoring, Laya trails the judge slightly on off-track F1 over all steps (its ``not done'' answers count as false claims, so it never marks a closing message off track), and both are near zero on false claims, which are rare on validation and which Laya has no head for. The plan to the final submission therefore focuses on test passes sized for false claims, a false-claim head, and the test-set evaluation.
+On validation, finetuned Laya ranks bad tool calls far better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers, on the replay step labels). Against the LLM annotators, with the judge on its harness prompt, Laya's F1 lead on off-track tool calls is +7 to +9 points, with confidence intervals that include zero. For telling whether a turn is finished, Laya's AUROC is 0.79 (0.53 as is); its F1 beats the SLM judge's 0.41 only at threshold 0.5 (0.53), not at the threshold chosen on dev (0.36). Each Laya check costs one forward pass, where the SLM judge writes about 1,500 to 2,400 tokens. Scored on the same labels, Laya beats plain rules on both classes of the primary metric (primary F1 0.18 to 0.19 against 0.06 to 0.07; no paired CI yet). The proposal's primary bar is a gain of 9 F1 points on the mean of off-track and false-claim F1. On validation the gap is only $-1.0$ to $+2.0$. Under the proposal's scoring, Laya trails the judge slightly on off-track F1 over all steps (its ``not done'' answers count as false claims, so it never marks a closing message off track), and both are near zero on false claims, which are rare on validation and which Laya has no head for. The plan to the final submission therefore focuses on test passes sized for false claims, a false-claim head, and the test-set evaluation.
 \end{tcolorbox}
 
 {\small\tableofcontents}
@@ -132,8 +132,8 @@ A large judge on every step is too slow, and a small model judging itself is wea
 
 \textbf{Key findings at mid-term.}
 \begin{itemize}
-  \item \textbf{Laya ranks bad steps much better than the SLM judge offline} (AUROC 0.91 against 0.61), at near-zero cost. Against the LLM annotators its F1 lead on off-track calls is +7 to +9 points, not yet significant (Section~\ref{sec:laya}).
-  \item \textbf{Laya beats plain rules on every class} when both are scored on the same LLM labels: primary F1 0.18 to 0.19 against 0.06 to 0.07 (Section~\ref{sec:ablations}).
+  \item \textbf{Laya ranks bad steps much better than the SLM judge offline} (AUROC 0.91 against 0.61 for the judge's yes/no answers, on the replay labels the head was trained on), at near-zero cost. Against the LLM annotators its F1 lead on off-track calls is +7 to +9 points, not yet significant (Section~\ref{sec:laya}).
+  \item \textbf{Laya beats plain rules on both classes of the primary metric} when both are scored on the same LLM labels: primary F1 0.18 to 0.19 against 0.06 to 0.07, no paired CI yet. On made-up values, which Laya does not output, the rules score F1 0.44 to 0.52 (Section~\ref{sec:ablations}).
   \item \textbf{A judge of single steps cannot see omissions,} which are about half of all failures, so we added a check at the end of each turn (Section~\ref{sec:agent}).
   \item \textbf{Block-and-warn corrections do not help even with a perfect judge,} and they hurt with the SLM judge. Rollback plus the turn-end check moved task accuracy with a perfect (oracle) judge on the weaker Qwen3.5 4B agent; no deployable judge has moved it yet (Section~\ref{sec:ablations}).
   \item \textbf{After one guide rewrite, the LLM annotators reach kappa 0.84 and 0.71 against the human check} on a fresh sample (reweighted; 0.71 is 0.69 unweighted): past the 0.7 bar only after reweighting, and in the proposal's ``label more steps'' band (Section~\ref{sec:annot}).
@@ -155,7 +155,7 @@ Every member worked across design, experiments and writing. Table~\ref{tab:roles
 \textbf{Swayam Goyal} & Annotation check, guide v3, report & Cross-checked the LLM annotations: labelled the 200-step check sample blind, with Aaditya. Rewrote the annotation guide (v3) from the check results, built the fresh check sample, wrote this report. \\
 \textbf{Aaditya Sharma} & Annotation check, error analysis & Cross-checked the LLM annotations: labelled the 200-step check sample blind, with Swayam. Analysed where the LLM annotations differ from the human check by error type; reviewed the guide and the proposal. \\
 \textbf{Ch Pavan Harshit} & Agent runs, LLM annotation, Laya, referee & Ran the Qwen3.5 9B agent on Turing and the LLM annotation runs, finetuned Laya's two heads, ran the live checks and the primary-metric analysis; refereed the annotation check. \\
-\textbf{Shuban Biswas} & Harness, baselines, second pass & Built the harness and the replay oracle; ran the Qwen3 8B and Qwen3.5 4B baselines on BFCL test and AgentDojo, the correction-action study, and the offline scorer for off-the-shelf judges; did the blind second pass on the contested check steps. \\
+\textbf{Shuban Biswas} & Harness, baselines, second pass & Built the harness and the replay oracle; ran the Qwen3 8B baselines on BFCL test and AgentDojo and the Qwen3 8B and Qwen3.5 4B validation runs, the correction-action study, and the offline scorer for off-the-shelf judges; did the blind second pass on the contested check steps. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -447,14 +447,14 @@ Every confidence interval overlaps, so none is reliably ahead, and all score low
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figs/fig4_offline_laya.pdf}
-\caption{Finetuned Laya against the 9B SLM judge on the same validation steps. (a) Step check on tool calls. (b) Done check at turn end.}\label{fig:offlinelaya}
+\caption{Finetuned Laya against the 9B SLM judge on the same validation steps. (a) Step check on tool calls. (b) Done check at turn end; Laya full is at threshold 0.5, and at its dev-chosen threshold its F1 is 0.36.}\label{fig:offlinelaya}
 \end{figure}
 
 Both heads use a full finetune with balanced class weights on one RTX 6000 Ada: 4 epochs and 16 minutes for the step check, and 4 epochs and 5 minutes for the done check.
 
 \begin{table}[H]
 \centering\tablestyle
-\caption{Offline detection on validation: the step check on 1,277 calls (109 bad); the done check on 495 turn ends (positive class: not done). Step labels are the replay step labels the step head was trained on; the 9B SLM judge here used the v1 annotator prompt, and its 83 unparsed answers count as not flagged. Done-check F1: the full finetune at threshold 0.5 (at its dev-chosen threshold, 0.98, it gives 0.36, below the SLM judge's 0.41); the as-is and head-only rows at their dev thresholds (0.49 and 0.54).}\label{tab:offlinelaya}
+\caption{Offline detection on validation: the step check on 1,277 calls (109 bad); the done check on 495 turn ends (positive class: not done). Step labels are the replay step labels the step head was trained on; the 9B SLM judge here used the v1 annotator prompt, and 83 of its 1,277 call answers and 20 of its 495 turn-end answers did not parse and count as not flagged. Done-check F1: the full finetune at threshold 0.5 (at its dev-chosen threshold, 0.98, it gives 0.36, below the SLM judge's 0.41); the as-is and head-only rows at their dev thresholds (0.49 and 0.54).}\label{tab:offlinelaya}
 \begin{tabularx}{\linewidth}{P{0.1\linewidth}Ycccc}
 \toprule
 \rowcolor{white}\textbf{Check} & \textbf{Checker} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{AUROC} \\
@@ -542,9 +542,9 @@ Both agree & 0.30 / 0.31 & 0.07 / 0.06 (6) & +0.5 [$-$6.7, +5.1] & 0.39 / 0.29; 
 \toprule
 \rowcolor{white}\textbf{Ablation} & \textbf{Result} \\
 \midrule
-\textbf{Correction action} (Qwen3 8B, validation) & \textbf{Block and warn does not help even with a perfect judge} (oracle +2.5 [$-$1.7, +6.7]) and hurts with the SLM judge (18.3\% against 25.8\% for no judge). Rollback removes that damage (22.5 to 24.2\%). A vote of 3 with the SLM judge gives nothing (20.8\%). \textbf{Rollback plus the done check moved results with the oracle} on Qwen3.5 4B (+9.2 [+2.5, +15.8]); on Qwen3 8B it is borderline (+5.8 [0.0, +12.5]). No deployable judge has moved results yet. \\
+\textbf{Correction action} (Qwen3 8B, validation) & \textbf{Block and warn does not help even with a perfect judge} (oracle +2.5 [$-$1.7, +6.7]) and hurts with the SLM judge (18.3\% against 25.8\% for no judge). Rollback removes that damage (22.5 to 24.2\%). A vote of 3 with the SLM judge does not help (20.8\%, $-$5.0 [$-$12.5, +1.7]). \textbf{Rollback plus the done check moved results with the oracle} on Qwen3.5 4B (+9.2 [+2.5, +15.8]); on Qwen3 8B it is borderline (+5.8 [0.0, +12.5]). No deployable judge has moved results yet. \\
 \textbf{Finetuning gain per question} & Done check: AUROC 0.53 as is, 0.59 head only, 0.79 full finetune. Step check: AUROC 0.57 as is against 0.90 finetuned (2,427 pooled validation calls). \\
-\textbf{Per question against rules} & Scored on the same guide v2 labels as Table~\ref{tab:primary} (A / B). Off track over all steps: rules 0.14 / 0.12, Laya 0.30 / 0.27. On tool calls: rules 0.16 / 0.14, Laya 0.42 / 0.36. False claim: rules 0.00 / 0.00, Laya 0.07 / 0.10. Primary: rules 0.07 / 0.06, Laya 0.18 / 0.19. Laya beats the rules on every class; the rules flag 299 calls off track at precision 0.08 to 0.09. \\
+\textbf{Per question against rules} & Scored on the same guide v2 labels as Table~\ref{tab:primary} (A / B). Off track over all steps: rules 0.14 / 0.12, Laya 0.30 / 0.27. On tool calls: rules 0.16 / 0.14, Laya 0.42 / 0.36. False claim: rules 0.00 / 0.00, Laya 0.07 / 0.10. Primary: rules 0.07 / 0.06, Laya 0.18 / 0.19. Laya beats the rules on off track and false claim (no paired CI yet); the rules flag 299 calls off track at precision 0.08 to 0.09. On made-up values, which Laya does not output, the rules score F1 0.44 / 0.52. \\
 \textbf{Agent model and reasoning} & Qwen3 8B 25.8\%, Qwen3.5 4B 40.0\%, Qwen3.5 9B 43.3\%. Reasoning on is 6.6 points lower and 2.5$\times$ slower. \\
 \textbf{Input format, Laya as is} & 4 state formats and 8 question wordings: AUROC 0.39 to 0.67. Putting the step first fixes the truncation but adds no signal. \\
 \textbf{How the done head is used} & As a gate on every closing message: 37.5\%. Only for the done check: 42.5\%. \\
@@ -581,18 +581,18 @@ The revised proposal requires the LLM annotation to be checked by people on a st
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.76\linewidth]{figs/fig6_agreement.pdf}
-\caption{LLM annotators' agreement with the human check consensus (Cohen's kappa, reweighted to the real mix of steps). The 0.6 to 0.8 band means ``label more steps''. The last pair includes the pilot that v3 was written from.}\label{fig:agreement}
+\caption{LLM annotators' agreement with the human check consensus (Cohen's kappa, reweighted to the real mix of steps). Between the 0.6 and 0.8 lines the rule is ``label more steps''; 0.7 is the pass bar. The last pair includes the pilot that v3 was written from.}\label{fig:agreement}
 \end{figure}
 
 \begin{table}[H]
 \centering\tablestyle
-\caption{Annotation check results (kappa, reweighted; every step, problem vs fine).}\label{tab:agreement}
+\caption{Annotation check results (kappa, reweighted; every step, problem vs fine). $^{*}$The fresh-sample consensus was labelled under the first v3 draft, so the v2-to-v3 rise partly reflects v3's rule changes.}\label{tab:agreement}
 \begin{tabularx}{\linewidth}{YccccP{0.22\linewidth}}
 \toprule
 \rowcolor{white}\textbf{Round} & \textbf{Checker vs checker} & \textbf{vs A} & \textbf{vs B} & \textbf{A vs B} & \textbf{Decision (weaker annotator)} \\
 \midrule
 Pilot, guide v2 & 0.89 & 0.42 & 0.60 & 0.66 & below 0.6: rewrite the guide \\
-Fresh sample, guide v2 & 0.87 & 0.71 & 0.66 & 0.66 & 0.6 to 0.8: label more steps \\
+Fresh sample, guide v2$^{*}$ & 0.87 & 0.71 & 0.66 & 0.66 & 0.6 to 0.8: label more steps \\
 Fresh sample, guide v3 (main result) & 0.87 & \textbf{0.84} & \textbf{0.71} & 0.73 & 0.6 to 0.8: label more steps (B is 0.69 unweighted) \\
 All 200 steps, guide v3 (optimistic) & & 0.87 & 0.71 & 0.76 & includes the pilot v3 was written from \\
 \bottomrule
@@ -608,7 +608,7 @@ All 200 steps, guide v3 (optimistic) & & 0.87 & 0.71 & 0.76 & includes the pilot
   \item \textbf{The evidence list is trusted.}
 \end{itemize}
 
-\textbf{Caveats.} The fresh sample was drawn after v3 was written, so it is the fairer test, but the checkers labelled it with the first v3 draft. Two rules were reversed afterwards (a zero-amount fill counts as a change; deleting a file the request did not ask to delete is off track), and no fresh-sample label depends on them. On 7 contested pilot steps, Shuban's blind second pass sided with the annotators every time; scoring the pilot with his answers would lift its kappas from 0.42 and 0.60 to 0.57 and 0.78. Under the proposal's rule the result is in the ``label more steps'' band, and the next 100 check steps come from the test runs. The weakest class is false claims at turn ends (kappa 0.38 to 0.46 on few positives), which matters because false claims are half of the primary metric.
+\textbf{Caveats.} The fresh sample was drawn after v3 was written, so it is the fairer test, but the checkers labelled it with the first v3 draft. Two rules were reversed afterwards (a zero-amount fill counts as a change; deleting a file the request did not ask to delete is off track), and no fresh-sample label depends on them. On 7 contested pilot steps, Shuban's blind second pass sided with the annotators every time; scoring the pilot with his answers would lift its kappas from 0.42 and 0.60 to 0.57 and 0.78. Under the proposal's rule the result is in the ``label more steps'' band, and the next 100 check steps come from the test runs. The weakest class is false claims at turn ends (kappa 0.38 to 0.46 on few positives), which matters because false claims are half of the primary metric. Guide v3 also lowered false-claim agreement on the fresh sample (A from 0.76 to 0.46, B from 0.49 to 0.38; on the pilot, B is at 0.00), while turn-end done-vs-not agreement rose (A 0.66 to 0.78, B 0.56 to 0.61). The next guide revision targets false claims.
 
 % =====================================================================
 \section{Worked example of a failure}
@@ -641,7 +641,7 @@ No call in this task was harmful. Both failures are omissions, which a judge tha
 \midrule
 \textbf{False claims are rare:} 6 to 15 on validation by the v2 LLM labels (50 by the automatic labels), while the primary metric needs about 300; Laya also has no false-claim head yet. & Run test passes until 300 false claims or 8 passes, decided before seeing any test result. Train a typed closing-message head. Plan to create training false claims by editing passed traces so their last needed call fails, which replay confirms. \\
 \textbf{The oracle's off-track label disagrees with the annotators} (kappa 0.04 to 0.15), fails the proposal's 80\% rule, yet it is set on 276 of the step head's 408 bad training calls (as ``breaks task''). & Not fixed yet. Retrain the step head without it, or on annotator-checked labels, and compare; meanwhile the step-check results in Table~\ref{tab:offlinelaya} are scored against labels that include this rule. \\
-\textbf{Annotators disagreed on turn ends} (kappa 0.54 under guide v1, 0.61 under v2). & Ran the 200-step human check and rewrote the guide (v3). On the fresh sample agreement is now 0.84 and 0.71: past the 0.7 bar, still in the ``label more steps'' band. \\
+\textbf{Annotators disagreed on turn ends} (kappa 0.54 under guide v1, 0.61 under v2). & Ran the 200-step human check and rewrote the guide (v3). All-step agreement with the check is now 0.84 and 0.71 (past 0.7 only after reweighting). On turn ends it is not resolved: the annotators agree with each other at 0.61 to 0.62, B agrees with the check at 0.60 to 0.61, and false-claim agreement fell. A further guide revision and the test-sample check follow. \\
 \textbf{Laya as is is unusable:} it blocks 87.6\% of steps and truncates the step it judges. & Step first in the state, and a full finetune: AUROC 0.91 on calls. \\
 \textbf{A step judge cannot see omissions,} which are about half of all failures. & Added the done check at turn end, and rollback in place of block and warn. \\
 \textbf{Little room on the 9B agent, and a noisy pass rate:} oracle +4.2; 28 of 120 tasks flip between identical runs. & Three seeds per system, and a pilot on the weaker 4B agent (oracle +9.2). Report the per-step F1 claim separately from task accuracy. \\
@@ -658,7 +658,7 @@ This report is measured against the revised proposal (\code{proposal/proposal.md
 
 \textbf{Changes from the revised proposal to now:}
 \begin{itemize}
-  \item \textbf{Directed runs dropped.} The planned Qwen3.8 27B directed runs cost too many GPU-hours for the gain. The step head trains on pooled natural mistakes from two agent models, Qwen3.5 9B and Qwen3 8B. False-claim examples are planned to come from edited traces.
+  \item \textbf{Directed runs dropped.} The planned Qwen3.8 27B directed runs were dropped by team decision on 24 October to save GPU time. As a result, two step classes stay below Gate 1 (unneeded irreversible calls 217, made-up values at most 143); the step head pools them into one ``bad step'' class. The step head trains on pooled natural mistakes from two agent models, Qwen3.5 9B and Qwen3 8B. False-claim examples are planned to come from edited traces.
   \item \textbf{Natural training runs.} The Qwen3.5 9B ran its planned 3 passes (888 train tasks). The Qwen3.5 4B pass was replaced by the recorded Qwen3 8B steps.
   \item \textbf{Test-set baselines.} They ran with the earlier Qwen3 8B agent and judge, not the proposal's Qwen3.5 9B; they are to be rerun with the 9B for the task claim.
   \item \textbf{Test passes.} Up to 8 passes instead of 3 (the proposal allows a fourth as a fallback), stopping at 300 false claims; the stop rule is fixed before seeing any test result.

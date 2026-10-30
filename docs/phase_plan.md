@@ -32,7 +32,7 @@ Each task gives:
 |---|---|
 | 1. Attribution | **Done.** Commit 30 covers 1.1 to 1.3. Items 1.4 and 1.5 are in the report, commit 31. |
 | 2. Report wording | **Done.** Commit 31: all 13 items from `midreport-check.md`, plus 16 more from a second fact-check. |
-| 3. Data gaps without GPUs | **In progress.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, are in `pavan_gpu/` jobs b and a. |
+| 3. Data gaps without GPUs | **In progress.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, run on Ada under Swayam's account (`pavan_gpu/jobs/ada_*.sbatch`, 31 Oct). |
 | 4. GPU experiments | From 1 Nov. Item 4.1 is `pavan_gpu/` job c. |
 
 **Second fact-check, key corrections:**
@@ -40,7 +40,7 @@ Each task gives:
 - **Training labels.** The step head still trains on the oracle off-track rule ("breaks task", 276 of 408 bad training calls), which failed the 80% agreement rule. This is now Phase 3 item 3.7.
 - **Gate 1 counts.** Pooled over the 9B and 8B steps: off track 310 and false claim 372 pass; unneeded irreversible 217 and made-up values at most 143 do not.
 - **Baselines.** The test baselines used the Qwen3 8B agent and judge, so they must be rerun with the 9B for the task claim. This is now Phase 4 item 4.9.
-- **Rules comparison.** Table 10 was scored against v1 labels, so rules and Laya are not comparable yet. This is now Phase 3 item 3.8.
+- **Rules comparison.** The off-the-shelf judges table was scored against v1 labels, so rules and Laya were not comparable. This became item 3.8, now done.
 
 ## Phase 1: make the attribution true (no new runs)
 
@@ -49,7 +49,7 @@ Each task gives:
 | 1.1 | Name the annotators as the LLMs they are: "Annotator A (DeepSeek V4.1 Flash)" and "Annotator B (GLM-5.3-Flash)" | `human_check/score.py` (display names), `human_check/README.md`, `analysis/2026-10-30_guide_v3.md`, `mid_submission/mid_report.tex`, `mid_submission/make_figs.py` (figure 6 legend) | Searching the repo finds no "Swayam (Annotator A)" or "Aaditya (Annotator B)" |
 | 1.2 | Credit the check to its labellers: rename the check sheets to `labels_swayam.csv` and `labels_aaditya.csv`, with Pavan as referee | `human_check/{pilot,val2}/labels_*.csv`, `decisions.csv` (columns and notes), `human_check/README.md` roles table, guide v3 write-up | `score.py` prints "aaditya vs swayam" and the decision notes name Pavan |
 | 1.3 | Regenerate every results file | `human_check/{pilot,val2}/results*.md`, `consensus.csv` | Numbers identical to now; only names change |
-| 1.4 | Fix the roles table in the report: Swayam and Aaditya do annotation checking and guide v3, Pavan does refereeing and runs, Shuban does the harness and baselines | `mid_report.tex` Table 2 | Matches 1.1 and 1.2 |
+| 1.4 | Fix the roles table in the report: Swayam and Aaditya do annotation checking and guide v3, Pavan does refereeing and runs, Shuban does the harness and baselines | `mid_report.tex`, roles table | Matches 1.1 and 1.2 |
 | 1.5 | Name the proposal baseline (D1) in the report, and split "changes from the proposal" into v5 to revision and revision to now | `mid_report.tex` section 13 | Check #8 closed |
 
 ## Phase 2: correct the mid report wording (no new runs)
@@ -57,7 +57,7 @@ Each task gives:
 | ID | Check | Fix |
 |---|---|---|
 | 2.1 | #2 | Abstract: "LLM labels for every validation step (guide v2), plus a 200-step human check; only the 200 checked steps have v3 labels so far." |
-| 2.2 | #3 | Table 15 decision column: "0.6 to 0.8 band: label more steps (passes the 0.7 bar)". Add the same to figure 6's caption. |
+| 2.2 | #3 | Annotation-check table, decision column: "0.6 to 0.8 band: label more steps (passes the 0.7 bar)". Add the same to figure 6's caption. |
 | 2.3 | #4 | Use the fresh-sample numbers as the headline (A 0.71 to 0.84, B 0.66 to 0.71). Mark the 200-step row "includes the pilot v3 was written from, optimistic". |
 | 2.4 | #5 | Done check: lead with AUROC 0.79 against 0.53. Give F1 at both thresholds: 0.53 at 0.5, and 0.36 at the dev-chosen 0.98 against 0.41 for the 9B. Say the comparison depends on the threshold. |
 | 2.5 | #6 | Step check headline: state its conditions. The 9B used the v1 annotator prompt, 83 unparsed answers count as "not flagged", and the labels follow the training rule. Add the fairer comparison: harness prompt and annotator labels, a lead of about +8 points. |
@@ -67,7 +67,7 @@ Each task gives:
 | 2.9 | #11 | Add the annotator-vs-annotator column: 0.66, 0.66, 0.73, 0.76. |
 | 2.10 | #12 | No change. The check is wrong here: `score.py` compares the raw sheets before refereeing. |
 | 2.11 | #13 | Note that false claims are half the primary metric. |
-| 2.12 | Gate 1 | State it plainly: no step class reaches 300 training examples (off track 221, false claim 281). The 672 unfinished turns are not a proposal class. |
+| 2.12 | Gate 1 | State it plainly. Pooled over the 9B and 8B training scenarios, off track (310) and false claim (372) pass 300; unneeded irreversible (217) and made-up values (at most 143) do not. The 672 unfinished turns are not a proposal class. |
 | 2.13 | Coverage | List the proposal items not started: escalation, calibration, AgentProcessBench and AgentHallu, the stronger reference judge, Laya alone and the full system online. |
 
 **Phase 2 is done when** a fresh fact-check of the rebuilt PDF finds no wrong or overstated claim.
@@ -77,13 +77,13 @@ Each task gives:
 | ID | What | Why | Done when | Owner |
 |---|---|---|---|---|
 | 3.1 | Deferred (D4): relabel all 1,772 validation steps with guide v3 | Check #2: the full-validation labels are still the failed v2 | For now, the report states the labels are v2 | Pavan |
-| 3.2 | Only if 3.1 runs: rerun the primary metric against the v3 labels | The current primary uses v2 labels | New Table 13 with paired CIs | Pavan |
-| 3.3 | **Done (31 Oct).** Score the step check against annotator labels with the harness-prompt 9B, unparsed answers reported separately | Check #6 | Report Table 13, tool-calls column; 33 unparsed answers noted | Shuban |
-| 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | Pavan |
-| 3.5 | **Done.** Gate 1 table: training counts per proposal class | 2.12 | Report Table 3 and section 5.3 | Swayam |
+| 3.2 | Only if 3.1 runs: rerun the primary metric against the v3 labels | The current primary uses v2 labels | New primary-metric table with paired CIs | Pavan |
+| 3.3 | **Done (31 Oct).** Score the step check against annotator labels with the harness-prompt 9B, unparsed answers reported separately | Check #6 | Report primary-metric table, tool-calls column (printed by `analysis/primary_val.py`); 33 unparsed answers noted | Shuban |
+| 3.4 | Done check: report AUROC and F1 at the dev threshold, and choose thresholds by grouped cross-validation on train | Check #5 | Threshold fixed before any validation look | Swayam (Ada, `pavan_gpu/jobs/ada_b_done_cv.sbatch`, running 31 Oct) |
+| 3.5 | **Done.** Gate 1 table: training counts per proposal class | 2.12 | Report progress table and section 5.3 | Swayam |
 | 3.6 | Rebuild the report with Phases 1 to 3 and run the fact-check again | All | Zero open items | Swayam, Aaditya |
-| 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | Pavan |
-| 3.8 | **Done.** Score the rules and Laya against the same LLM labels (v2) | Table 10 used v1 labels | `analysis/2026-10-30_rules_vs_laya_v2.md`; report Table 14 | Shuban |
+| 3.7 | Retrain the step head without the oracle "breaks task" label, or on annotator-checked labels, and compare | The label failed the 80% rule but is set on 276 of 408 bad training calls | Step check reported with and without it | Swayam (Ada, `pavan_gpu/jobs/ada_a_step_nobt.sbatch`, running 31 Oct) |
+| 3.8 | **Done.** Score the rules and Laya against the same LLM labels (v2) | Table 10 used v1 labels | `analysis/2026-10-30_rules_vs_laya_v2.md`; report ablations table | Shuban |
 
 ## Phase 4: the experiments the proposal still needs (GPU from 1 Nov)
 
@@ -96,7 +96,7 @@ Each task gives:
 | 4.5 | Primary metric on test: paired bootstrap, Holm correction | The hypothesis is confirmed or falsified | Shuban |
 | 4.6 | Ablations: state parts (no plan, no recent calls, no evidence list), escalation budget, 3 seeds | Ablation table | Shuban, Swayam |
 | 4.7 | Online test runs with rollback and the done check, plus a 4B pilot | Task accuracy with CIs | Pavan, Aaditya |
-| 4.9 | Rerun the test-set baselines (no judge, rules, SLM judge) with the Qwen3.5 9B agent and judge | The current test baselines used Qwen3 8B | Table 9 on the 9B | Pavan, Shuban |
+| 4.9 | Rerun the test-set baselines (no judge, rules, SLM judge) with the Qwen3.5 9B agent and judge | The current test baselines used Qwen3 8B | Test-baselines table on the 9B | Pavan, Shuban |
 | 4.8 | Optional, if time allows: AgentProcessBench and AgentHallu any-flag F1, and Gemma 4 12B as a reference | Results, or listed as future work | Shuban |
 
 ## Phase 5: final submission

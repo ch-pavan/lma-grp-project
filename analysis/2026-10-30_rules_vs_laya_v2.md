@@ -14,9 +14,9 @@
 | Primary (mean of off track and false claim, all steps) | 0.07 / 0.06 | 0.18 / 0.19 | 0.19 / 0.17 |
 
 **Reading:**
-- **Laya against the rules.** Laya beats the plain rules on every class, by +11 to +13 primary F1 and by +16 to +26 F1 on off track.
+- **Laya against the rules.** Laya beats the plain rules on both classes of the primary metric, by +11 to +13 primary F1 and by +16 to +26 F1 on off track, with no paired CI yet. On made-up values, which Laya does not output, the rules score F1 0.44 (A) and 0.52 (B).
 - **Why the rules score low.** They flag 299 calls as off track, most of them wrongly: precision is 0.08 to 0.09.
-- **Laya against the 9B judge.** That comparison is in the mid report's Table 13.
+- **Laya against the 9B judge.** That comparison is in the mid report's primary-metric table.
 - **Variation.** The rules are deterministic, so they have no seed variation. Their CIs, from a bootstrap over the 15 validation scenarios, are in the per-file tables.
 
 **Raw tables:** `analysis/rules_v2/{all,call}_annotator{A,B}.md`.
