@@ -682,7 +682,7 @@ This report is measured against the revised proposal (\code{proposal/proposal.md
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\linewidth]{figs/fig7_timeline.pdf}
-\caption{Plan to the final submission (weeks of November 2026).}\label{fig:timeline}
+\caption{Plan to the final submission on 15 November 2026 (evaluations 16 to 19 November).}\label{fig:timeline}
 \end{figure}
 
 \begin{table}[H]
@@ -692,17 +692,18 @@ This report is measured against the revised proposal (\code{proposal/proposal.md
 \toprule
 \rowcolor{white}\textbf{Week} & \textbf{Work} & \textbf{Owner} \\
 \midrule
-31 Oct & Finish the two Phase 3 runs on Ada (training labels without ``breaks task''; done-head threshold by cross-validation) and score them. & Swayam \\
-1--7 Nov & Test passes of the 9B agent (about 0.5 GPU-hour each) until 300 false claims; LLM annotation of the test steps with guide v3. & Pavan \\
-8--14 Nov & Typed closing-message head with a false-claim class; thresholds by grouped cross-validation; 3 seeds. Human check of 100 test steps (Pavan referees). & Pavan, Shuban; check: Swayam, Aaditya \\
-15--21 Nov & Primary metric on test with paired bootstrap CIs and Holm correction; state-part and escalation-budget ablations; cost per judge. & Shuban, Swayam \\
-22--28 Nov & Online test runs (no judge, Laya, SLM judge, oracle) with rollback and the done check; 4B pilot; error analysis of every miss and false alarm. & Pavan, Aaditya \\
-By the deadline & Final report, release of the checked annotations, repository clean-up. & Everyone \\
+31 Oct to 3 Nov & Score the two running jobs (step-head labels without ``breaks task''; done-head threshold by cross-validation). & Swayam, Pavan \\
+1 to 7 Nov & 9B test passes without a judge, 4 first and up to 8 if short of false claims; LLM annotation of the test steps with guide v3. & Pavan \\
+2 to 9 Nov & Typed closing-message head with a false-claim class, frozen before test. Human check of 100 test steps, Pavan refereeing. & Pavan; Swayam, Aaditya \\
+3 to 10 Nov & State-part ablation, 3 seeds. Rerun of the test baselines with the 9B. & Shuban, Swayam, Pavan \\
+9 to 13 Nov & Primary metric on test with paired bootstrap CIs and Holm correction. Online test runs with rollback and the done check, one pass per system. & Shuban; Pavan, Aaditya \\
+11 to 15 Nov & Final report, fact check, release of the checked labels, repository clean-up. & Everyone \\
+Stretch & Escalation budget, 4B online pilot, AgentProcessBench and AgentHallu, Gemma 4 12B reference, v3 relabel of all validation steps. & Dropped first \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Dates shift with the final deadline. The critical path is the test passes, then the test annotation, then the offline test evaluation.
+The final submission is due on 15 November, with evaluations on 16 to 19 November. The critical path is the test passes, then the test annotation and human check, then the primary metric on test. If the test passes slip past 5 November, the online runs and the ablations are cut before the primary metric is.
 
 % =====================================================================
 \section{Repository and reproduction}\label{sec:repo}

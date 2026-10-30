@@ -68,10 +68,10 @@ Small local agents drift, make up values and claim work they did not do. We test
 
 \textbf{Findings so far.}
 \begin{itemize}
-  \item \textbf{Step check.} On the replay step labels, finetuned Laya ranks bad tool calls better than the SLM judge (AUROC 0.91 against 0.61). That judge used the weaker annotator prompt. With its harness prompt and the LLM annotators' labels, Laya's F1 lead on off track tool calls is +7 to +9 points, and every interval includes zero.
+  \item \textbf{Step check.} On the replay step labels the head was trained on, finetuned Laya ranks bad tool calls better than the SLM judge (AUROC 0.91 against 0.61 for the judge's yes/no answers). That judge used the weaker annotator prompt. With its harness prompt and the LLM annotators' labels, Laya's F1 lead on off track tool calls is +7 to +9 points, and every interval includes zero.
   \item \textbf{Done check.} Laya's AUROC is 0.79 against 0.53 as is. F1 is 0.53 at threshold 0.5 and 0.36 at the threshold chosen on dev, against 0.41 for the SLM judge. The F1 comparison depends on the threshold.
-  \item \textbf{Plain rules.} Laya beats them on every class on the same labels (primary F1 0.18 to 0.19 against 0.06 to 0.07).
-  \item \textbf{Primary metric on validation.} Laya minus the SLM judge is $-$1.0 to +2.0 F1, intervals include zero. It is not met on validation. Only 6 to 15 false claims exist there, so the false claim half cannot be measured yet.
+  \item \textbf{Plain rules.} On the same labels Laya beats them on both classes of the primary metric (primary F1 0.18 to 0.19 against 0.06 to 0.07; no paired interval yet). On made up values, which Laya does not output, the rules score F1 0.44 to 0.52.
+  \item \textbf{Primary metric on validation.} Laya minus the SLM judge is $-$1.0 to +2.0 F1, intervals include zero. It is not met on validation. Only 6 to 15 false claims exist there and Laya has no false claim head yet, so the false claim half cannot be measured yet.
   \item \textbf{Task accuracy.} No deployable judge differs from no judge beyond noise. Rollback plus the done check helped with the oracle ceiling on Qwen3.5 4B (+9.2 [+2.5, +15.8]) and was borderline on Qwen3 8B (+5.8 [0.0, +12.5]).
   \item \textbf{Labels.} Two LLM annotators label all validation steps. After one guide rewrite their agreement with our human check is kappa 0.84 and 0.71 on a fresh sample. 0.71 is in the proposal's ``label more steps'' band, not a pass.
 \end{itemize}
@@ -99,7 +99,7 @@ Updated GitHub with all the code & Section~\ref{sec:repo} \\
 \caption{Main work of each member. All four wrote and revised the proposal.}\label{tab:roles}
 \begin{tabularx}{\linewidth}{P{0.16\linewidth}Y}
 \toprule
-\textbf{Shuban Biswas} & Harness and replay oracle. Qwen3 8B and Qwen3.5 4B baselines on BFCL test and AgentDojo, correction action study, offline scorer for off the shelf judges and plain rules, blind second pass on contested check steps. \\
+\textbf{Shuban Biswas} & Harness and replay oracle. Qwen3 8B baselines on BFCL test and AgentDojo, Qwen3 8B and Qwen3.5 4B validation runs, correction action study, offline scorer for off the shelf judges and plain rules, blind second pass on contested check steps. \\
 \textbf{Ch Pavan Harshit} & Qwen3.5 9B agent runs on Turing, LLM annotation runs, Laya finetuning of both heads, live checks and primary metric analysis, referee of the human check. \\
 \textbf{Swayam Goyal} & Human check of the LLM annotations (with Aaditya), annotation guide v3, fresh check sample, Gate 1 counts, scorers and Ada job scripts, report. \\
 \textbf{Aaditya Sharma} & Human check of the LLM annotations (with Swayam), review of disagreements by error type. \\
@@ -217,12 +217,12 @@ LettuceDetect (false claim only) & 0.18 & 0.22 & 0.15 \\
 All intervals overlap, so none is reliably ahead. Laya as is stays at AUROC 0.39 to 0.67 across 4 state formats and 8 question wordings. It cuts the end of its input, so on long states it never sees the step it judges, and moving the step first added no signal. Only the hosted Jev classifier showed signal, on closing messages (AUROC 0.81). Off the shelf use is not enough, so Laya is finetuned.
 
 \section{Results: finetuned Laya}\label{sec:laya}
-Both heads are fully finetuned with balanced class weights on one RTX 6000 Ada (step head 16 minutes, done head 5 minutes). The step head trains on 8,847 calls (408 bad) and the done head on 3,341 turn ends. Thresholds come from held out dev scenarios.
+Both heads are fully finetuned with balanced class weights on one RTX 6000 Ada (step head 16 minutes, done head 5 minutes). The step head trains on 8,847 calls (408 bad) and the done head on 3,341 turn ends. The step head's threshold comes from held out dev scenarios; the done head is reported at 0.5 and at its dev threshold.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figs/fig_offline.pdf}
-\caption{Finetuned Laya on validation. (a) Replay step labels; the SLM judge used the annotator prompt and its 83 unparsed answers count as not flagged. (b, c) Done check on 495 turn ends against the oracle, positive class not done.}\label{fig:offlinelaya}
+\caption{Finetuned Laya on validation. (a) Replay step labels; the SLM judge used the annotator prompt and 83 of its 1,277 answers did not parse and count as not flagged. (b, c) Done check on 495 turn ends against the oracle, positive class not done; panel (c) shows Laya full at threshold 0.5 and at its dev threshold. 20 of the 9B's 495 done check answers did not parse.}\label{fig:offlinelaya}
 \end{figure}
 
 \textbf{Step check.} On the 2,427 pooled validation calls the finetuned AUROC is 0.90 against 0.57 as is. It also beats the rule ``flag every irreversible call'' on irreversible calls only (0.74 against 0.50) and on reads only (0.95 against 0.50), so it is not only reading function names. The labels are the replay rules, not yet checked by people.
@@ -281,12 +281,12 @@ The primary hypothesis is not met on validation and not yet tested. Over all ste
 \toprule
 \textbf{Ablation} & \textbf{Result} \\
 \midrule
-Correction action (Qwen3 8B) & Block and warn does not help even with the oracle (+2.5 [$-$1.7, +6.7]) and hurts with the SLM judge (18.3\% against 25.8\%). Rollback removes that damage (22.5 to 24.2\%). A vote of 3 gives nothing (20.8\%). Rollback plus the done check with the oracle: +9.2 [+2.5, +15.8] on Qwen3.5 4B and +5.8 [0.0, +12.5] on Qwen3 8B. No deployable judge has moved results. \\
+Correction action (Qwen3 8B) & Block and warn does not help even with the oracle (+2.5 [$-$1.7, +6.7]) and hurts with the SLM judge (18.3\% against 25.8\%). Rollback removes that damage (22.5 to 24.2\%). A vote of 3 does not help (20.8\%, $-$5.0 [$-$12.5, +1.7]). Rollback plus the done check with the oracle: +9.2 [+2.5, +15.8] on Qwen3.5 4B and +5.8 [0.0, +12.5] on Qwen3 8B. No deployable judge has moved results. \\
 Laya head only against full finetune & Done check AUROC 0.53 as is, 0.59 head only, 0.79 full. Step check AUROC 0.57 as is, 0.90 finetuned. \\
-Laya against plain rules, same v2 labels (A / B) & Primary F1 0.07 / 0.06 for rules, 0.18 / 0.19 for Laya. Off track on tool calls 0.16 / 0.14 against 0.42 / 0.36. False claim 0.00 / 0.00 against 0.07 / 0.10. The rules flag 299 calls at precision 0.08 to 0.09. \\
+Laya against plain rules, same v2 labels (A / B) & Primary F1 0.07 / 0.06 for rules, 0.18 / 0.19 for Laya. Off track on tool calls 0.16 / 0.14 against 0.42 / 0.36. False claim 0.00 / 0.00 against 0.07 / 0.10, no paired interval yet. The rules flag 299 calls at precision 0.08 to 0.09. On made up values, which Laya does not output, the rules score 0.44 / 0.52. \\
 SLM judge prompt & Harness prompt instead of the annotator prompt: 9B call F1 0.28 to 0.34 (against A). \\
 Agent reasoning & On is 36.7\% against 43.3\% off, and 2.5 times slower. \\
-Annotation guide version & Kappa against the human check on the fresh sample: A 0.71 (v2) to 0.84 (v3), B 0.66 to 0.71 (Section~\ref{sec:annot}). \\
+Annotation guide version & Kappa against the human check on the fresh sample: A 0.71 (v2) to 0.84 (v3), B 0.66 to 0.71. The fresh sample's consensus was labelled under the first v3 draft, so the rise partly reflects v3's own rules. False claim agreement fell under v3 (Section~\ref{sec:annot}). \\
 Done head use & As a gate on every closing message 37.5\%, as a done check only 42.5\%. \\
 \bottomrule
 \end{tabularx}
@@ -305,25 +305,25 @@ Swayam and Aaditya each labelled every sampled step blind, and Pavan refereed th
 \includegraphics[width=\linewidth]{figs/fig_kappa.pdf}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.55\linewidth}
-\captionof{figure}{LLM annotators against the human consensus on the fresh sample, kappa reweighted. The shaded band is the proposal's ``label more steps' range, the dashed line the 0.7 bar. Guide v3 was written from the pilot, so the fresh sample is the fair test.}\label{fig:agreement}
+\captionof{figure}{LLM annotators against the human consensus on the fresh sample, kappa reweighted. The shaded band is the proposal's ``label more steps'' range, the dashed line the 0.7 bar. Guide v3 was written from the pilot, so the fresh sample is the fair test.}\label{fig:agreement}
 \end{minipage}
 \end{figure}
 
 \begin{table}[H]
 \centering\tablestyle
-\caption{Kappa against the consensus (reweighted, problem against fine).}\label{tab:agreement}
+\caption{Kappa against the consensus (reweighted, problem against fine). $^{*}$The fresh sample's consensus was labelled under the first v3 draft.}\label{tab:agreement}
 \begin{tabularx}{\linewidth}{Ycccc P{0.25\linewidth}}
 \toprule
 \textbf{Round} & \textbf{Checkers} & \textbf{vs A} & \textbf{vs B} & \textbf{A vs B} & \textbf{Decision} \\
 \midrule
 Pilot, guide v2 & 0.89 & 0.42 & 0.60 & 0.66 & rewrite the guide \\
-Fresh sample, guide v2 & 0.87 & 0.71 & 0.66 & 0.66 & label more steps \\
+Fresh sample, guide v2$^{*}$ & 0.87 & 0.71 & 0.66 & 0.66 & label more steps \\
 Fresh sample, guide v3 & 0.87 & 0.84 & 0.71 & 0.73 & label more steps \\
 All 200 steps, guide v3 & & 0.87 & 0.71 & 0.76 & optimistic, includes the pilot \\
 \bottomrule
 \end{tabularx}
 \end{table}
-Checker against checker is computed on the raw sheets before refereeing. The weaker annotator, B, is at 0.71 (0.69 unweighted), in the ``label more steps'' band, so the next 100 check steps come from the test runs. The v2 labels on all validation steps have not been redone with v3. The checkers labelled the fresh sample from the first v3 draft. Two rules were reversed afterwards and no fresh sample label depends on them. On 7 contested pilot steps Shuban's blind second pass sided with the annotators every time, which would lift the pilot kappas from 0.42 and 0.60 to 0.57 and 0.78. The rule that a name the agent chose itself needs asking is kept but contested. The weakest class is false claims at turn ends (kappa 0.38 to 0.46 on a handful of positives), and false claims are half of the primary metric.
+Checker against checker is computed on the raw sheets before refereeing. The weaker annotator, B, is at 0.71 (0.69 unweighted), in the ``label more steps'' band, so the next 100 check steps come from the test runs. The v2 labels on all validation steps have not been redone with v3. The checkers labelled the fresh sample from the first v3 draft. Two rules were reversed afterwards and no fresh sample label depends on them. On 7 contested pilot steps Shuban's blind second pass sided with the annotators every time, which would lift the pilot kappas from 0.42 and 0.60 to 0.57 and 0.78. The rule that a name the agent chose itself needs asking is kept but contested. The weakest class is false claims at turn ends (kappa 0.38 to 0.46 on a handful of positives), and false claims are half of the primary metric. Guide v3 lowered false claim agreement on the fresh sample (A 0.76 to 0.46, B 0.49 to 0.38; on the pilot B is at 0.00), while turn end done against not done rose (A 0.66 to 0.78, B 0.56 to 0.61). The next guide revision targets false claims.
 
 \section{Challenges and mitigation}\label{sec:challenges}
 \begin{table}[H]
@@ -334,10 +334,10 @@ Checker against checker is computed on the raw sheets before refereeing. The wea
 \midrule
 False claims are rare: 6 to 15 on validation by the LLM labels, while the primary metric needs about 300. Laya has no false claim head. & Test passes until 300 false claims or 8 passes, rule fixed before seeing test results. A typed closing message head. \\
 The oracle's off track label disagrees with the annotators (kappa 0.04 to 0.15) yet is set on 276 of the step head's 408 bad training calls. & Retrain without it and compare (in progress). Until then step check results are scored against labels that include it. \\
-Annotators disagreed on turn ends (kappa 0.54 under guide v1, 0.61 under v2). & 200 step human check, guide v3. Next: 100 more check steps from test, a third annotator for closing messages if false claim agreement stays low. \\
+Annotators disagreed on turn ends (kappa 0.54 under guide v1, 0.61 under v2). Under v3 they still agree with each other at only 0.61 to 0.62, and B with the check at 0.60 to 0.61. & 200 step human check, guide v3. Next: 100 more check steps from test, a third annotator for closing messages if false claim agreement stays low. \\
 Dev threshold on 50 positives overfit the done head (F1 0.36 against 0.53 at 0.5). & Thresholds from grouped cross validation on train, fixed before any test look. \\
 Little room on the 9B agent and a noisy pass rate (oracle +4.2, 28 of 120 tasks flip between identical runs). & Three seeds, the larger test set, paired bootstrap. Online pilot on the 4B agent if time allows. \\
-Compute: Ada 2080 Ti cards are slow, a 27B model for directed runs does not fit our GPUs. & 9B runs on a 48 GB card on Turing, fp16 jobs on Ada, Granite on CPU. Directed runs dropped. \\
+Compute: Ada 2080 Ti cards are slow and lack fast bf16, and directed runs with a 27B model would cost too many GPU hours. & 9B runs on a 48 GB card on Turing, fp16 jobs on Ada, Granite on CPU. Directed runs dropped by team decision (24 October), so unneeded irreversible calls and made up values stay below Gate 1 and are pooled into one bad step class. \\
 BFCL quality: unsound keys, and the turn where the agent should ask is never scored. & Cleaned split, empty turn check, act or ask decision accuracy reported if time allows. \\
 \bottomrule
 \end{tabularx}

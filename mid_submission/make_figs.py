@@ -175,23 +175,32 @@ def agreement():
 
 
 def timeline():
-    """Figure 7: plan to the final submission (weeks of November 2026)."""
-    tasks = [("Test passes of the 9B agent", 0, 1, True), ("Annotate test steps (guide v3)", 0.4, 1.6, True),
-             ("False-claim head, thresholds, 3 seeds", 1, 2, False), ("Check 100 test steps", 1.2, 2, False),
-             ("Primary metric on test, ablations", 2, 3, True), ("Online runs, 4B pilot, error analysis", 3, 4, False),
-             ("Final report and release", 3.4, 4.2, False)]
-    fig, ax = plt.subplots(figsize=(6.4, 2.0))
-    ax.grid(axis="y", visible=False)
-    for i, (n, s, e, crit) in enumerate(tasks[::-1]):
-        ax.barh(i, e - s, left=s, height=0.55, color=VERM if crit else SKY)
-    ax.set_yticks(range(len(tasks)), [t[0] for t in tasks[::-1]])
-    ax.set_xticks([0.5, 1.5, 2.5, 3.5], ["1-7 Nov", "8-14 Nov", "15-21 Nov", "22-28 Nov"])
-    ax.set_xlim(0, 4.3)
-    for x in (1, 2, 3, 4):
-        ax.axvline(x, color="#cccccc", lw=0.5, ls=":")
+    """Figure 7: plan to the final submission on 15 November 2026 (same plan as the condensed report)."""
+    import datetime as dt
     from matplotlib.patches import Patch
+    d0 = dt.date(2026, 10, 31)
+    day = lambda m, d: (dt.date(2026, m, d) - d0).days
+    tasks = [("Score the two running jobs", day(10, 31), day(11, 3) + 1, True),
+             ("9B test passes (4, up to 8)", day(11, 1), day(11, 7) + 1, True),
+             ("LLM annotation of test steps (v3)", day(11, 3), day(11, 7) + 1, True),
+             ("Human check of 100 test steps", day(11, 5), day(11, 9) + 1, True),
+             ("False-claim head, frozen before test", day(11, 2), day(11, 9) + 1, False),
+             ("State-part ablation, 3 seeds; baselines on 9B", day(11, 3), day(11, 10) + 1, False),
+             ("Primary metric on test", day(11, 9), day(11, 13) + 1, True),
+             ("Online test runs", day(11, 9), day(11, 13) + 1, False),
+             ("Final report, label release", day(11, 11), day(11, 15) + 1, True)]
+    fig, ax = plt.subplots(figsize=(6.6, 2.3))
+    ax.grid(axis="y", visible=False)
+    for i, (n, s_, e_, crit) in enumerate(tasks[::-1]):
+        ax.barh(i, e_ - s_, left=s_, height=0.55, color=VERM if crit else SKY)
+    ax.set_yticks(range(len(tasks)), [x[0] for x in tasks[::-1]])
+    ticks = [day(10, 31), day(11, 3), day(11, 7), day(11, 11), day(11, 15)]
+    ax.set_xticks(ticks, ["31 Oct", "3 Nov", "7 Nov", "11 Nov", "15 Nov"])
+    ax.axvline(day(11, 15) + 1, color="#333333", lw=0.9, ls="--")
+    ax.text(day(11, 15) + 1.2, len(tasks) - 0.6, "final\n15 Nov", fontsize=6.5, va="top")
+    ax.set_xlim(0, day(11, 15) + 3.5)
     ax.legend(handles=[Patch(color=VERM, label="critical path"), Patch(color=SKY, label="other work")],
-              fontsize=6.8, loc="upper center", ncol=2, bbox_to_anchor=(0.5, -0.18))
+              fontsize=6.8, loc="upper center", ncol=2, bbox_to_anchor=(0.5, -0.16))
     save(fig, "fig7_timeline")
 
 
