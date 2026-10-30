@@ -139,6 +139,8 @@ def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--limit", type=int, default=0, help="rows per split, for a smoke test")
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--dtype", default="bf16", choices=["bf16", "fp16"],
+                    help="autocast type; fp16 (with a GradScaler) for GPUs without fast bf16, such as the RTX 2080 Ti")
     a = ap.parse_args()
     os.makedirs(a.out_dir, exist_ok=True)
     random.seed(a.seed); np.random.seed(a.seed); torch.manual_seed(a.seed)
@@ -147,7 +149,7 @@ def main():
     agent = laya.load(a.model_dir, device=a.device)
     agent.cfg["max_len"] = a.max_len
     model, enc = agent.model, Encoder(agent, QUESTIONS[a.question])
-    dtype = torch.bfloat16
+    dtype = torch.bfloat16 if a.dtype == "bf16" else torch.float16
     data = {s: jl(os.path.join(a.data_dir, f"{s}.jsonl")) for s in ("train", "dev", "val")}
     if a.limit:
         data = {s: random.Random(a.seed).sample(r, min(a.limit, len(r))) for s, r in data.items()}  # mixed labels
@@ -174,6 +176,7 @@ def main():
         groups = [{"params": [p for n, p in model.named_parameters() if n.startswith("encoder.")], "lr": a.lr_enc},
                   {"params": [p for n, p in model.named_parameters() if not n.startswith("encoder.")], "lr": a.lr_head}]
     opt = torch.optim.AdamW(groups, weight_decay=0.01)
+    scaler = torch.amp.GradScaler("cuda", enabled=a.dtype == "fp16" and a.device.startswith("cuda"))
     n = len(data["train"]); n_nd = min(max(1, sum(1 - r["label"] for r in data["train"])), n - 1)
     w = torch.tensor([n / (2 * (n - n_nd)), n / (2 * n_nd)], device=a.device)  # balanced: index 0 done, 1 not_done
     steps = a.epochs * math.ceil(n / a.bs); warm = max(1, steps // 10)
@@ -202,9 +205,10 @@ def main():
                     logits, _ = model(b["input_ids"].to(a.device), b["attention_mask"].to(a.device), b["marker_pos"].to(a.device),
                                       b["marker_mask"].to(a.device), b["qtype"].to(a.device), detach_encoder=a.mode == "head")
                 loss = (F.cross_entropy(logits.float()[:, :2], slot, reduction="none") * w[cls]).sum() / len(ch)
-                loss.backward(); step_loss += loss.item()
+                scaler.scale(loss).backward(); step_loss += loss.item()
+            scaler.unscale_(opt)
             torch.nn.utils.clip_grad_norm_([p for g in groups for p in g["params"]], 1.0)
-            opt.step(); sched.step(); tl += step_loss; nb += 1
+            scaler.step(opt); scaler.update(); sched.step(); tl += step_loss; nb += 1
         s_dev = score(model, enc, data["dev"], a.device, 64, dtype)
         auc = auroc([1 - r["label"] for r in data["dev"]], s_dev)
         print(f"epoch {ep + 1}: loss {tl / nb:.4f}, dev AUROC {auc:.3f}, {time.time() - te:.0f}s", flush=True)

@@ -43,6 +43,29 @@ Jobs a and b can run at the same time.
 - **b:** the done head's F1 is 0.53 at threshold 0.5, but 0.36 at the threshold chosen on 50 dev positives. Out-of-fold scores on train give a threshold we can defend.
 - **c:** the primary metric must be measured on test, and test needs enough false claims. The stop rule is fixed now: keep adding passes until the two LLM annotators agree on 300 false claims, or 8 passes. We count after annotating each batch. If 4 passes are not enough, we will ask you for `PASSES=4` once more.
 
+## Running on Ada instead (Swayam's account, 31 Oct)
+
+Pavan was unavailable, so jobs a and b run on Ada under Swayam's account. Two settings differ from Turing:
+- **Precision.** All Ada GPUs in partition `u22` are RTX 2080 Ti (11 GB), which have no fast bf16. The Ada jobs pass `--dtype fp16` to `analysis/train_laya_done.py`; the option was added with a GradScaler, and bf16 stays the default, so Turing runs are unchanged.
+- **Micro-batches.** They use `--accum 8` (micro-batches of 4) to fit in 11 GB.
+
+To keep the comparison like-for-like, job a trains both variants on Ada, with 3 seeds each: `nobt_seed0..2` and `orig_seed0..2`.
+
+| File | What |
+|---|---|
+| `jobs/ada_a_step_nobt.sbatch` | Item 3.7: job array of 6 runs, about 1 to 1.2 h each on a 2080 Ti |
+| `jobs/ada_b_done_cv.sbatch` | Item 3.4: job array of 5 folds, about 15 min each |
+
+**Setup on Ada:**
+- **Gateway.** `ada.iiit.ac.in` no longer accepts SSH; use `ada-gw1` or `ada-gw2`.
+- **Python environment.** `~/sot/venv`, built with `uv` (Python 3.12, torch 2.7.1+cu126, laya 0.3.27).
+- **Model.** Laya at the pinned commit, in `~/sot/models/laya-typed-decisions`.
+- **Data.** `~/sot/data`, unpacked from `runs/data`. The prep scripts are run once before submitting.
+
+**Canary (job 49469).** fp16 runs, with peak memory 9.8 GB, at 17 s per epoch on 200 rows.
+
+Results go to `results/a_step_nobt_ada/` and `results/b_done_cv_ada/`.
+
 ## After the jobs
 
 ```
