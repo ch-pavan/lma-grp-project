@@ -3,6 +3,7 @@
 #SBATCH -A research
 #SBATCH -p u22
 #SBATCH --constraint=2080ti
+#SBATCH --exclude=gnode077   # its GPU fails CUDA init (31 Oct)
 #SBATCH --gres=gpu:1
 #SBATCH -c 8
 #SBATCH --mem=32G
@@ -29,4 +30,4 @@ python $H/analysis/train_laya_done.py ${DATA[$i]} $M $O --question step --mode f
   --dtype fp16 --seed ${SEEDS[$i]} > $O/train.log 2>&1
 tail -n 6 $O/train.log
 cp $O/results.json $O/val_scores.jsonl $RES/ && cp $O/train.log $RES/$N.log
-grep -q "^DONE" $O/train.log && echo ALL_DONE || echo RUN_FAILED
+grep -q "^DONE" $O/train.log && echo ALL_DONE || { echo RUN_FAILED; exit 1; }
