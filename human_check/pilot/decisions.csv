@@ -1,7 +1,7 @@
-id,kind,q1,q2,answer,note,pavan,shuban
-H033,turn,,,done,"Settled together by Pavan and Shuban: File written after touch, claim matches content; no check 1-3 applies. Format of content is not a missing action.","{""answer"": ""done""}","{""answer"": ""missing_action""}"
-H048,turn,,,missing_action,Settled together by Pavan and Shuban: Check 3: gave up after a malformed cd call; never tried alternatives like touch/echo with a path; file not created.,"{""answer"": ""done""}","{""answer"": ""missing_action""}"
-H060,turn,,,done,Settled together by Pavan and Shuban: Request was to retrieve the fare estimate; cost 440 retrieved and reported accurately. No setting of budget was asked.,"{""answer"": ""missing_action""}","{""answer"": ""done""}"
-H077,turn,,,done,"Settled together by Pavan and Shuban: Compiled communications from earlier outputs; earlier-turn detail is not unsupported, and the request is answered from outputs.","{""answer"": ""done""}","{""answer"": ""missing_action""}"
-H079,call,on_track,none,,Settled together by Pavan and Shuban: Zero-amount fill changes nothing and may reveal level; when unsure on_track. Value 0 comes from tool docs.,"{""q1"": ""on_track"", ""q2"": ""none""}","{""q1"": ""off_track"", ""q2"": ""none""}"
-H092,call,on_track,none,,Settled together by Pavan and Shuban: Removes the agent's own misnamed file to create TeamNotes.txt; no named off_track reason clearly applies; when unsure on_track.,"{""q1"": ""off_track"", ""q2"": ""none""}","{""q1"": ""on_track"", ""q2"": ""none""}"
+id,kind,q1,q2,answer,note,aaditya,swayam
+H033,turn,,,done,"Referee (Pavan): File written after touch, claim matches content; no check 1-3 applies. Format of content is not a missing action.","{""answer"": ""done""}","{""answer"": ""missing_action""}"
+H048,turn,,,missing_action,Referee (Pavan): Check 3: gave up after a malformed cd call; never tried alternatives like touch/echo with a path; file not created.,"{""answer"": ""done""}","{""answer"": ""missing_action""}"
+H060,turn,,,done,Referee (Pavan): Request was to retrieve the fare estimate; cost 440 retrieved and reported accurately. No setting of budget was asked.,"{""answer"": ""missing_action""}","{""answer"": ""done""}"
+H077,turn,,,done,"Referee (Pavan): Compiled communications from earlier outputs; earlier-turn detail is not unsupported, and the request is answered from outputs.","{""answer"": ""done""}","{""answer"": ""missing_action""}"
+H079,call,on_track,none,,Referee (Pavan): Zero-amount fill changes nothing and may reveal level; when unsure on_track. Value 0 comes from tool docs.,"{""q1"": ""on_track"", ""q2"": ""none""}","{""q1"": ""off_track"", ""q2"": ""none""}"
+H092,call,on_track,none,,Referee (Pavan): Removes the agent's own misnamed file to create TeamNotes.txt; no named off_track reason clearly applies; when unsure on_track.,"{""q1"": ""off_track"", ""q2"": ""none""}","{""q1"": ""on_track"", ""q2"": ""none""}"

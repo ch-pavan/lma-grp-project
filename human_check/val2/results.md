@@ -1,8 +1,8 @@
 # Human check results: `human_check/val2` (annotator labels: guide v2)
 
-100 steps, checkers pavan and shuban. Sample: half flagged by the annotators; 'reweighted' columns scale each cell back to its share of all 1668 steps.
+100 steps, checkers aaditya and swayam. Sample: half flagged by the LLM annotators; 'reweighted' columns scale each cell back to its share of all 1668 steps.
 
-### pavan vs shuban (checker vs checker)
+### aaditya vs swayam (checker vs checker)
 
 | Measure | n | Agree | Kappa (sample) | AC1 (sample) | Agree, reweighted | Kappa, reweighted |
 |---|---|---|---|---|---|---|
@@ -13,7 +13,7 @@
 | turn ends: four answers | 50 | 94% | 0.88 | 0.92 | 95% | 0.79 |
 | turn ends: false claim vs not | 50 | 98% | 0.88 | 0.98 | 99% | 0.89 |
 
-### Check consensus vs Swayam (Annotator A)
+### Check consensus vs Annotator A (DeepSeek V4.1 Flash)
 
 | Measure | n | Agree | Kappa (sample) | AC1 (sample) | Agree, reweighted | Kappa, reweighted |
 |---|---|---|---|---|---|---|
@@ -24,7 +24,7 @@
 | turn ends: four answers | 50 | 80% | 0.65 | 0.75 | 91% | 0.64 |
 | turn ends: false claim vs not | 50 | 94% | 0.74 | 0.92 | 98% | 0.76 |
 
-### Check consensus vs Aaditya (Annotator B)
+### Check consensus vs Annotator B (GLM-5.3-Flash)
 
 | Measure | n | Agree | Kappa (sample) | AC1 (sample) | Agree, reweighted | Kappa, reweighted |
 |---|---|---|---|---|---|---|
@@ -35,7 +35,7 @@
 | turn ends: four answers | 50 | 80% | 0.58 | 0.76 | 91% | 0.57 |
 | turn ends: false claim vs not | 50 | 92% | 0.46 | 0.91 | 97% | 0.49 |
 
-### Swayam (Annotator A) vs Aaditya (Annotator B) on the same steps (for reference)
+### Annotator A (DeepSeek V4.1 Flash) vs Annotator B (GLM-5.3-Flash) on the same steps (for reference)
 
 | Measure | n | Agree | Kappa (sample) | AC1 (sample) | Agree, reweighted | Kappa, reweighted |
 |---|---|---|---|---|---|---|
@@ -48,7 +48,7 @@
 
 ## Decision
 
-Headline kappa, reweighted (all steps, problem vs fine): checker vs checker 0.87; consensus vs Swayam (A) 0.71, vs Aaditya (B) 0.66; A vs B 0.66.
+Headline kappa, reweighted (all steps, problem vs fine): checker vs checker 0.87; consensus vs Annotator A 0.71, vs Annotator B 0.66; A vs B 0.66.
 
 Lower of the two consensus-vs-annotator kappas: **0.66**, so **0.6 to 0.8: label more steps until the result is clear (proposal); under the 0.7 bar so far**.
 

@@ -3,7 +3,7 @@
 #   1st run (two labels_<name>.csv in the folder): checks the sheets, prints human vs human and writes decisions.csv
 #     with every step the two labellers answered differently, for the referee to fill.
 #   2nd run (decisions.csv filled): builds the consensus and writes results.md and consensus.csv.
-# The sample is half flagged by the annotators (build_sample.py), which packs in the steps where A and B disagree,
+# The sample is half flagged by the LLM annotators (build_sample.py), which packs in the steps where A and B disagree,
 # so kappa on the sample alone is biased low. Every measure is also reweighted to the real mix of steps (the pool size
 # of each cell over the steps drawn from it), as the proposal does for test F1; the decision uses the reweighted kappa.
 # Standard library only; reads the annotator labels from runs/data (.jsonl or .jsonl.gz).
@@ -14,7 +14,7 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VALUES = {"call": {"q1": {"on_track", "off_track"}, "q2": {"none", "made_up_value"}},
           "turn": {"answer": {"done", "missing_action", "should_ask_user", "unsupported_claim"}}}
-ANNOTATORS = {"Swayam (Annotator A)": "annot_{guide}_deepseek.jsonl", "Aaditya (Annotator B)": "annot_{guide}_glm.jsonl"}
+ANNOTATORS = {"Annotator A (DeepSeek V4.1 Flash)": "annot_{guide}_deepseek.jsonl", "Annotator B (GLM-5.3-Flash)": "annot_{guide}_glm.jsonl"}
 
 
 def read_jsonl(path):
@@ -147,7 +147,7 @@ def main():
         sys.exit("fix the sheets above and run again")
 
     report = [f"# Human check results: `{a.folder}`", "",
-              f"{len(key)} steps, checkers {names[0]} and {names[1]}. Sample: half flagged by the annotators; "
+              f"{len(key)} steps, checkers {names[0]} and {names[1]}. Sample: half flagged by the LLM annotators; "
               f"'reweighted' columns scale each cell back to its share of all {sum(meta['pools'].values())} steps.", ""]
     t, k_hh = table(f"{names[0]} vs {names[1]} (checker vs checker)", key, weight, A, B)
     report.append(t)
@@ -177,13 +177,13 @@ def main():
         t, heads[name] = table(f"Check consensus vs {name}", key, weight, consensus, ans)
         report.append(t)
         print(t)
-    t, k_ll = table("Swayam (Annotator A) vs Aaditya (Annotator B) on the same steps (for reference)", key, weight, L["Swayam (Annotator A)"], L["Aaditya (Annotator B)"])
+    t, k_ll = table("Annotator A (DeepSeek V4.1 Flash) vs Annotator B (GLM-5.3-Flash) on the same steps (for reference)", key, weight, L["Annotator A (DeepSeek V4.1 Flash)"], L["Annotator B (GLM-5.3-Flash)"])
     report.append(t)
     print(t)
     worst = min(heads.values())
     report += ["## Decision", "",
-               f"Headline kappa, reweighted (all steps, problem vs fine): checker vs checker {k_hh:.2f}; consensus vs Swayam (A) "
-               f"{heads['Swayam (Annotator A)']:.2f}, vs Aaditya (B) {heads['Aaditya (Annotator B)']:.2f}; A vs B {k_ll:.2f}.", "",
+               f"Headline kappa, reweighted (all steps, problem vs fine): checker vs checker {k_hh:.2f}; consensus vs Annotator A "
+               f"{heads['Annotator A (DeepSeek V4.1 Flash)']:.2f}, vs Annotator B {heads['Annotator B (GLM-5.3-Flash)']:.2f}; A vs B {k_ll:.2f}.", "",
                f"Lower of the two consensus-vs-annotator kappas: **{worst:.2f}**, so **{verdict(worst)}**.", "",
                "Per-class rows rest on 25 to 50 steps and are noisy; the headline row decides.", ""]
     open(os.path.join(a.folder, res_name), "w", encoding="utf-8").write("\n".join(report))

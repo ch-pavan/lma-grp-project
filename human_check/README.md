@@ -2,7 +2,7 @@
 
 ## Why we are doing this
 
-Every result in the project is scored against labels written by two annotators, Swayam Goyal (Annotator A) and Aaditya Sharma (Annotator B). We showed the two annotators mostly agree **with each other** (kappa 0.73 on tool calls, 0.61 on turn ends). That does not show they are **right**. The proposal requires people to check them:
+Every result in the project is scored against labels written by two LLM annotators: Annotator A is DeepSeek V4.1 Flash and Annotator B is GLM-5.3-Flash (`analysis/annotate.py`). We showed the two annotators mostly agree **with each other** (kappa 0.73 on tool calls, 0.61 on turn ends). That does not show they are **right**. The proposal requires people to check them:
 
 > a stratified sample of steps, half flagged and half not, is labelled by two of us with a third deciding disagreements … the bar is kappa 0.7 both between the annotators and against our consensus. The first 100 steps are checked early as a pilot. Below 0.6 the guide is rewritten and the steps relabelled; between 0.6 and 0.8 we label more steps until the result is clear; above 0.8 we stop at 200.
 
@@ -12,9 +12,9 @@ This folder is that check: the **100-step pilot**, on val steps the annotators a
 
 | Role | Who | Job | Time |
 |---|---|---|---|
-| Labeller 1 | Ch Pavan Harshit | Label all 100 steps | about 2 to 3 hours |
-| Labeller 2 | Shuban Biswas | Label all 100 steps, separately | about 2 to 3 hours |
-| Referee | Pavan and Shuban together, by discussion (the annotators being checked cannot referee) | Decide the steps where the two labellers differ | about 30 to 60 min |
+| Labeller 1 | Swayam Goyal | Label all 100 steps | about 2 to 3 hours |
+| Labeller 2 | Aaditya Sharma | Label all 100 steps, separately | about 2 to 3 hours |
+| Referee | Ch Pavan Harshit, not one of the labellers | Decide the steps where the two labellers differ | about 30 to 60 min |
 | Organiser | Pavan | Runs the scoring script, reports the result | minutes |
 
 ## What's in this folder
@@ -93,7 +93,7 @@ This writes `human_check/pilot/results.md` (all agreement tables plus the decisi
 
 ## How to read the result
 
-The script builds the **human consensus**: the labellers' answer where they agree, the referee's where they don't. It compares that consensus with Swayam (Annotator A) and with Aaditya (Annotator B). The deciding number is the **headline kappa** (every step, "problem" vs "fine"), using the lower of the two annotators.
+The script builds the **human consensus**: the labellers' answer where they agree, the referee's where they don't. It compares that consensus with Annotator A (DeepSeek) and with Annotator B (GLM). The deciding number is the **headline kappa** (every step, "problem" vs "fine"), using the lower of the two annotators.
 
 | Lower kappa | What it means | What we do (proposal rule) |
 |---|---|---|
