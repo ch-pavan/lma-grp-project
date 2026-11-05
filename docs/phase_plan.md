@@ -14,14 +14,14 @@ Each task gives:
 |---|---|
 | Annotation | Two LLM annotators label the steps: **Annotator A = DeepSeek V4.1 Flash**, **Annotator B = GLM-5.3-Flash**. They run through `analysis/annotate.py` on the OpenCode API. Every row of their label files records the model. |
 | Annotation check | **Swayam Goyal and Aaditya Sharma** cross-check the LLM labels. Each labels the stratified check sample blind, and **Ch Pavan Harshit** referees their disagreements. |
-| Proposal baseline | `proposal/proposal.md` (revised, 24 Oct) already says "labels from the two LLM annotators, checked by hand on a subset". Proposal v5, the PDF, said hand labels only. |
+| Proposal baseline | `proposal/Stay_On_Task_proposal.pdf` (the final proposal, revised 24 Oct) already says "labels from the two LLM annotators, checked by hand on a subset". The earlier draft, v5, said hand labels only. |
 | Numbers | Every table in the mid report reproduces from the repo scripts, per `midreport-check.md`. The problems are attribution, caveats and wording, not data. |
 
 ## Decisions (30 Oct 2026)
 
 | # | Decision | Outcome |
 |---|---|---|
-| D1 | Which proposal is the baseline? | **The revised `proposal/proposal.md`.** The v5 to revision changes are listed separately. |
+| D1 | Which proposal is the baseline? | **The final `proposal/Stay_On_Task_proposal.pdf` (revised 24 Oct).** The v5 to revision changes are listed separately. |
 | D2 | Who referees the check disagreements, and who did the 7-step second pass? | **Pavan referees; Shuban did the second pass.** |
 | D3 | Do fixes rewrite commits or land as new ones? | **New commits:** 30 for the repo attribution fixes, 31 for the corrected report. No force-push. |
 | D4 | Relabel all 1,772 validation steps with guide v3? | **Deferred.** Training uses oracle labels, not LLM labels, so it isn't needed for training. It is a validation-only redo of the v2 job: about 3,140 calls, about $1, about the same as the v2 run. The report states that full-validation labels are still v2. Revisit at Phase 4, together with the test labelling, which is required. |
