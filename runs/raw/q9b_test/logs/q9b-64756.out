@@ -1,0 +1,19 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[731s] venv ready: vllm 0.19.1
+[920s] model ready: 8.5G
+[939s] serve flags: --language-model-only --attention-backend TRITON_ATTN --tensor-parallel-size 2 
+[1511s] server up, max-model-len 32768
+(Worker_TP0 pid=1861440) INFO 11-08 14:08:42 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7200 to 0.7510 to maintain the same effective KV cache size.
+(Worker_TP1 pid=1861441) INFO 11-08 14:08:43 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7200 to 0.7510 to maintain the same effective KV cache size.
+(EngineCore pid=1861363) INFO 11-08 14:08:43 [kv_cache_utils.py:1319] GPU KV cache size: 41,712 tokens
+(EngineCore pid=1861363) INFO 11-08 14:08:43 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 4.62x
+[1719s] S_layastep@rbh2dc exit 0: DONE S_layastep@rbh2dc 159s
+[41894s] S_layastep@rbh2dc exit 0: DONE S_layastep@rbh2dc 40157s
+(APIServer pid=1861147) ERROR:    Exception in ASGI application
+(APIServer pid=1861147) Traceback (most recent call last):
+(APIServer pid=1861147)   File "/scratch/swayam.goyal/sot-64756/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=1861147)   File "/scratch/swayam.goyal/sot-64756/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=1861147)     raise VLLMValidationError(
+[41894s] ALL_DONE

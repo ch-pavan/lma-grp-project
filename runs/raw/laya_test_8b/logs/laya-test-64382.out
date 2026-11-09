@@ -1,0 +1,36 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[296s] venv ready: vllm 0.19.1
+[297s] model ready: 5.7G
+miss_func 4/4 passed, interventions 0, asks 0 []
+long_context 4/4 passed, interventions 0, asks 0 []
+gold false flags: {'call': 116, 'msg': 68}
+[298s] gold replay done
+[409s] server up, max-model-len 20480
+(EngineCore pid=119008) INFO 11-08 07:08:55 [kv_cache_utils.py:1319] GPU KV cache size: 24,176 tokens
+(EngineCore pid=119008) INFO 11-08 07:08:55 [kv_cache_utils.py:1324] Maximum concurrency for 20,480 tokens per request: 1.18x
+(EngineCore pid=119008) INFO 11-08 07:08:57 [core.py:283] init engine (profile, create kv cache, warmup model) took 58.34 seconds
+S_layastep: 120 episodes to run (0 already done), concurrency 10
+/scratch/swayam.goyal/sot-64382/venv/lib/python3.10/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+10/120 done, 158s
+20/120 done, 329s
+30/120 done, 640s
+40/120 done, 915s
+50/120 done, 1245s
+60/120 done, 1498s
+70/120 done, 1624s
+80/120 done, 1859s
+90/120 done, 2108s
+100/120 done, 2320s
+110/120 done, 2659s
+120/120 done, 2797s
+DONE S_layastep 2797s
+[3222s] run exit 0
+(APIServer pid=118903) Traceback (most recent call last):
+(APIServer pid=118903)   File "/scratch/swayam.goyal/sot-64382/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=118903)   File "/scratch/swayam.goyal/sot-64382/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=118903)     raise VLLMValidationError(
+(APIServer pid=118903) vllm.exceptions.VLLMValidationError: This model's maximum context length is 20480 tokens. However, you requested 1024 output tokens and your prompt contains at least 19457 input tokens, for a total of at least 20481 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=19457)
+[3222s] ALL_DONE

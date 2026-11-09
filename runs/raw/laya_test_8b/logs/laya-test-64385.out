@@ -1,0 +1,33 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 0
+[297s] venv ready: vllm 0.19.1
+[298s] model ready: 5.7G
+miss_func 4/4 passed, interventions 0, asks 0 []
+long_context 4/4 passed, interventions 0, asks 0 []
+gold false flags: {'call': 116, 'msg': 68}
+[299s] gold replay done
+[414s] server up, max-model-len 20480
+(EngineCore pid=123816) INFO 11-08 08:03:01 [kv_cache_utils.py:1319] GPU KV cache size: 24,176 tokens
+(EngineCore pid=123816) INFO 11-08 08:03:01 [kv_cache_utils.py:1324] Maximum concurrency for 20,480 tokens per request: 1.18x
+(EngineCore pid=123816) INFO 11-08 08:03:03 [core.py:283] init engine (profile, create kv cache, warmup model) took 55.22 seconds
+S1_none: 120 episodes to run (0 already done), concurrency 10
+10/120 done, 141s
+20/120 done, 271s
+30/120 done, 465s
+40/120 done, 613s
+50/120 done, 783s
+60/120 done, 968s
+70/120 done, 1079s
+80/120 done, 1206s
+90/120 done, 1374s
+100/120 done, 1566s
+110/120 done, 1694s
+120/120 done, 1840s
+DONE S1_none 1840s
+[2255s] run exit 0
+(APIServer pid=123710) Traceback (most recent call last):
+(APIServer pid=123710)   File "/scratch/swayam.goyal/sot-64385/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=123710)   File "/scratch/swayam.goyal/sot-64385/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=123710)     raise VLLMValidationError(
+(APIServer pid=123710) vllm.exceptions.VLLMValidationError: This model's maximum context length is 20480 tokens. However, you requested 1024 output tokens and your prompt contains at least 19457 input tokens, for a total of at least 20481 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=19457)
+[2255s] ALL_DONE

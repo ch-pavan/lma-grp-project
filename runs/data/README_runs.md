@@ -27,3 +27,9 @@ In git (29 Oct 2026): the raw run outputs live in runs/raw/; the files made from
   (runs/ada/laya_done_cv.sbatch, jobs 49476 and 49598)
 - Scored by analysis/score_step_variants.py and analysis/done_threshold_cv.py; write-up
   analysis/2026-10-31_step_nobt_and_done_cv.md
+
+## laya_runs/ada_done_full/ (Ada, job 64348)
+- The frozen done head: trained on all of train with the cross-validated threshold 0.561 (runs/ada/laya_done_full.sbatch);
+  results.json, train.log, val_scores.jsonl. With the step head step_49477/orig_seed1 (threshold 0.1266, results in
+  ada_step_nobt/orig_seed1) it is the Laya used in every test run (runs/ada/test_freeze.md). Both weights files are on the
+  release laya-heads-frozen-2026-11-08.

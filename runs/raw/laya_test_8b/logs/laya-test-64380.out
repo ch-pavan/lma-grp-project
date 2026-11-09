@@ -1,0 +1,85 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[293s] venv ready: vllm 0.19.1
+[523s] model ready: 5.7G
+miss_func 4/4 passed, interventions 0, asks 0 []
+long_context 4/4 passed, interventions 0, asks 0 []
+gold false flags: {'call': 116, 'msg': 68}
+[524s] gold replay done
+[655s] context too long for this card's KV room, retrying with max-model-len 16384
+[713s] server up, max-model-len 16384
+(EngineCore pid=108328) INFO 11-08 04:19:18 [kv_cache_utils.py:1319] GPU KV cache size: 24,176 tokens
+(EngineCore pid=108328) INFO 11-08 04:19:18 [kv_cache_utils.py:1324] Maximum concurrency for 16,384 tokens per request: 1.48x
+(EngineCore pid=108328) INFO 11-08 04:19:20 [core.py:283] init engine (profile, create kv cache, warmup model) took 29.12 seconds
+S_layastep: 600 episodes to run (0 already done), concurrency 10
+/scratch/swayam.goyal/sot-64380/venv/lib/python3.10/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+10/600 done, 94s
+20/600 done, 161s
+30/600 done, 190s
+40/600 done, 354s
+50/600 done, 479s
+60/600 done, 607s
+70/600 done, 676s
+80/600 done, 711s
+90/600 done, 860s
+100/600 done, 1095s
+110/600 done, 1384s
+120/600 done, 1589s
+130/600 done, 1788s
+140/600 done, 2103s
+150/600 done, 2324s
+160/600 done, 2552s
+170/600 done, 2779s
+180/600 done, 2850s
+190/600 done, 3127s
+200/600 done, 3292s
+210/600 done, 3424s
+220/600 done, 3463s
+230/600 done, 3485s
+240/600 done, 3587s
+250/600 done, 3704s
+260/600 done, 3805s
+270/600 done, 3917s
+280/600 done, 3951s
+290/600 done, 4132s
+300/600 done, 4332s
+310/600 done, 4584s
+320/600 done, 4762s
+330/600 done, 5046s
+340/600 done, 5331s
+350/600 done, 5611s
+360/600 done, 5727s
+370/600 done, 6121s
+380/600 done, 6251s
+390/600 done, 6470s
+400/600 done, 6676s
+410/600 done, 6762s
+420/600 done, 6840s
+430/600 done, 6869s
+440/600 done, 7010s
+450/600 done, 7096s
+460/600 done, 7234s
+470/600 done, 7294s
+480/600 done, 7329s
+490/600 done, 7509s
+500/600 done, 7692s
+510/600 done, 7996s
+520/600 done, 8208s
+530/600 done, 8430s
+540/600 done, 8732s
+550/600 done, 8932s
+560/600 done, 9116s
+570/600 done, 9242s
+580/600 done, 9371s
+590/600 done, 9637s
+600/600 done, 9748s
+DONE S_layastep 9748s
+[10472s] run exit 0
+(APIServer pid=108271) Traceback (most recent call last):
+(APIServer pid=108271)   File "/scratch/swayam.goyal/sot-64380/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=108271)   File "/scratch/swayam.goyal/sot-64380/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=108271)     raise VLLMValidationError(
+(APIServer pid=108271) vllm.exceptions.VLLMValidationError: This model's maximum context length is 16384 tokens. However, you requested 1024 output tokens and your prompt contains at least 15361 input tokens, for a total of at least 16385 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=15361)
+[10472s] ALL_DONE

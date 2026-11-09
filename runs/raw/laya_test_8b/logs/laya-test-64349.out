@@ -1,0 +1,22 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[277s] venv ready: vllm 0.19.1
+[423s] model ready: 5.7G
+miss_func 4/4 passed, interventions 0, asks 0 []
+long_context 4/4 passed, interventions 0, asks 0 []
+gold false flags: {'call': 116, 'msg': 68}
+[424s] gold replay done
+[550s] context too long for this card's KV room, retrying with max-model-len 16384
+[617s] server up, max-model-len 16384
+(EngineCore pid=284676) INFO 11-08 03:43:23 [kv_cache_utils.py:1319] GPU KV cache size: 24,176 tokens
+(EngineCore pid=284676) INFO 11-08 03:43:23 [kv_cache_utils.py:1324] Maximum concurrency for 16,384 tokens per request: 1.48x
+(EngineCore pid=284676) INFO 11-08 03:43:25 [core.py:283] init engine (profile, create kv cache, warmup model) took 37.39 seconds
+S_layastep: 8 episodes to run (0 already done), concurrency 10
+/scratch/swayam.goyal/sot-64349/venv/lib/python3.10/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+8/8 done, 43s
+DONE S_layastep 43s
+[693s] run exit 0
+(EngineCore pid=284676) ERROR 11-08 03:42:42 [fa_utils.py:145] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+[693s] ALL_DONE
