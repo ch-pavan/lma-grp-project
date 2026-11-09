@@ -1,0 +1,16 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[804s] venv ready: vllm 0.19.1
+[920s] model ready: 8.5G
+[938s] serve flags: --language-model-only --attention-backend TRITON_ATTN --tensor-parallel-size 2 
+[1511s] server up, max-model-len 32768
+(Worker_TP0 pid=1861428) INFO 11-08 14:08:42 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(Worker_TP1 pid=1861429) INFO 11-08 14:08:42 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(EngineCore pid=1861341) INFO 11-08 14:08:42 [kv_cache_utils.py:1319] GPU KV cache size: 41,712 tokens
+(EngineCore pid=1861341) INFO 11-08 14:08:42 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 4.59x
+[1583s] S1_record exit 0: DONE S1_record 71s
+[34192s] S1_record exit 0: DONE S1_record 32607s
+[34754s] S_oracle@rbh2dc exit 0: DONE S_oracle@rbh2dc 561s
+[2026-11-09T13:43:49.015] error: *** JOB 64755 ON gnode052 CANCELLED AT 2026-11-09T13:43:49 DUE TO TIME LIMIT ***
+Terminated

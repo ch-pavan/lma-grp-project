@@ -1,0 +1,18 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[258s] venv ready: vllm 0.19.1
+[259s] model ready: 15G
+[278s] serve flags: --language-model-only --attention-backend TRITON_ATTN --tensor-parallel-size 2 
+[376s] server up, max-model-len 32768
+(Worker_TP1 pid=274976) INFO 11-09 19:31:41 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(Worker_TP0 pid=274975) INFO 11-09 19:31:42 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(EngineCore pid=274929) INFO 11-09 19:31:42 [kv_cache_utils.py:1319] GPU KV cache size: 64,944 tokens
+(EngineCore pid=274929) INFO 11-09 19:31:42 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 7.14x
+[1196s] S_oracle@rbh2dc exit 0: DONE S_oracle@rbh2dc 818s
+(APIServer pid=274821) ERROR:    Exception in ASGI application
+(APIServer pid=274821) Traceback (most recent call last):
+(APIServer pid=274821)   File "/scratch/swayam.goyal/sot-65919/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=274821)   File "/scratch/swayam.goyal/sot-65919/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=274821)     raise VLLMValidationError(
+[1196s] ALL_DONE
