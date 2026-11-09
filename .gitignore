@@ -6,3 +6,10 @@ tools/ollama/
 third_party/
 runs/data/
 tools/ollama-bin
+
+# Test round of 9 Nov: JSONL is committed gzipped (gunzip -k restores it); the weights go on a release
+runs/raw/test9b*/**/*.jsonl
+runs/raw/typed_head/**/*.jsonl
+runs/raw/typed_head/typed_head_fp16.pt
+runs/raw/typed_head/stage/
+runs/raw/test9b/gpu.txt

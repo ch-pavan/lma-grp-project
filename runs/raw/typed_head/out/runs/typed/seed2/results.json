@@ -1,0 +1,35 @@
+{
+ "args": {
+  "data_dir": "runs/data/laya_typed",
+  "model_dir": "models/laya-typed-decisions",
+  "out_dir": "runs/typed/seed2",
+  "fold": -1,
+  "seed": 2,
+  "epochs": 2,
+  "bs": 32,
+  "accum": 1,
+  "lr_head": 0.0001,
+  "lr_enc": 2e-05,
+  "max_len": 1024,
+  "device": "cuda",
+  "dtype": "bf16",
+  "check": false
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "loss": 0.9422739144319143,
+   "seconds": 75.01861810684204
+  },
+  {
+   "epoch": 2,
+   "loss": 0.6402317015533774,
+   "seconds": 74.4991044998169
+  }
+ ],
+ "class_mass": [
+  3156.0,
+  461.5,
+  119.5
+ ]
+}

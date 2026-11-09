@@ -1,0 +1,90 @@
+16:17 chosen on validation: seed0
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: ._runs: time stamp 2026-11-09 10:46:53 is 31.348882239 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/._data: time stamp 2026-11-09 10:46:53 is 31.348781929 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/._laya_runs: time stamp 2026-11-09 10:46:53 is 31.348717818 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs: time stamp 2026-11-09 10:46:53.131712635 is 31.480380899 s in the future
+tar: runs/data/._laya_done: time stamp 2026-11-09 10:46:53 is 31.348599313 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_done: time stamp 2026-11-09 10:46:53.14193354 is 31.490490864 s in the future
+tar: runs/data/._laya_step: time stamp 2026-11-09 10:46:53 is 31.348516557 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_step/._val.jsonl: time stamp 2026-11-09 10:47:32 is 70.348443959 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_step/val.jsonl: time stamp 2026-11-09 10:47:32.600805423 is 70.433234413 s in the future
+tar: runs/data/laya_step: time stamp 2026-11-09 10:46:53.139018323 is 30.9714033 s in the future
+tar: runs/data/laya_done/._val.jsonl: time stamp 2026-11-09 10:47:32 is 69.832310275 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_done/val.jsonl: time stamp 2026-11-09 10:47:32.603529014 is 70.432882532 s in the future
+tar: runs/data/laya_runs/._ada_step_nobt: time stamp 2026-11-09 10:46:53 is 30.829294026 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs/ada_step_nobt: time stamp 2026-11-09 10:46:53.131746385 is 30.960987841 s in the future
+tar: runs/data/laya_runs/._ada_done_full: time stamp 2026-11-09 10:46:53 is 30.829190109 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs/ada_done_full/._val_scores.jsonl: time stamp 2026-11-09 10:47:32 is 69.829108003 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs/ada_done_full/val_scores.jsonl: time stamp 2026-11-09 10:47:32.596317827 is 70.42533038 s in the future
+tar: runs/data/laya_runs/ada_done_full: time stamp 2026-11-09 10:46:53.13517352 is 30.964161917 s in the future
+tar: runs/data/laya_runs/ada_step_nobt/._orig_seed1: time stamp 2026-11-09 10:46:53 is 30.828935968 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs/ada_step_nobt/orig_seed1/._val_scores.jsonl.gz: time stamp 2026-11-09 10:47:32 is 69.828856978 s in the future
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: runs/data/laya_runs/ada_step_nobt/orig_seed1/val_scores.jsonl.gz: time stamp 2026-11-09 10:47:32.597923956 is 70.426713306 s in the future
+tar: runs/data/laya_runs/ada_step_nobt/orig_seed1: time stamp 2026-11-09 10:46:53.137185151 is 30.965640639 s in the future
+tar: runs/data: time stamp 2026-11-09 10:46:53.131838677 is 30.960260491 s in the future
+tar: runs: time stamp 2026-11-09 10:46:53.131594093 is 30.960002903 s in the future
+runs/data/laya_done/val.jsonl
+runs/data/laya_runs/ada_done_full/val_scores.jsonl
+runs/data/laya_runs/ada_step_nobt/orig_seed1/val_scores.jsonl.gz
+runs/data/laya_step/val.jsonl
+FROZEN_OK
+/home/sot/venv/lib/python3.12/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+laya 0.3.27, torch 2.13.0+cu130
+sample: 5171 calls, 2043 closing messages (0 without a closing-message text)
+loaded step_head_49477_seed1.pt: 206 tensors, 0 missing, 0 unexpected
+[W1109 10:47:05.997823780 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3399483392 bytes (free: 2882076672, total: 42405855232).
+VERIFY step head: 1277 val rows, mean |diff| 0.00007, max 0.0122
+loaded done_head_64348.pt: 206 tensors, 0 missing, 0 unexpected
+VERIFY done head: 495 val rows, mean |diff| 0.00033, max 0.0057
+loaded weights.pt: 206 tensors, 0 missing, 0 unexpected
+VERIFY typed head: 1485 val rows, mean |diff| 0.00194, max 0.0286
+SCORED 7214 test steps; max val diff step 0.0122 done 0.0057 typed 0.0286
+b702252020a0af5bb8205baec35cbaa83f5c5d275f2d59a227d30e4e2881d26e  typed_head_fp16.pt
+1c2aaf70e257d1a432e5e94c2729156d11831458a63c13c6a935142a1fffb19a  laya_test_scores.jsonl
+test steps: 7214 sampled, 7214 scored by every system (5171 calls, 2043 closing messages); 9B unparsed after the rejudge 136; 100 scenarios
+
+| labels | system | off track F1 | false claim F1 | primary | − 9B, F1 points [95% CI] | − Laya frozen [95% CI] |
+|---|---|---|---|---|---|---|
+| DeepSeek v3 | 9B SLM judge | 0.25 (1142) | 0.25 (91) | 0.246 |  |  |
+| DeepSeek v3 | Laya frozen | 0.09 (1142) | 0.06 (91) | 0.076 | -17.0 [-22.0, -11.2] |  |
+| DeepSeek v3 | Laya typed (after freeze) | 0.63 (1142) | 0.24 (91) | 0.436 | +19.0 [+12.8, +24.8] | +36.0 [+28.6, +42.5] |
+| GLM v3 | 9B SLM judge | 0.25 (1015) | 0.24 (76) | 0.245 |  |  |
+| GLM v3 | Laya frozen | 0.10 (1015) | 0.06 (76) | 0.078 | -16.7 [-22.0, -10.4] |  |
+| GLM v3 | Laya typed (after freeze) | 0.56 (1015) | 0.19 (76) | 0.376 | +13.1 [+7.7, +18.6] | +29.8 [+23.6, +35.6] |
+| both agree | 9B SLM judge | 0.23 (775) | 0.25 (49) | 0.240 |  |  |
+| both agree | Laya frozen | 0.08 (775) | 0.04 (49) | 0.063 | -17.7 [-23.7, -10.4] |  |
+| both agree | Laya typed (after freeze) | 0.62 (775) | 0.19 (49) | 0.405 | +16.5 [+9.9, +22.8] | +34.2 [+26.7, +41.1] |
+
+Positives in brackets. Proposal bar: Laya ahead of the 9B by at least 9 points with the CI above 0.
+
+| labels | steps | off track positives | 9B F1 | Laya frozen F1 | Laya typed F1 |
+|---|---|---|---|---|---|
+| DeepSeek v3 | tool calls | 162 | 0.21 | 0.28 | 0.28 |
+| DeepSeek v3 | closing messages | 980 | 0.27 | 0.00 | 0.71 |
+| GLM v3 | tool calls | 210 | 0.21 | 0.25 | 0.25 |
+| GLM v3 | closing messages | 805 | 0.28 | 0.00 | 0.65 |
+| both agree | tool calls | 108 | 0.17 | 0.23 | 0.23 |
+| both agree | closing messages | 667 | 0.29 | 0.00 | 0.72 |
+16:25 everything copied and checked; destroying the instance
+✓ Instance 567748 destroyed.
+No instances found.
+16:25 TYPED_TEST_DONE

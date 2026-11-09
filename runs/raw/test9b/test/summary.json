@@ -1,0 +1,46 @@
+{
+ "S1_record": {
+  "task_runs": 3200,
+  "scenarios": 100,
+  "acc": 0.4653125,
+  "ci95": [
+   0.4040546875,
+   0.5275
+  ],
+  "per_version": {
+   "base": {
+    "n": 800,
+    "acc": 0.59,
+    "lo": 0.51375,
+    "hi": 0.66375
+   },
+   "long_context": {
+    "n": 800,
+    "acc": 0.5875,
+    "lo": 0.50875,
+    "hi": 0.665
+   },
+   "miss_func": {
+    "n": 800,
+    "acc": 0.285,
+    "lo": 0.21875,
+    "hi": 0.3525
+   },
+   "miss_param": {
+    "n": 800,
+    "acc": 0.39875,
+    "lo": 0.32625,
+    "hi": 0.47375
+   }
+  },
+  "empty_turn_fails": 319,
+  "interventions_per_task": 0.0,
+  "asks_per_task": 0.0,
+  "steps_per_task": 12.57,
+  "seconds_per_task": 445.1659890282899,
+  "seconds_per_step": 35.414955372178994,
+  "agent_tokens_per_task": 87598.0271875,
+  "judge_tokens_per_task": 0.0,
+  "tokens_per_step": 6968.816800914877
+ }
+}

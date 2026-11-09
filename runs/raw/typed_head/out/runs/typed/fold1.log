@@ -1,0 +1,7 @@
+/home/sot/venv/lib/python3.12/site-packages/laya/agent.py:2110: RuntimeWarning: laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929 -> 0.5. Treat confidence from the affected entries as uncalibrated.
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+laya 0.3.27, torch 2.13.0+cu130, loaded in 4s
+fold 1, seed 0: train 2927 rows, class mass [2480.0, 348.0, 99.0], weights [0.39, 2.8, 9.86]; scored 810
+epoch 1: loss 0.9528, 59s
+epoch 2: loss 0.6572, 59s
+DONE in 133s

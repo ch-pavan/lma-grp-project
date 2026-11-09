@@ -358,7 +358,16 @@ JUDGES = {"rules": Rules, "laya": Laya, "kev": Kev, "lettuce": Lettuce, "granite
 
 
 async def run_judge(judge, rows, a, pred_path):
-    f, preds = open(pred_path, "w"), {}
+    preds = {}
+    if getattr(a, "resume", False) and os.path.exists(pred_path):
+        # --resume: keep the rows already judged without an error and judge only the rest (spot machines get interrupted)
+        kept = [p for p in jl(pred_path) if "error" not in p]
+        preds = {(p["id"], p["run"], p["k"]): p for p in kept}
+        with open(pred_path, "w") as g:
+            g.writelines(json.dumps(p, default=str) + "\n" for p in kept)
+        rows = [r for r in rows if (r["id"], r["run"], r["k"]) not in preds]
+        print(f"resume: {len(preds)} steps already judged, {len(rows)} to go", flush=True)
+    f = open(pred_path, "a")
 
     def record(r, step, v, t):
         row = {"id": r["id"], "run": r["run"], "k": r["k"], "turn": r["turn"], "kind": step["kind"], "version": r.get("version"),
@@ -554,6 +563,8 @@ def main():
     ap.add_argument("--state", choices=["proposal", "legacy"], default="proposal")
     ap.add_argument("--kind", choices=["all", "call", "msg"], default="all", help="score only calls or only closing messages")
     ap.add_argument("--limit", type=int, default=0, help="judge only N steps, taken in sha256 order of the key")
+    ap.add_argument("--keys", help="judge only the steps listed in this file (id|run|k per line, e.g. analysis/sample_test.py output), in its order")
+    ap.add_argument("--resume", action="store_true", help="keep the error free rows already in OUT/predictions.jsonl and judge only the rest")
     ap.add_argument("--device", default="cpu", help="laya and kev: cuda:0 or cpu")
     ap.add_argument("--granite-url", default="cpu", help="cpu or an OpenAI compatible URL serving granite guardian")
     ap.add_argument("--base-url"); ap.add_argument("--model")
@@ -595,6 +606,16 @@ def main():
     if len(sets) < len(a.labels):
         ap.error("label sets need distinct names (use RUN_DIR::source)")
     sel = rows
+    if a.keys:
+        # --keys: judge only the listed steps (lines "id|run|k[|kind]"), in the file's order, which is the sampling order
+        order = {}
+        for line in open(a.keys):
+            p = line.strip().split("|")
+            if len(p) >= 3:
+                order.setdefault((p[0], int(p[1]), int(p[2])), len(order))
+        sel = sorted((r for r in rows if (r["id"], r["run"], r["k"]) in order), key=lambda r: order[(r["id"], r["run"], r["k"])])
+        if len(sel) < len(order):
+            print(f"warning: {len(order) - len(sel)} listed keys are not in the steps", file=sys.stderr)
     if a.limit:
         sel = sorted(rows, key=lambda r: hashlib.sha256(f"{r['id']}|{r['run']}|{r['k']}".encode()).hexdigest())[:a.limit]
     print(f"{len(rows)} steps, label sets {', '.join(f'{n} ({len(l)})' for n, l in sets.items())}, judging {len(sel)} with {a.judge}", flush=True)
