@@ -3,6 +3,10 @@
 # resampled); a closing message passes the gate and is judged by the done head at the done check
 # (P(not done) >= LAYA_DONE_THR -> not done), the same as S_layadone.
 # Selected as system S_layastep; env LAYA_DIR, LAYA_STEP_WEIGHTS, LAYA_STEP_THR, LAYA_DONE_WEIGHTS, LAYA_DONE_THR.
+# LAYA_GATE=0 is for run.py's plain block mode (the test baselines), which asks about a closing message once: the done
+# head answers that call directly. LAYA_DTYPE=fp16 for cards without fast bf16 (RTX 2080 Ti); the heads are cast to fp16.
+# LAYA_DONE_MODE: block (default, every flagged closing message is blocked), once (at most one block per turn, like the
+# done check), off (closing messages always pass; step head only).
 import asyncio, os, sys, threading
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -13,17 +17,21 @@ from build_step_data import state_text as step_text  # noqa: E402
 
 
 class Head:
-    def __init__(self, model_dir, weights, question, device):
+    def __init__(self, model_dir, weights, question, device, dtype="bf16"):
         import laya
-        self.agent = laya.load(model_dir, device=device)
+        # fp16 heads are built on the CPU and moved once cast: next to a vLLM server the card has no room for the fp32 copy
+        self.agent = laya.load(model_dir, device="cpu" if dtype == "fp16" else device)
         self.agent.model.load_state_dict(torch.load(weights, map_location="cpu"), strict=False)
         self.agent.model.eval()
+        self.dtype = torch.float16 if dtype == "fp16" else torch.bfloat16
+        if dtype == "fp16":
+            self.agent.model.half().to(device)
         self.enc, self.device = T.Encoder(self.agent, question), device
 
     @torch.no_grad()
     def p_bad(self, text):
         b = T.collate([self.enc.item(text)], self.agent.tok.pad_token_id)
-        with torch.autocast("cuda", dtype=torch.bfloat16, enabled=self.device.startswith("cuda")):
+        with torch.autocast("cuda", dtype=self.dtype, enabled=self.device.startswith("cuda")):
             logits, _ = self.agent.model(*(b[k].to(self.device) for k in ("input_ids", "attention_mask", "marker_pos", "marker_mask", "qtype")))
         return float(torch.softmax(logits.float()[0, :2], -1)[T.NOT_DONE])
 
@@ -31,11 +39,12 @@ class Head:
 class LayaStepJudge:
     name = "S_layastep"
 
-    def __init__(self, model_dir, step_w, step_thr, done_w, done_thr, device="cuda:0"):
-        self.step = Head(model_dir, step_w, T.STEP_QUESTION, device)
-        self.done = Head(model_dir, done_w, T.QUESTION, device)
+    def __init__(self, model_dir, step_w, step_thr, done_w, done_thr, device="cuda:0", gate=True, dtype="bf16", done_mode="block"):
+        self.step = Head(model_dir, step_w, T.STEP_QUESTION, device, dtype)
+        self.done = Head(model_dir, done_w, T.QUESTION, device, dtype)
         self.step_thr, self.done_thr, self.lock = step_thr, done_thr, threading.Lock()
-        self.gated = {}
+        self.gate, self.gated = gate, {}
+        self.done_mode, self.flagged = done_mode, set()
 
     def _p(self, head, text):
         with self.lock:
@@ -49,12 +58,17 @@ class LayaStepJudge:
             # (job 49671 gated with it: 4.7 closing messages thrown away per task, -5.8 points), so the gate always
             # passes and the head answers the second call. Keyed by the episode's requests list, one per episode.
             key = id(ctx["requests"])
-            if self.gated.get(key) != step["text"]:
+            if self.gate and self.gated.get(key) != step["text"]:
                 self.gated[key] = step["text"]
                 return v
-            del self.gated[key]
+            self.gated.pop(key, None)
+            turn = (key, len(ctx["requests"]), ctx["requests"][0][:200])  # id() alone can be reused by a later episode
+            if self.done_mode == "off" or (self.done_mode == "once" and turn in self.flagged):
+                return v
             calls = [{"call": c, "out": str(o)[:300]} for c, o in ctx.get("turn_calls", [])]
             p = await asyncio.to_thread(self._p, self.done, done_text(ctx["requests"], calls, step["text"]))
+            if p >= self.done_thr:
+                self.flagged.add(turn)
             return {**v, "q2": "false_claim" if p >= self.done_thr else "none", "p_not_done": round(p, 4)}
         st = {"requests": ctx["requests"], "plan": ctx.get("plan"), "recent": list(ctx.get("recent") or [])[-3:], "step": step}
         p = await asyncio.to_thread(self._p, self.step, step_text(st))
@@ -64,4 +78,6 @@ class LayaStepJudge:
 def make():
     e = os.environ
     return LayaStepJudge(e["LAYA_DIR"], e["LAYA_STEP_WEIGHTS"], float(e["LAYA_STEP_THR"]), e["LAYA_DONE_WEIGHTS"],
-                         float(e.get("LAYA_DONE_THR", "0.5")), e.get("LAYA_DEVICE", "cuda:0"))
+                         float(e.get("LAYA_DONE_THR", "0.5")), e.get("LAYA_DEVICE", "cuda:0"),
+                         gate=e.get("LAYA_GATE", "1") != "0", dtype=e.get("LAYA_DTYPE", "bf16"),
+                         done_mode=e.get("LAYA_DONE_MODE", "block"))
