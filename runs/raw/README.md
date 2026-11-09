@@ -16,6 +16,8 @@ Copied from Turing `~/stay-on-task/runs/` on 25 Oct 2026, without the vLLM serve
 | `test9b_judge/` | rented cloud GPU (9 Nov) | 9B SLM judge offline on the 7,214 test steps (`runs/judge9b/full/`, 4,096 tokens) and the rejudge of its unparsed answers with 8,192 tokens (`pass2.jsonl`) |
 | `typed_head/` | rented cloud GPU (9 Nov) | Plan item 4.4, the typed closing-message head (`analysis/2026-11-09_typed_closing_head.md`): out-of-fold and seed runs (`out/`), thresholds and choice (`select/`), Laya's scores on the test steps (`laya_test_scores.jsonl`), the final test table (`primary_test.md`). Weights on release `laya-typed-head-2026-11-09` |
 
-The `test9b*` and `typed_head` folders keep JSONL gzipped only (`gunzip -k` restores it before running the scripts).
+| `typed_live/` | rented cloud GPU (9 Nov) | Plan item 4.4 live run (`analysis/2026-11-09_typed_closing_head.md`, "Live run"): the 9B agent on test in rollback plus done check (`S_layastep@rbh2dc`) with the typed head at the done check and the frozen step head, 3 runs of the 400 tasks (`runs/cloud/live_typed.sh`); the 3-task smoke run and the run logs, without the vLLM log |
+
+The `test9b*`, `typed_head` and `typed_live` folders keep JSONL gzipped only (`gunzip -k` restores it before running the scripts).
 
 In each system directory, `steps_*.jsonl` holds one row per step (judge input, verdict, action) and `states_*.jsonl` the environment state after each step.

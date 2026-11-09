@@ -3,6 +3,8 @@
 # resampled); a closing message passes the gate and is judged by the done head at the done check
 # (P(not done) >= LAYA_DONE_THR -> not done), the same as S_layadone.
 # Selected as system S_layastep; env LAYA_DIR, LAYA_STEP_WEIGHTS, LAYA_STEP_THR, LAYA_DONE_WEIGHTS, LAYA_DONE_THR.
+# LAYA_TYPED_WEIGHTS and LAYA_TYPED_THR="t_fc,t_off" put the three-way closing-message head of plan item 4.4 in place of
+# the done head (a flag on either class means not done); unset, nothing changes.
 # LAYA_GATE=0 is for run.py's plain block mode (the test baselines), which asks about a closing message once: the done
 # head answers that call directly. LAYA_DTYPE=fp16 for cards without fast bf16 (RTX 2080 Ti); the heads are cast to fp16.
 # LAYA_DONE_MODE: block (default, every flagged closing message is blocked), once (at most one block per turn, like the
@@ -29,19 +31,31 @@ class Head:
         self.enc, self.device = T.Encoder(self.agent, question), device
 
     @torch.no_grad()
-    def p_bad(self, text):
+    def probs(self, text, n=2):
         b = T.collate([self.enc.item(text)], self.agent.tok.pad_token_id)
         with torch.autocast("cuda", dtype=self.dtype, enabled=self.device.startswith("cuda")):
             logits, _ = self.agent.model(*(b[k].to(self.device) for k in ("input_ids", "attention_mask", "marker_pos", "marker_mask", "qtype")))
-        return float(torch.softmax(logits.float()[0, :2], -1)[T.NOT_DONE])
+        return torch.softmax(logits.float()[0, :n], -1).tolist()
+
+    def p_bad(self, text):
+        return self.probs(text)[T.NOT_DONE]
 
 
 class LayaStepJudge:
     name = "S_layastep"
 
-    def __init__(self, model_dir, step_w, step_thr, done_w, done_thr, device="cuda:0", gate=True, dtype="bf16", done_mode="block"):
+    def __init__(self, model_dir, step_w, step_thr, done_w, done_thr, device="cuda:0", gate=True, dtype="bf16", done_mode="block",
+                 typed_w=None, typed_thr=None):
         self.step = Head(model_dir, step_w, T.STEP_QUESTION, device, dtype)
-        self.done = Head(model_dir, done_w, T.QUESTION, device, dtype)
+        # typed_w: the three-way closing-message head of plan item 4.4 (train_laya_typed.py) replaces the done head; a closing
+        # message is not done when P(false claim) >= t_fc (-> false_claim) or else P(off track) >= t_off (-> off_track),
+        # the decision rule of analysis/2026-11-09_typed_closing_head.md
+        self.typed = typed_w is not None
+        if self.typed:
+            import train_laya_typed as TT
+            self.done, (self.t_fc, self.t_off) = Head(model_dir, typed_w, TT.TYPED, device, dtype), typed_thr
+        else:
+            self.done = Head(model_dir, done_w, T.QUESTION, device, dtype)
         self.step_thr, self.done_thr, self.lock = step_thr, done_thr, threading.Lock()
         self.gate, self.gated = gate, {}
         self.done_mode, self.flagged = done_mode, set()
@@ -49,6 +63,10 @@ class LayaStepJudge:
     def _p(self, head, text):
         with self.lock:
             return head.p_bad(text)
+
+    def _probs3(self, text):
+        with self.lock:
+            return self.done.probs(text, 3)
 
     async def judge(self, ctx, step):
         v = {"q1": "on_track", "q2": "none", "q3": "needed", "jin": 0, "jout": 0}
@@ -66,6 +84,12 @@ class LayaStepJudge:
             if self.done_mode == "off" or (self.done_mode == "once" and turn in self.flagged):
                 return v
             calls = [{"call": c, "out": str(o)[:300]} for c, o in ctx.get("turn_calls", [])]
+            if self.typed:
+                pr = await asyncio.to_thread(self._probs3, done_text(ctx["requests"], calls, step["text"]))
+                q1, q2 = ("on_track", "false_claim") if pr[2] >= self.t_fc else ("off_track", "none") if pr[1] >= self.t_off else ("on_track", "none")
+                if q1 != "on_track" or q2 != "none":
+                    self.flagged.add(turn)
+                return {**v, "q1": q1, "q2": q2, "p_typed": [round(x, 4) for x in pr]}
             p = await asyncio.to_thread(self._p, self.done, done_text(ctx["requests"], calls, step["text"]))
             if p >= self.done_thr:
                 self.flagged.add(turn)
@@ -80,4 +104,5 @@ def make():
     return LayaStepJudge(e["LAYA_DIR"], e["LAYA_STEP_WEIGHTS"], float(e["LAYA_STEP_THR"]), e["LAYA_DONE_WEIGHTS"],
                          float(e.get("LAYA_DONE_THR", "0.5")), e.get("LAYA_DEVICE", "cuda:0"),
                          gate=e.get("LAYA_GATE", "1") != "0", dtype=e.get("LAYA_DTYPE", "bf16"),
-                         done_mode=e.get("LAYA_DONE_MODE", "block"))
+                         done_mode=e.get("LAYA_DONE_MODE", "block"), typed_w=e.get("LAYA_TYPED_WEIGHTS") or None,
+                         typed_thr=tuple(map(float, e["LAYA_TYPED_THR"].split(","))) if e.get("LAYA_TYPED_WEIGHTS") else None)

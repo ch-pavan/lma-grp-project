@@ -30,7 +30,7 @@ choice is written down.
 | Choice of run | Highest validation primary (mean of DeepSeek v2, GLM v2 and both agree), with the frozen step head on calls, scored by `primary_val.py`'s method | As the frozen step head was chosen (best of 3 seeds). Validation labels are guide v2, the only complete set |
 | Check before training | Laya as is on the done head's dev rows must match the Ada logs (AUROC 0.752) in this environment (torch 2.13, transformers 5.22) | The software differs from Ada |
 | Test | After this choice is written down: frozen Laya, this head (with the frozen step head on calls) and the 9B judge on the 7,214 labelled test steps; primary with a paired bootstrap over the 100 test scenarios | The proposal's comparison |
-| Not done | No live run with this head; the step head is unchanged | Time; the live result stays the frozen Laya's |
+| Not done | No live run with this head; the step head is unchanged | Time; the live result stays the frozen Laya's. A live run was added later, after the test scoring (section "Live run") |
 
 ## Results (9 Nov 2026)
 
@@ -89,7 +89,42 @@ Off track by step kind (F1; 9B / Laya frozen / Laya typed): tool calls 0.21 / 0.
 - **Limits.** It is a change after the freeze, so it does not confirm the hypothesis; that needs fresh test data. It was
   trained on labels from the same two annotators (guide v3, train scenarios only) that grade the test, while the frozen
   Laya trained on the automatic labels. The test sample over-weights failed turns by the proposal's sampling rule; the
-  F1 reweighted to the real mix of turns is still to do, as is the human check of 100 test steps. No live run uses
-  this head.
+  F1 reweighted to the real mix of turns is still to do, as is the human check of 100 test steps. The live run
+  below was added after the test scoring.
 - **Weights** (fp16, 843 MB, sha256 `b702252020a0af5bb8205baec35cbaa83f5c5d275f2d59a227d30e4e2881d26e`) are kept outside git
   (`runs/raw/typed_head/typed_head_fp16.pt` locally), to go on a release.
+
+## Live run (added 9 Nov 2026, after the test scoring, before the run)
+
+Added after the offline test result above was known, so it is reported as a further check of the after-freeze head,
+not as a confirmation. The frozen Laya's live result (item 4.7) stays the main live result. Fixed before the run:
+
+| Choice | Value |
+|---|---|
+| System | `S_layastep@rbh2dc` (rollback plus done check), as the frozen Laya's item 4.7 run: frozen step head `orig_seed1` at 0.1266 on calls; this head at the done check (not done if false claim or off track by the decision rule above, t_fc 0.2601, t_off 0.4173); `analysis/laya_step_judge.py` with `LAYA_TYPED_WEIGHTS` |
+| Tasks | Test split, 100 scenarios x 4 versions x 3 runs = 1,200 tasks (as item 4.7) |
+| Setup | Qwen3.5 9B (`cyankiwi/Qwen3.5-9B-AWQ-4bit`, revision `e4d2d39c`), vLLM 0.27.1, reasoning off, the rented cloud GPU and server settings of the 8 no-judge passes (`runs/cloud/`), Laya in bf16 beside vLLM; `runs/cloud/live_typed.sh` |
+| Baseline | The 8 no-judge passes on test (`runs/raw/test9b/`, 3,200 tasks): same software, harness and GPU type |
+| Measure | Task pass rate; difference to the baseline with a 95% bootstrap CI over the 100 test scenarios (each scenario's pass rate over its versions and runs) |
+| Also reported | Interventions per task; the frozen Laya's Ada result (+3.7 points over Ada's no-judge run) next to it, marked as a different GPU and serving setup |
+
+### Live result (9 Nov 2026)
+
+1,200 of 1,200 tasks, no harness errors, 73 minutes at 256 tasks at once (`runs/raw/typed_live/`). Pass rate, with
+interventions per task in brackets; 95% bootstrap CI over the 100 test scenarios (`analysis/live_compare.py`):
+
+| Version | No judge (8 passes, cloud) | Frozen Laya (Ada, item 4.7) | Typed head |
+|---|---|---|---|
+| base | 59.0 | 63.3 (1.36) | 63.3 (2.30) |
+| miss_param | 39.9 | 39.7 (2.11) | 40.3 (3.41) |
+| miss_func | 28.5 | 32.7 (3.11) | 33.3 (4.25) |
+| long_context | 58.8 | 61.0 (1.39) | 62.0 (2.72) |
+| **all** | **46.5** | **49.2** (1.99) | **49.8** (3.17) |
+
+- **Typed head − no judge: +3.2 points [+0.4, +6.2].** The CI is above 0.
+- **Typed head − frozen Laya: +0.6 [−2.0, +3.2]**, so no difference. The frozen run is on Ada (2080 Ti, fp16) and
+  this one on the cloud GPU (bf16); against the cloud no-judge passes the frozen Laya gives +2.6 [−0.2, +5.6].
+- The typed head sends the agent back more often (3.17 against 1.99 interventions per task; 2.38 "not done" per task),
+  as expected from a head that now also flags off-track closing messages. Its far better offline detection (+16.5 over
+  the 9B judge, both agree) turns into about the same live gain as the frozen head: both sit near the validation
+  oracle ceiling of about +4, so the limit is the agent's ability to fix what it is told, not the check.
