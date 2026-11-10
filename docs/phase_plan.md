@@ -33,7 +33,7 @@ Each task gives:
 | 1. Attribution | **Done.** Commit 30 covers 1.1 to 1.3. Items 1.4 and 1.5 are in the report, commit 31. |
 | 2. Report wording | **Done.** Commit 31: all 13 items from `midreport-check.md`, plus 16 more from a second fact-check. |
 | 3. Data gaps without GPUs | **Done for the mid submission.** 3.1 and 3.2 are deferred (D4). The GPU parts, 3.4 and 3.7, ran on Ada under Swayam's account on 31 Oct (`analysis/2026-10-31_step_nobt_and_done_cv.md`). |
-| 4. GPU experiments | **Running on Ada (9 Nov).** Turing is no longer available, so every Phase 4 run uses Ada under Swayam's account. Finetuned Laya on the original 8B test is done (`runs/ada/test_freeze.md`). The 9B test runs use `runs/ada/q9b_ada.sbatch`. |
+| 4. GPU experiments | **Live 9B test done on Ada (10 Nov); offline F1 open.** Turing is no longer available, so every Phase 4 run uses Ada under Swayam's account. Finetuned Laya on the original 8B test is done (`runs/ada/test_freeze.md`). The 9B test runs use `runs/ada/q9b_ada.sbatch`. |
 
 **Second fact-check, key corrections:**
 - **Off-track result.** Under the proposal's scoring, Laya trails the 9B judge on off-track F1 over all steps (0.27 to 0.30 against 0.29 to 0.34). It leads only on tool calls, by +7 to +9 points.
@@ -87,7 +87,7 @@ Each task gives:
 
 ## Phase 4: the experiments the proposal still needs (GPU from 1 Nov)
 
-| ID | What | Done when | Owner | Status (9 Nov) |
+| ID | What | Done when | Owner | Status (10 Nov) |
 |---|---|---|---|---|
 | 4.0 | Finetuned Laya as one more system in the original 8B test baselines (`run.py` plain block mode) | Test pass rate, paired with S1 and S3 | Swayam | **Done.** 13.5%: −2.4 [−5.2, +0.2] against no judge, −3.9 [−7.1, −1.1] against the 8B judge (`runs/ada/test_freeze.md`) |
 | 4.1 | 9B test passes (`S1_record`, 3 passes, 1,200 tasks). The stop rule is fixed before seeing results. | Recorded steps for 400 tasks per pass | Swayam | **Done** (job 64755): 1,200 tasks, 16,012 recorded steps, no-judge pass rate 45.5% |
@@ -96,7 +96,7 @@ Each task gives:
 | 4.4 | A typed closing-message head for Laya, with a false-claim class | False-claim F1 on validation above the 9B judge, then frozen | Pavan | Not started; likely future work |
 | 4.5 | Primary metric on test: paired bootstrap, Holm correction | The hypothesis is confirmed or falsified | Shuban, Swayam | Waits for 4.2 and 4.3. Laya head scores on the test steps: `analysis/score_test_heads.py` via `runs/ada/score_heads.sbatch` (CPU job, queued) |
 | 4.6 | Ablations: state parts (no plan, no recent calls, no evidence list), escalation budget, 3 seeds | Ablation table | Shuban, Swayam | Partly covered by the step-head reruns (3.7) |
-| 4.7 | Online test runs with rollback and the done check (`rbh2dc`): no judge, Laya, 9B judge, oracle | Task accuracy with CIs | Swayam | No judge and Laya done; oracle and 9B judge running (jobs 64755, 64759, 65521; resumes 65522, 65919). Laya 49.2% against 45.5% for no judge: +3.7 [+0.8, +6.7] over the 100 scenarios (first check, to be confirmed with `rb_results.py`) |
+| 4.7 | Online test runs with rollback and the done check (`rbh2dc`): no judge, Laya, 9B judge, oracle | Task accuracy with CIs | Swayam | **Done** (10 Nov), 1,200 test tasks each, paired over the 100 scenarios against no judge (45.5%): Laya 49.2%, +3.7 [+0.8, +6.8]; 9B judge 49.2%, +3.7 [+1.1, +6.5]; oracle 55.8%, +10.3 [+7.0, +13.8]. Laya against the 9B judge +0.0 [−2.8, +2.9]. `analysis/rb_test_results.py`, data in `runs/raw/q9b_test/` |
 | 4.9 | Rerun the test-set baselines with the Qwen3.5 9B agent and judge | Test-baselines table on the 9B | Swayam | Merged into 4.7 (no judge and 9B judge). Rules on the 9B are not rerun unless GPUs are free at the end |
 | 4.8 | Optional, if time allows: AgentProcessBench and AgentHallu any-flag F1, and Gemma 4 12B as a reference | Results, or listed as future work | Shuban | Future work |
 

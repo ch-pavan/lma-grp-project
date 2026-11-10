@@ -1,0 +1,15 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[255s] venv ready: vllm 0.19.1
+[256s] model ready: 15G
+[275s] serve flags: --language-model-only --attention-backend TRITON_ATTN --tensor-parallel-size 2 
+[402s] server up, max-model-len 32768
+(Worker_TP0 pid=273273) INFO 11-09 19:25:18 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(Worker_TP1 pid=273274) INFO 11-09 19:25:18 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(EngineCore pid=273221) INFO 11-09 19:25:18 [kv_cache_utils.py:1319] GPU KV cache size: 64,944 tokens
+(EngineCore pid=273221) INFO 11-09 19:25:18 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 7.14x
+[403s] S3_llm_judge@rbh2dc exit 0: DONE S3_llm_judge@rbh2dc 0s
+(Worker_TP0 pid=273273) ERROR 11-09 19:24:18 [fa_utils.py:145] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+(Worker_TP1 pid=273274) ERROR 11-09 19:24:18 [fa_utils.py:145] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+[403s] ALL_DONE

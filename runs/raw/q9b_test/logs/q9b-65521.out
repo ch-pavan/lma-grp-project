@@ -1,0 +1,19 @@
+0, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+1, NVIDIA GeForce RTX 2080 Ti, 11264 MiB
+[0s] agent GPU 0, Laya GPU 1
+[398s] venv ready: vllm 0.19.1
+[594s] model ready: 8.5G
+[611s] serve flags: --language-model-only --attention-backend TRITON_ATTN --tensor-parallel-size 2 
+[1193s] server up, max-model-len 32768
+(Worker_TP1 pid=1352818) INFO 11-09 14:03:27 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(Worker_TP0 pid=1352817) INFO 11-09 14:03:27 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.7800 to 0.8110 to maintain the same effective KV cache size.
+(EngineCore pid=1352771) INFO 11-09 14:03:27 [kv_cache_utils.py:1319] GPU KV cache size: 41,712 tokens
+(EngineCore pid=1352771) INFO 11-09 14:03:27 [kv_cache_utils.py:1324] Maximum concurrency for 32,768 tokens per request: 4.59x
+[2350s] S3_llm_judge@rbh2dc exit 0: DONE S3_llm_judge@rbh2dc 1155s
+[63137s] S3_llm_judge@rbh2dc exit 0: DONE S3_llm_judge@rbh2dc 60782s
+(APIServer pid=1352665) ERROR:    Exception in ASGI application
+(APIServer pid=1352665) Traceback (most recent call last):
+(APIServer pid=1352665)   File "/scratch/swayam.goyal/sot-65521/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+(APIServer pid=1352665)   File "/scratch/swayam.goyal/sot-65521/venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+(APIServer pid=1352665)     raise VLLMValidationError(
+[63137s] ALL_DONE
