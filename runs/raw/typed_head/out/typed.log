@@ -1,0 +1,13 @@
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+laya 0.3.27, torch 2.13.0+cu130, loaded in 4s
+CHECK Laya as is, done question, dev: AUROC 0.7512 on 396 rows (Ada logs: 0.7524)
+CHECK_OK
+10:26 fold0 exit 0 DONE in 135s
+10:29 fold1 exit 0 DONE in 133s
+10:31 fold2 exit 0 DONE in 132s
+10:33 fold3 exit 0 DONE in 134s
+10:36 fold4 exit 0 DONE in 138s
+10:38 seed0 exit 0 DONE in 166s
+10:41 seed1 exit 0 DONE in 166s
+10:44 seed2 exit 0 DONE in 166s
+TYPED_ALL_DONE

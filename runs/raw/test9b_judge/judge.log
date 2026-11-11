@@ -1,0 +1,71 @@
+runs/judge9b/full/predictions.jsonl 3232 rows, 0 cut lines dropped
+runs/judge9b/pass2.jsonl 20 rows, 0 cut lines dropped
+42483 steps, label sets test (42483), judging 7214 with llm
+resume: 3232 steps already judged, 3982 to go
+100/3982
+200/3982
+300/3982
+400/3982
+500/3982
+600/3982
+700/3982
+800/3982
+900/3982
+1000/3982
+1100/3982
+1200/3982
+1300/3982
+1400/3982
+1500/3982
+1600/3982
+1700/3982
+1800/3982
+1900/3982
+2000/3982
+2100/3982
+2200/3982
+2300/3982
+2400/3982
+2500/3982
+2600/3982
+2700/3982
+2800/3982
+2900/3982
+3000/3982
+3100/3982
+3200/3982
+3300/3982
+3400/3982
+3500/3982
+3600/3982
+3700/3982
+3800/3982
+3900/3982
+# llm vs test labels, 7214 steps
+Errors 0, unparsed 1412. CIs: bootstrap over scenarios, 10 draws.
+Primary, mean F1 of q1:off_track, q2:false_claim: **0.1154** [0.1025, 0.134]
+
+| question | class | precision | recall | F1 [95% CI] | support | predicted |
+|---|---|---|---|---|---|---|
+| q1 (n=7214) | on_track | 0.6759 | 0.9098 | 0.7756 [0.7676, 0.7947] | 4891 | 6584 |
+| q1 (n=7214) | off_track | 0.3 | 0.0814 | 0.128 [0.1121, 0.1518] | 2323 | 630 |
+| q2 (n=2043) | none | 0.8472 | 0.9523 | 0.8967 [0.8742, 0.9091] | 1718 | 1931 |
+| q2 (n=2043) | made_up_value | 0.0 | 0.0 | 0.0 [0.0, 0.0] | 0 | 67 |
+| q2 (n=2043) | false_claim | 0.4222 | 0.0585 | 0.1027 [0.077, 0.136] | 325 | 45 |
+
+FIRST_PASS_EXIT 0: 5802 parsed of 7214
+early rejudge stopped at 09:53; final rejudge at concurrency 80
+1412 steps to judge again, max tokens 8192
+resume: 381 steps already judged, 1031 to go
+100/1031
+200/1031
+300/1031
+400/1031
+500/1031
+600/1031
+700/1031
+800/1031
+900/1031
+1000/1031
+done: 1276 of 1412 parsed
+REJUDGE_EXIT 0

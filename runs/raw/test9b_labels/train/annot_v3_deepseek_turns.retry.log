@@ -1,0 +1,3 @@
+deepseek-v4.1-flash: 13 items to annotate (3724 already done), concurrency 16
+13/13 67s 12/min parse_fail 1 http {} tok in 19596 out 47927 cached 11648
+DONE 13 rows in 67s, parse_fail 1, http {}, tok in 19596 out 47927 cached 11648

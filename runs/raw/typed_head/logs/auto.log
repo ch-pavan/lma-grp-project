@@ -1,0 +1,57 @@
+15:49 labels: DONE 3737 rows in 1012s, parse_fail 13, http {'other': 121}, tok in 5003367 out 1665420 cached 2605718 | DONE 3737 rows in 828s, parse_fail 20, http {'other': 138}, tok in 4866746 out 1127185 cached 1008736
+runs/raw/test9b_labels/train/annot_v3_deepseek_turns.jsonl 3724 kept, 13 dropped to retry
+15:50 retry deepseek: DONE 13 rows in 67s, parse_fail 1, http {}, tok in 19596 out 47927 cached 11648
+runs/raw/test9b_labels/train/annot_v3_glm_turns.jsonl 3717 kept, 20 dropped to retry
+15:51 retry glm: DONE 20 rows in 55s, parse_fail 1, http {}, tok in 26853 out 13960 cached 1088
+train: 3737 rows (0 without any label, 2 with one), done either 3365 both 2946, off_track either 630 both 293, false_claim either 182 both 56
+val: 495 rows (0 without any label, 4 with one), done either 447 both 397, off_track either 77 both 40, false_claim either 19 both 6
+folds: {0: 702, 1: 810, 2: 809, 3: 760, 4: 656}
+15:53 judge copied: predictions     7214 (want 7214), rejudge rows     1412 (want 1412), REJUDGE_EXIT 0
+0 MiB
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+started
+15:54 training started
+  return Agent(model_id_or_path, device=device, token=token, subfolder=subfolder, fast=fast,
+laya 0.3.27, torch 2.13.0+cu130, loaded in 4s
+CHECK Laya as is, done question, dev: AUROC 0.7512 on 396 rows (Ada logs: 0.7524)
+CHECK_OK
+10:26 fold0 exit 0 DONE in 135s
+10:29 fold1 exit 0 DONE in 133s
+10:31 fold2 exit 0 DONE in 132s
+10:33 fold3 exit 0 DONE in 134s
+10:36 fold4 exit 0 DONE in 138s
+10:38 seed0 exit 0 DONE in 166s
+10:41 seed1 exit 0 DONE in 166s
+10:44 seed2 exit 0 DONE in 166s
+TYPED_ALL_DONE
+thresholds (out of fold on train): {'t_fc': 0.2601, 't_off': 0.4173, 'oof_f1_fc': 0.1364, 'oof_f1_off': 0.4837, 'oof_rows': 3737}
+
+val steps scored by every system: 1772
+
+| labels | system | off track F1 | false claim F1 | primary | − 9B [95% CI] | − frozen [95% CI] |
+|---|---|---|---|---|---|---|
+| DeepSeek v2 | 9B SLM judge | 0.34 | 0.05 | 0.192 |  | -0.5 [-7.4, +8.6] |
+| DeepSeek v2 | Laya frozen | 0.30 | 0.09 | 0.198 | +0.5 [-8.6, +7.4] |  |
+| DeepSeek v2 | typed seed0 | 0.56 | 0.12 | 0.340 | +14.8 [+8.1, +21.7] | +14.3 [+4.5, +26.5] |
+| DeepSeek v2 | typed seed1 | 0.53 | 0.10 | 0.317 | +12.5 [+3.9, +21.5] | +11.9 [+1.3, +25.4] |
+| DeepSeek v2 | typed seed2 | 0.55 | 0.12 | 0.331 | +13.9 [+4.4, +23.9] | +13.4 [+2.3, +27.1] |
+| GLM v2 | 9B SLM judge | 0.29 | 0.05 | 0.170 |  | -2.2 [-8.7, +7.0] |
+| GLM v2 | Laya frozen | 0.28 | 0.10 | 0.192 | +2.2 [-7.0, +8.7] |  |
+| GLM v2 | typed seed0 | 0.49 | 0.06 | 0.272 | +10.2 [+3.2, +17.8] | +8.0 [-0.5, +19.9] |
+| GLM v2 | typed seed1 | 0.48 | 0.07 | 0.270 | +10.1 [+0.9, +19.1] | +7.8 [-1.9, +20.4] |
+| GLM v2 | typed seed2 | 0.49 | 0.06 | 0.276 | +10.6 [+1.0, +20.3] | +8.4 [-1.5, +21.2] |
+| both agree | 9B SLM judge | 0.31 | 0.06 | 0.182 |  | -3.8 [-10.9, +6.8] |
+| both agree | Laya frozen | 0.34 | 0.11 | 0.220 | +3.8 [-6.8, +10.9] |  |
+| both agree | typed seed0 | 0.55 | 0.04 | 0.297 | +11.5 [+4.7, +19.0] | +7.7 [-0.9, +20.6] |
+| both agree | typed seed1 | 0.53 | 0.02 | 0.275 | +9.3 [+0.9, +17.9] | +5.4 [-4.1, +19.0] |
+| both agree | typed seed2 | 0.55 | 0.04 | 0.294 | +11.2 [+2.3, +20.2] | +7.4 [-2.2, +20.8] |
+
+mean primary over the three label sets: {'9B SLM judge': 0.1814, 'Laya frozen': 0.2034, 'typed seed0': 0.3033, 'typed seed1': 0.2874, 'typed seed2': 0.3006}
+CHOICE: typed seed0
+16:16 TYPED_AUTO_DONE

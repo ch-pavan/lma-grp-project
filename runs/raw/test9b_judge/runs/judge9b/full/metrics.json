@@ -1,0 +1,181 @@
+{
+  "q1": {
+    "n": 7214,
+    "scenarios": 100,
+    "accuracy": 0.6431,
+    "classes": {
+      "on_track": {
+        "precision": 0.6759,
+        "recall": 0.9098,
+        "f1": 0.7756,
+        "f1_ci": [
+          0.7676,
+          0.7947
+        ],
+        "precision_ci": [
+          0.6642,
+          0.705
+        ],
+        "recall_ci": [
+          0.8943,
+          0.9152
+        ],
+        "support": 4891,
+        "predicted": 6584
+      },
+      "off_track": {
+        "precision": 0.3,
+        "recall": 0.0814,
+        "f1": 0.128,
+        "f1_ci": [
+          0.1121,
+          0.1518
+        ],
+        "precision_ci": [
+          0.2513,
+          0.3456
+        ],
+        "recall_ci": [
+          0.0711,
+          0.0978
+        ],
+        "support": 2323,
+        "predicted": 630
+      }
+    },
+    "confusion": {
+      "labels": [
+        "on_track",
+        "off_track"
+      ],
+      "rows_label_cols_pred": [
+        [
+          4450.0,
+          441.0
+        ],
+        [
+          2134.0,
+          189.0
+        ]
+      ]
+    }
+  },
+  "q2": {
+    "n": 2043,
+    "scenarios": 100,
+    "accuracy": 0.8101,
+    "classes": {
+      "none": {
+        "precision": 0.8472,
+        "recall": 0.9523,
+        "f1": 0.8967,
+        "f1_ci": [
+          0.8742,
+          0.9091
+        ],
+        "precision_ci": [
+          0.8104,
+          0.8692
+        ],
+        "recall_ci": [
+          0.9423,
+          0.9534
+        ],
+        "support": 1718,
+        "predicted": 1931
+      },
+      "made_up_value": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "f1_ci": [
+          0.0,
+          0.0
+        ],
+        "precision_ci": [
+          0.0,
+          0.0
+        ],
+        "recall_ci": [
+          0.0,
+          0.0
+        ],
+        "support": 0,
+        "predicted": 67
+      },
+      "false_claim": {
+        "precision": 0.4222,
+        "recall": 0.0585,
+        "f1": 0.1027,
+        "f1_ci": [
+          0.077,
+          0.136
+        ],
+        "precision_ci": [
+          0.2989,
+          0.5353
+        ],
+        "recall_ci": [
+          0.0435,
+          0.0798
+        ],
+        "support": 325,
+        "predicted": 45
+      }
+    },
+    "confusion": {
+      "labels": [
+        "none",
+        "made_up_value",
+        "false_claim"
+      ],
+      "rows_label_cols_pred": [
+        [
+          1636.0,
+          56.0,
+          26.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          295.0,
+          11.0,
+          19.0
+        ]
+      ]
+    }
+  },
+  "primary": {
+    "classes": [
+      "q1:off_track",
+      "q2:false_claim"
+    ],
+    "mean_f1": 0.1154,
+    "ci": [
+      0.1025,
+      0.134
+    ]
+  },
+  "run": {
+    "judge": "llm",
+    "labels": "test",
+    "steps_judged": 7214,
+    "errors": 0,
+    "seconds": 3095.2,
+    "state": "proposal",
+    "reasoning": "on",
+    "trace": "proposal",
+    "model": "cyankiwi/Qwen3.5-9B-AWQ-4bit",
+    "label_rule": "subset",
+    "kind": "all",
+    "reweighted": null,
+    "unparsed": 1412,
+    "expresses": [
+      "q1",
+      "q2"
+    ]
+  }
+}

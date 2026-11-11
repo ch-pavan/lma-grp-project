@@ -1,0 +1,156 @@
+--uids: 4790 of 4790 listed steps found in /private/tmp/claude-501/-Users-ch-lma-grp-prj/08845eb6-470a-4a9b-b5ba-2f38843e0b60/scratchpad/fc
+deepseek-v4.1-flash: 4790 items to annotate (0 already done), concurrency 32
+50/4790 117s 26/min parse_fail 0 http {'other': 51} tok in 73062 out 9813 cached 8960
+100/4790 132s 45/min parse_fail 0 http {'other': 52} tok in 146983 out 20872 cached 37504
+150/4790 143s 63/min parse_fail 0 http {'other': 52} tok in 223547 out 31610 cached 49664
+200/4790 155s 77/min parse_fail 0 http {'other': 52} tok in 300887 out 42061 cached 63872
+250/4790 170s 88/min parse_fail 0 http {'other': 52} tok in 375637 out 59924 cached 76160
+300/4790 184s 98/min parse_fail 0 http {'other': 52} tok in 450163 out 76332 cached 93568
+350/4790 197s 106/min parse_fail 0 http {'other': 52} tok in 523214 out 89921 cached 104192
+400/4790 210s 115/min parse_fail 0 http {'other': 53} tok in 600118 out 104925 cached 118144
+450/4790 220s 123/min parse_fail 0 http {'other': 54} tok in 673830 out 113100 cached 137856
+500/4790 233s 129/min parse_fail 1 http {'other': 54} tok in 745691 out 124265 cached 159488
+550/4790 243s 136/min parse_fail 1 http {'other': 54} tok in 818311 out 142742 cached 188672
+600/4790 252s 143/min parse_fail 1 http {'other': 54, 429: 7} tok in 889350 out 151507 cached 223488
+dy done), concurrency 64
+50/4287 4s 822/min parse_fail 0 http {} tok in 80095 out 4836 cached 22656
+100/4287 6s 980/min parse_fail 0 http {} tok in 152288 out 13108 cached 46080
+150/4287 8s 1095/min parse_fail 0 http {} tok in 228101 out 24398 cached 71424
+200/4287 11s 1138/min parse_fail 0 http {} tok in 302783 out 37018 cached 97408
+250/4287 13s 1142/min parse_fail 0 http {} tok in 376302 out 43932 cached 121472
+300/4287 15s 1164/min parse_fail 0 http {} tok in 450095 out 57134 cached 154240
+350/4287 18s 1165/min parse_fail 0 http {429: 20} tok in 524066 out 66196 cached 189440
+400/4287 55s 433/min parse_fail 0 http {429: 327} tok in 595861 out 114116 cached 227072
+450/4287 61s 446/min parse_fail 0 http {429: 327} tok in 667812 out 119085 cached 277888
+500/4287 64s 467/min parse_fail 0 http {429: 327} tok in 740827 out 128478 cached 314752
+550/4287 68s 486/min parse_fail 0 http {429: 327} tok in 817308 out 138590 cached 331264
+600/4287 71s 505/min parse_fail 0 http {429: 327} tok in 894083 out 152506 cached 354816
+650/4287 74s 528/min parse_fail 0 http {429: 327} tok in 970448 out 164819 cached 378240
+700/4287 77s 543/min parse_fail 0 http {429: 327} tok in 1044970 out 173812 cached 402816
+750/4287 80s 560/min parse_fail 0 http {429: 327} tok in 1120176 out 187429 cached 430848
+800/4287 83s 575/min parse_fail 0 http {429: 330} tok in 1194920 out 200651 cached 467712
+850/4287 119s 428/min parse_fail 0 http {429: 627} tok in 1267569 out 243752 cached 489088
+900/4287 123s 440/min parse_fail 0 http {429: 627} tok in 1343029 out 247511 cached 504832
+950/4287 125s 455/min parse_fail 0 http {429: 627} tok in 1418519 out 254688 cached 529920
+1000/4287 128s 470/min parse_fail 0 http {429: 627} tok in 1495359 out 263553 cached 553472
+1050/4287 130s 484/min parse_fail 0 http {429: 627} tok in 1572732 out 274381 cached 581632
+1100/4287 133s 496/min parse_fail 0 http {429: 627} tok in 1646816 out 286259 cached 620544
+1150/4287 135s 510/min parse_fail 0 http {429: 627} tok in 1723092 out 295742 cached 657792
+1200/4287 138s 520/min parse_fail 0 http {429: 627} tok in 1798046 out 311111 cached 694400
+1250/4287 141s 531/min parse_fail 0 http {429: 627} tok in 1872765 out 323102 cached 734080
+1300/4287 144s 542/min parse_fail 0 http {429: 641} tok in 1947630 out 337209 cached 777472
+1350/4287 179s 453/min parse_fail 1 http {429: 923} tok in 2021516 out 396229 cached 805760
+1400/4287 182s 460/min parse_fail 1 http {429: 923} tok in 2094812 out 407937 cached 819840
+1450/4287 185s 470/min parse_fail 1 http {429: 923} tok in 2177631 out 413782 cached 848384
+1500/4287 188s 479/min parse_fail 2 http {429: 923} tok in 2249468 out 422755 cached 875776
+1550/4287 190s 490/min parse_fail 3 http {429: 923} tok in 2323801 out 442967 cached 904704
+1600/4287 192s 499/min parse_fail 3 http {429: 923} tok in 2400531 out 452624 cached 939008
+1650/4287 194s 509/min parse_fail 3 http {429: 923} tok in 2474924 out 457700 cached 976000
+1700/4287 197s 518/min parse_fail 3 http {429: 923} tok in 2549556 out 467981 cached 1015552
+1750/4287 200s 524/min parse_fail 3 http {429: 923} tok in 2622500 out 482228 cached 1052800
+1800/4287 203s 532/min parse_fail 3 http {429: 938} tok in 2697099 out 494506 cached 1087232
+1850/4287 238s 466/min parse_fail 3 http {429: 1230} tok in 2767446 out 563527 cached 1126528
+1900/4287 243s 470/min parse_fail 3 http {429: 1230} tok in 2846495 out 567893 cached 1172480
+1950/4287 245s 477/min parse_fail 3 http {429: 1230} tok in 2923286 out 576104 cached 1188992
+2000/4287 249s 483/min parse_fail 3 http {429: 1230} tok in 2997461 out 584320 cached 1209088
+2050/4287 251s 490/min parse_fail 3 http {429: 1230} tok in 3070301 out 596472 cached 1233408
+2100/4287 254s 496/min parse_fail 3 http {429: 1230} tok in 3145248 out 607357 cached 1268736
+2150/4287 256s 503/min parse_fail 3 http {429: 1230} tok in 3218696 out 623227 cached 1304704
+2200/4287 259s 511/min parse_fail 3 http {429: 1230} tok in 3291791 out 636342 cached 1342080
+2250/4287 261s 517/min parse_fail 3 http {429: 1230} tok in 3365405 out 646721 cached 1384832
+2300/4287 263s 524/min parse_fail 3 http {429: 1240} tok in 3439740 out 659313 cached 1424640
+2350/4287 300s 471/min parse_fail 3 http {429: 1538} tok in 3513232 out 696100 cached 1457280
+2400/4287 303s 475/min parse_fail 3 http {429: 1538} tok in 3585582 out 701194 cached 1469952
+2450/4287 306s 480/min parse_fail 3 http {429: 1538} tok in 3661730 out 705978 cached 1497088
+2500/4287 309s 485/min parse_fail 3 http {429: 1538} tok in 3737439 out 721883 cached 1527040
+2550/4287 312s 491/min parse_fail 3 http {429: 1538} tok in 3812379 out 735713 cached 1554944
+2600/4287 315s 495/min parse_fail 3 http {429: 1538} tok in 3885576 out 747602 cached 1591552
+2650/4287 318s 500/min parse_fail 3 http {429: 1538} tok in 3958484 out 762544 cached 1622656
+2700/4287 321s 504/min parse_fail 3 http {429: 1538} tok in 4030169 out 779243 cached 1658880
+2750/4287 324s 509/min parse_fail 3 http {429: 1538} tok in 4105218 out 796852 cached 1697664
+2800/4287 327s 514/min parse_fail 3 http {429: 1551} tok in 4182121 out 818336 cached 1737728
+2850/4287 362s 473/min parse_fail 3 http {429: 1839} tok in 4254028 out 875379 cached 1777152
+2900/4287 366s 476/min parse_fail 3 http {429: 1839} tok in 4329091 out 884902 cached 1799424
+2950/4287 368s 481/min parse_fail 3 http {429: 1839} tok in 4405278 out 894834 cached 1820416
+3000/4287 371s 485/min parse_fail 3 http {429: 1839} tok in 4478834 out 905960 cached 1851904
+3050/4287 374s 490/min parse_fail 3 http {429: 1839} tok in 4553784 out 918107 cached 1889792
+3100/4287 377s 494/min parse_fail 3 http {429: 1839} tok in 4629533 out 934096 cached 1928832
+3150/4287 379s 498/min parse_fail 3 http {429: 1839} tok in 4704320 out 945733 cached 1967872
+3200/4287 382s 502/min parse_fail 3 http {429: 1839} tok in 4780027 out 960486 cached 2010752
+3250/4287 385s 506/min parse_fail 3 http {429: 1839} tok in 4853600 out 976956 cached 2045568
+3300/4287 388s 511/min parse_fail 3 http {429: 1850} tok in 4925737 out 988818 cached 2089216
+3350/4287 417s 482/min parse_fail 3 http {429: 2134} tok in 4998242 out 1047046 cached 2125568
+3400/4287 425s 480/min parse_fail 3 http {429: 2134} tok in 5075313 out 1058132 cached 2149632
+3450/4287 428s 484/min parse_fail 3 http {429: 2134} tok in 5153266 out 1064538 cached 2177024
+3500/4287 430s 488/min parse_fail 3 http {429: 2134} tok in 5229377 out 1072040 cached 2209280
+3550/4287 433s 492/min parse_fail 3 http {429: 2134} tok in 5304241 out 1082961 cached 2252672
+3600/4287 436s 495/min parse_fail 3 http {429: 2134} tok in 5377072 out 1100136 cached 2292096
+3650/4287 439s 499/min parse_fail 3 http {429: 2134} tok in 5449688 out 1116857 cached 2328832
+3700/4287 442s 503/min parse_fail 3 http {429: 2134} tok in 5528827 out 1127764 cached 2365568
+3750/4287 444s 506/min parse_fail 3 http {429: 2134} tok in 5602057 out 1148298 cached 2403712
+3800/4287 447s 510/min parse_fail 3 http {429: 2145} tok in 5676611 out 1163456 cached 2449024
+3850/4287 478s 484/min parse_fail 3 http {429: 2447} tok in 5746760 out 1199993 cached 2480128
+3900/4287 486s 481/min parse_fail 3 http {429: 2447} tok in 5823035 out 1205818 cached 2500352
+3950/4287 489s 485/min parse_fail 3 http {429: 2447} tok in 5899390 out 1213431 cached 2529280
+4000/4287 491s 489/min parse_fail 3 http {429: 2447} tok in 5972794 out 1225479 cached 2563072
+4050/4287 494s 492/min parse_fail 3 http {429: 2447} tok in 6047693 out 1238175 cached 2598272
+4100/4287 496s 496/min parse_fail 3 http {429: 2447} tok in 6121437 out 1249921 cached 2630272
+4150/4287 499s 499/min parse_fail 3 http {429: 2447} tok in 6198853 out 1261054 cached 2672000
+4200/4287 502s 502/min parse_fail 3 http {429: 2447} tok in 6273989 out 1277456 cached 2712576
+4250/4287 505s 505/min parse_fail 3 http {429: 2447} tok in 6348753 out 1290392 cached 2756096
+DONE 4274 rows in 524s, parse_fail 3, http {429: 2447}, tok in 6379322 out 1323380 cached 2770432
+--uids: 7214 of 7214 listed steps found in runs/raw/test9b/test
+deepseek-v4.1-flash: 2437 items to annotate (4777 already done), concurrency 64
+50/2437 22s 139/min parse_fail 0 http {} tok in 76347 out 4548 cached 14720
+100/2437 52s 116/min parse_fail 0 http {'other': 30} tok in 152867 out 25801 cached 35200
+150/2437 102s 88/min parse_fail 0 http {'other': 144} tok in 227586 out 34612 cached 60800
+200/2437 134s 90/min parse_fail 0 http {'other': 285} tok in 305967 out 48988 cached 77696
+250/2437 143s 105/min parse_fail 0 http {'other': 296} tok in 381041 out 60135 cached 91264
+300/2437 186s 97/min parse_fail 0 http {'other': 474} tok in 456429 out 81613 cached 100352
+350/2437 192s 110/min parse_fail 0 http {'other': 474} tok in 530055 out 90239 cached 119552
+400/2437 205s 117/min parse_fail 0 http {'other': 475} tok in 605832 out 106339 cached 144128
+450/2437 214s 126/min parse_fail 0 http {'other': 483} tok in 679701 out 118216 cached 163968
+500/2437 223s 135/min parse_fail 0 http {'other': 484} tok in 754751 out 127689 cached 184192
+550/2437 230s 144/min parse_fail 0 http {'other': 484} tok in 835984 out 141026 cached 207744
+600/2437 237s 152/min parse_fail 0 http {'other': 485} tok in 911850 out 154407 cached 237952
+650/2437 252s 155/min parse_fail 0 http {'other': 490} tok in 985400 out 178964 cached 264064
+700/2437 263s 159/min parse_fail 0 http {'other': 499} tok in 1061677 out 192270 cached 287232
+750/2437 271s 166/min parse_fail 0 http {'other': 504} tok in 1138952 out 203263 cached 311552
+800/2437 276s 174/min parse_fail 0 http {'other': 504} tok in 1211365 out 212957 cached 333440
+850/2437 286s 178/min parse_fail 0 http {'other': 504} tok in 1287052 out 220433 cached 378112
+900/2437 297s 182/min parse_fail 0 http {'other': 504} tok in 1362570 out 231273 cached 413696
+950/2437 305s 187/min parse_fail 0 http {'other': 504} tok in 1437959 out 244440 cached 430976
+1000/2437 309s 194/min parse_fail 0 http {'other': 504} tok in 1514104 out 254123 cached 465792
+1050/2437 318s 198/min parse_fail 0 http {'other': 504} tok in 1588929 out 273707 cached 490880
+1100/2437 329s 201/min parse_fail 0 http {'other': 504} tok in 1663080 out 288406 cached 517632
+1150/2437 333s 207/min parse_fail 0 http {'other': 505} tok in 1736742 out 305682 cached 541440
+1200/2437 336s 214/min parse_fail 0 http {'other': 505} tok in 1811080 out 314669 cached 571648
+1250/2437 339s 221/min parse_fail 0 http {'other': 505} tok in 1886392 out 327255 cached 607104
+1300/2437 342s 228/min parse_fail 0 http {'other': 505} tok in 1962897 out 337642 cached 636288
+1350/2437 345s 235/min parse_fail 0 http {'other': 505} tok in 2038337 out 353222 cached 677376
+1400/2437 350s 240/min parse_fail 0 http {'other': 505} tok in 2115136 out 375376 cached 710656
+1450/2437 352s 247/min parse_fail 0 http {'other': 505} tok in 2190234 out 387318 cached 747904
+1500/2437 355s 253/min parse_fail 0 http {'other': 505} tok in 2268948 out 400020 cached 793344
+1550/2437 358s 260/min parse_fail 0 http {'other': 505} tok in 2343782 out 409322 cached 835456
+1600/2437 362s 266/min parse_fail 0 http {'other': 505} tok in 2419405 out 428229 cached 875648
+1650/2437 365s 271/min parse_fail 0 http {'other': 505, 429: 14} tok in 2497215 out 440040 cached 915968
+1700/2437 397s 257/min parse_fail 0 http {'other': 505, 429: 273} tok in 2572096 out 486345 cached 941952
+1750/2437 403s 261/min parse_fail 0 http {'other': 505, 429: 273} tok in 2649217 out 493935 cached 959488
+1800/2437 408s 265/min parse_fail 0 http {'other': 505, 429: 273} tok in 2725876 out 508952 cached 991744
+1850/2437 411s 270/min parse_fail 0 http {'other': 505, 429: 273} tok in 2800612 out 516337 cached 1028992
+1900/2437 414s 275/min parse_fail 0 http {'other': 505, 429: 273} tok in 2873501 out 523659 cached 1063936
+1950/2437 417s 281/min parse_fail 0 http {'other': 505, 429: 273} tok in 2947129 out 534540 cached 1098496
+2000/2437 420s 286/min parse_fail 0 http {'other': 505, 429: 273} tok in 3023745 out 550797 cached 1137536
+2050/2437 423s 291/min parse_fail 1 http {'other': 505, 429: 273} tok in 3099639 out 570972 cached 1173504
+2100/2437 426s 296/min parse_fail 1 http {'other': 505, 429: 273} tok in 3173199 out 585652 cached 1209856
+2150/2437 428s 301/min parse_fail 1 http {'other': 505, 429: 281} tok in 3247968 out 596444 cached 1248640
+2200/2437 457s 289/min parse_fail 1 http {'other': 505, 429: 524} tok in 3322785 out 642216 cached 1280000
+2250/2437 469s 288/min parse_fail 1 http {'other': 505, 429: 524} tok in 3395080 out 658141 cached 1307776
+2300/2437 480s 287/min parse_fail 1 http {'other': 507, 429: 524} tok in 3473480 out 678415 cached 1331584
+2350/2437 496s 284/min parse_fail 1 http {'other': 521, 429: 524} tok in 3546142 out 692154 cached 1358720
+2400/2437 504s 286/min parse_fail 1 http {'other': 525, 429: 524} tok in 3620703 out 701415 cached 1391360
+DONE 2431 rows in 522s, parse_fail 1, http {'other': 525, 429: 524}, tok in 3667564 out 715690 cached 1408000
+--uids: 7214 of 7214 listed steps found in runs/raw/test9b/test
+deepseek-v4.1-flash: 11 items to annotate (7203 already done), concurrency 16
+11/11 54s 12/min parse_fail 1 http {} tok in 18816 out 11985 cached 8064
+DONE 11 rows in 54s, parse_fail 1, http {}, tok in 18816 out 11985 cached 8064

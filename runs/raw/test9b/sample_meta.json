@@ -1,0 +1,13 @@
+{
+ "run_dir": "runs/test",
+ "seed": 0,
+ "passed_cap": 500,
+ "target_positives": 300,
+ "failed_turns": 2654,
+ "failed_turn_steps": 6714,
+ "passed_turns_kept": 162,
+ "passed_turn_steps": 500,
+ "oracle_off_track_in_failed": 766,
+ "oracle_false_claim_in_failed": 325,
+ "rule": "failed turns in this order (steps up to the first oracle off track call), then the passed turn steps; labelling stops at the end of the failed turn where off track and false claim each reach 300 agreed positives, or when the failed turns run out"
+}

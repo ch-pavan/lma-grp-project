@@ -10,6 +10,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("steps"); ap.add_argument("preds"); ap.add_argument("out")
 ap.add_argument("--base-url", required=True); ap.add_argument("--model", required=True)
 ap.add_argument("--max-tokens", type=int, default=8192); ap.add_argument("--concurrency", type=int, default=96)
+ap.add_argument("--resume", action="store_true", help="keep the error free rows already in OUT and judge only the rest")
 a = ap.parse_args()
 a.judge, a.reasoning, a.trace, a.state = "llm", "on", "proposal", "proposal"
 redo = {(r["id"], r["run"], r["k"]) for r in map(json.loads, open(a.preds)) if not r.get("parsed")}
