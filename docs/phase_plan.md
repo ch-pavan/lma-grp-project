@@ -92,7 +92,7 @@ Each task gives:
 | 4.0 | Finetuned Laya as one more system in the original 8B test baselines (`run.py` plain block mode) | Test pass rate, paired with S1 and S3 | Swayam | **Done.** 13.5%: −2.4 [−5.2, +0.2] against no judge, −3.9 [−7.1, −1.1] against the 8B judge (`runs/ada/test_freeze.md`) |
 | 4.1 | 9B test passes (`S1_record`, 3 passes, 1,200 tasks). The stop rule is fixed before seeing results. | Recorded steps for 400 tasks per pass | Swayam | **Done** (job 64755): 1,200 tasks, 16,012 recorded steps, no-judge pass rate 45.5% |
 | 4.2 | LLM annotation of the test steps with guide v3 | `annot_v3_*` for the test steps | Swayam | Waits for 4.1 and the OpenCode key |
-| 4.3 | Human check of 100 test steps: Swayam and Aaditya label, Pavan referees | Results for the test sample, kappa against both annotators | Swayam, Aaditya, Pavan | Waits for 4.2 |
+| 4.3 | Human check of 100 test steps: Swayam and Aaditya label, Pavan referees | Results for the test sample, kappa against both annotators | Swayam, Aaditya, Pavan | Done |
 | 4.4 | A typed closing-message head for Laya, with a false-claim class | False-claim F1 on validation above the 9B judge, then frozen | Pavan | Not started; likely future work |
 | 4.5 | Primary metric on test: paired bootstrap, Holm correction | The hypothesis is confirmed or falsified | Shuban, Swayam | Waits for 4.2 and 4.3. Laya head scores on the test steps: `analysis/score_test_heads.py` via `runs/ada/score_heads.sbatch` (CPU job, queued) |
 | 4.6 | Ablations: state parts (no plan, no recent calls, no evidence list), escalation budget, 3 seeds | Ablation table | Shuban, Swayam | Partly covered by the step-head reruns (3.7) |
