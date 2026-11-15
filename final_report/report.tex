@@ -6,26 +6,26 @@
 \usepackage[scale=0.9]{tgheros}
 \usepackage[scale=0.88]{tgcursor}
 \usepackage{microtype}
-\usepackage[a4paper,top=20mm,bottom=19mm,left=19mm,right=19mm,headheight=13pt]{geometry}
+\usepackage[a4paper,top=15mm,bottom=14mm,left=15mm,right=15mm,headheight=13pt,headsep=4mm,footskip=7mm]{geometry}
 \usepackage[table]{xcolor}
-\usepackage{graphicx,booktabs,tabularx,array,enumitem,float,amsmath,fancyhdr,lastpage,titlesec,needspace}
-\usepackage[font=small,labelfont=bf,labelsep=period,skip=3pt]{caption}
+\usepackage{graphicx,booktabs,tabularx,array,enumitem,float,amsmath,fancyhdr,lastpage,titlesec,needspace,multicol}
+\usepackage[font=footnotesize,labelfont=bf,labelsep=period,skip=2pt]{caption}
 \usepackage{xltabular}
 \usepackage[hidelinks]{hyperref}
 
-\definecolor{head}{gray}{0.12}
-\definecolor{sub}{gray}{0.35}
+\definecolor{head}{gray}{0}
+\definecolor{sub}{gray}{0}
 \definecolor{rule}{gray}{0.55}
 \definecolor{shade}{gray}{0.95}
 \definecolor{rowshade}{gray}{0.955}
-\definecolor{accent}{HTML}{2F5D8A}
+\definecolor{accent}{gray}{0}
 \definecolor{boxbg}{HTML}{EEF3F9}
-\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
 
-\titleformat{\section}{\needspace{8\baselineskip}\sffamily\large\bfseries\color{accent}}{\thesection}{0.6em}{}[{\color{rule}\titlerule[0.5pt]}]
-\titleformat{\subsection}{\needspace{5\baselineskip}\sffamily\normalsize\bfseries\color{head}}{\thesubsection}{0.6em}{}
-\titlespacing*{\section}{0pt}{10pt}{4pt}
-\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\titleformat{\section}{\needspace{6\baselineskip}\sffamily\large\bfseries\color{black}}{\thesection}{0.6em}{}[{\color{rule}\titlerule[0.5pt]}]
+\titleformat{\subsection}{\needspace{4\baselineskip}\sffamily\normalsize\bfseries\color{black}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+\titlespacing*{\subsection}{0pt}{4pt}{1pt}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -35,10 +35,14 @@
 \renewcommand{\headrulewidth}{0.3pt}
 \fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\small\sffamily\color{sub}\thepage\ of \pageref{LastPage}}}
 
-\setlist{itemsep=1pt,topsep=2pt,parsep=0pt,leftmargin=13pt}
+\setlist{itemsep=0pt,topsep=1pt,parsep=0pt,leftmargin=12pt}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{4pt}
-\renewcommand{\arraystretch}{1.15}
+\setlength{\parskip}{2.5pt}
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{2pt}
+\renewcommand{\arraystretch}{1.05}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcommand{\tablestyle}{\footnotesize\rowcolors{2}{rowshade}{white}}
@@ -97,16 +101,11 @@ Agents built on small open models can run on a normal computer and act through t
 \end{itemize}
 
 \section{Literature review}\label{sec:lit}
-\textbf{Step guards.} Existing guards are 0.8B to 8B generative safety models that \emph{block} a step rather than correct it: Granite Guardian~\cite{granite}, StepGuard~\cite{stepguard}, SAFETY SENTRY~\cite{sentry} and AgentDoG~\cite{agentdog}. Each targets harmful or risky actions, not a step that is safe but off task.
-
+\textbf{Step guards.} Existing guards are 0.8B to 8B generative safety models that \emph{block} harmful or risky steps, not safe but off task ones: Granite Guardian~\cite{granite}, StepGuard~\cite{stepguard}, SAFETY SENTRY~\cite{sentry} and AgentDoG~\cite{agentdog}.
 \textbf{Narrow small checkers.} Small models check one risk each: function call hallucination (Granite Guardian's function call risk~\cite{granite}), unsupported claims (MiniCheck~\cite{minicheck}, Vectara HHEM~\cite{hhem}, LettuceDetect~\cite{lettuce}) and injected instructions (LlamaFirewall and PromptGuard~\cite{llamafirewall}). Kev 0.8B~\cite{kev} is an open Jev style model~\cite{typesafe} that scores below chance on When2Call~\cite{when2call} by its own card. We use it as a reference point.
-
 \textbf{Reward models and judges.} Step reward models such as ToolRM~\cite{toolrm} and AgentPRM~\cite{agentprm} rank candidate steps for best of N picking. Math-Shepherd~\cite{mathshepherd} labels steps automatically by whether a correct ending is still reachable, the idea behind our replay oracle. LLM as a judge~\cite{zheng2023judge} is the standard baseline. CRITICTOOL~\cite{critictool} shows small models critique their own tool calls poorly. Cascades that send only uncertain inputs to a larger model cut cost~\cite{frugalgpt}.
-
 \textbf{Typed decision classifiers.} Laya~\cite{laya} is a 0.4B ModernBERT~\cite{modernbert} model that answers typed questions (choice, yes/no) in one forward pass, in the Jev style~\cite{typesafe}. A Laya head already picks actions in a browser agent~\cite{layabrowser}.
-
 \textbf{Benchmarks.} BFCL v4 multi turn~\cite{bfcl} grades agents on the end state of simulated apps, but some tasks have unsound answer keys~\cite{bfclissues}. AgentDojo~\cite{agentdojo} checks utility in four realistic suites. $\tau^2$-bench is excluded because an agent that does nothing passes 23 of its 50 airline tasks~\cite{tau2}. AgentProcessBench~\cite{agentprocessbench} and AgentHallu~\cite{agenthallu} label wrong steps of agent traces.
-
 \textbf{The gap.} We found no work that uses a sub 1B classifier as the judge of a multi agent pipeline and compares it, question by question and live, with an SLM judge given the same state. That is the comparison this project makes.
 
 \section{Datasets created and used}\label{sec:data}
@@ -160,7 +159,7 @@ This correction mode (\code{rbh2dc}) won the correction action study (Section~\r
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.93\linewidth]{figs/fig1_system.pdf}
+\includegraphics[width=0.64\linewidth]{figs/fig1_system.pdf}
 \caption{System. The blue boxes are the two Laya checks. In the baseline, the 9B SLM judge sits in both places and reasons before each answer. In the typed variant, the done head is replaced by a three way head (done, off track, false claim).}\label{fig:system}
 \end{figure}
 
@@ -194,15 +193,21 @@ Laya~\cite{laya} (0.3.27, revision \code{e929ae5}) reads a state of up to 1,024 
   \item \textbf{Agent and checker design.} Block and warn became rollback plus a done check, after the correction action study (Section~\ref{sec:ablations}). Q3 (needed irreversible call) is folded into the step head, since unneeded irreversible calls (217) missed Gate 1. The binary done head was extended to the typed closing message head, which answers Q1 and Q2 at turn end.
   \item \textbf{Training data.} The directed runs with Qwen3.8 27B were dropped by team decision (24 October). The step head trains on natural mistakes of Qwen3.5 9B and Qwen3 8B, and the 8B steps stand in for the planned 4B pass.
   \item \textbf{Test passes.} The stop rule ``300 false claims or 8 passes'' ended at 8 passes. GLM-5.3-Flash is used in place of GLM-5.3. Turing became unavailable, so the 9B test ran on Ada and on a rented GPU, each paired with its own no judge run.
-  \item \textbf{Feedback on the proposal.} We report the class distribution (Table~\ref{tab:balance}), finetuning gain per head and per class against as is and against plain rules, and the correction action ablation (Section~\ref{sec:ablations}). On the contest between the classifier and the judge, we report off track on calls and on closing messages and false claims separately (Figure~\ref{fig:primary}b). The state component ablation was not run (Section~\ref{sec:limits}).
+  \item \textbf{Feedback on the proposal.} We report the class distribution (Table~\ref{tab:balance}), finetuning gain per head and class against as is and plain rules, the correction action ablation (Section~\ref{sec:ablations}), and off track on calls, off track on closing messages and false claims separately (Figure~\ref{fig:primary}b). The state part ablation was not run (Section~\ref{sec:limits}).
 \end{itemize}
 
 \section{Experiment runs}\label{sec:experiments}
 \subsection{Choosing the agent}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.55\linewidth]{figs/fig2_agents.pdf}
+\begin{minipage}[b]{0.5\linewidth}\centering
+\includegraphics[width=0.9\linewidth]{figs/fig2_agents.pdf}
 \caption{Agent models on the same 120 validation tasks. Qwen3.5 9B with reasoning off is our agent.}\label{fig:agents}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.46\linewidth}\centering
+\includegraphics[width=0.85\linewidth]{figs/fig3_test_baselines.pdf}
+\caption{Pass rates on BFCL test and AgentDojo (Qwen3 8B agent), 95\% confidence intervals.}\label{fig:test8b}
+\end{minipage}
 \end{figure}
 Qwen3.5 4B passes 40.0\% against 25.8\% for Qwen3 8B, so model generation matters more than size. The 9B passes 43.3\% on validation and 52.7\% [44.8, 60.5] on train. Turning reasoning on costs 6.6 points and 2.5 times the time, so the agent runs with reasoning off.
 
@@ -223,11 +228,6 @@ Laya finetuned, frozen & 1,200 & 13.5 [9.7, 17.8] & \m2.4 [\m5.2, +0.2] & & \\
 \bottomrule
 \end{tabularx}
 \end{table}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figs/fig3_test_baselines.pdf}
-\caption{Pass rates on BFCL test and AgentDojo (Qwen3 8B agent), 95\% confidence intervals.}\label{fig:test8b}
-\end{figure}
 Off the shelf, no small judge is usable. Laya as is blocked 87.6\% of judged steps, and Granite Guardian called all 169 calls it saw risky, so every run hit the step cap. Plain rules block good calls and cost 8.3 points. In plain block mode, finetuned Laya is within noise of no judge (\m2.4 [\m5.2, +0.2]) and below the 8B judge (\m3.9 [\m7.1, \m1.1]). Plain mode asks the done head again on every retry of a flagged closing message, so 596 of the 1,200 tasks run into the 20 step cap. The 9B system's rollback mode, with at most two done checks per turn, avoids this loop, and there Laya turns into a gain (Section~\ref{sec:eval-live}).
 
 \subsection{Off the shelf judges, offline}
@@ -245,19 +245,19 @@ LettuceDetect (false claim only) & 0.18 & 0.22 & 0.15 \\
 \bottomrule
 \end{tabularx}
 \end{table}
-Laya as is stays at AUROC 0.39 to 0.67 across 4 state formats and 8 question wordings. Only the hosted Jev classifier showed signal, on closing messages (AUROC 0.81). Finetuning is needed.
+Laya as is stays at AUROC 0.39 to 0.67 across 4 state formats and 8 question wordings; only the hosted Jev classifier showed signal, on closing messages (AUROC 0.81). Finetuning is needed.
 
 \subsection{Finetuned Laya on validation}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_offline.pdf}
+\includegraphics[width=0.74\linewidth]{figs/fig_offline.pdf}
 \caption{Finetuned Laya on validation. (a) Step check on 1,277 calls against the replay labels. (b, c) Done check on 495 turn ends against the oracle, positive class not done. Panel (c) shows Laya at threshold 0.5, at 0.56 from cross validation on train, and at the discarded dev threshold.}\label{fig:offlinelaya}
 \end{figure}
 \textbf{Step check.} Finetuning lifts AUROC from 0.57 as is to 0.90 on 2,427 pooled validation calls. On the 9B's 1,277 calls Laya scores F1 0.59 and AUROC 0.91, against 0.24 and 0.61 for the 9B judge. It beats ``flag every irreversible call'' on irreversible calls (AUROC 0.74 against 0.50) and also ranks reads (0.95), so it reads arguments and context, not just function names. Against the annotators with the judge on its own harness prompt, Laya leads on off track tool calls by +7.2 to +9.2 F1.
 
 \textbf{Done check.} AUROC 0.79 against 0.53 as is and 0.59 for a head-only finetune. F1 is 0.53 at the train-chosen threshold against 0.41 for the 9B judge.
 
-\textbf{Live on validation.} On 120 validation tasks no system differed from no judge beyond noise. Two identical no judge runs disagree on 28 of 120 tasks. The oracle's +4.2 [\m1.7, +10.8] showed how wide intervals are at this size, which is why the claim rests on the 1,200 task test set.
+\textbf{Live on validation.} On 120 validation tasks no system differed from no judge beyond noise: two identical no judge runs disagree on 28 tasks, and even the oracle's +4.2 [\m1.7, +10.8] crosses zero. Hence the claim rests on the 1,200 task test set.
 
 \textbf{Primary metric on validation, frozen design.} Laya minus the 9B judge is \m1.0 to +2.0 F1. The reason: the done head can only say ``not done'', which the proposal's scoring counts as a false claim. On validation that gives 105 to 108 false claim flags against 6 to 15 real false claims, and no off track flag on any closing message, even though the annotators mark 51 to 66 closing messages off track. This diagnosis, made on validation before any test run, is the motivation for the typed head.
 
@@ -271,8 +271,14 @@ Laya as is stays at AUROC 0.39 to 0.67 across 4 state formats and 8 question wor
 \section{Ablations}\label{sec:ablations}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\linewidth]{figs/fig_forest.pdf}
+\begin{minipage}[b]{0.58\linewidth}\centering
+\includegraphics[width=0.88\linewidth]{figs/fig_forest.pdf}
 \caption{Correction actions on validation: pass rate change against no judge (120 tasks per system). Rollback plus the done check is the only action that helps with the oracle on every agent, and it is the mode used on test.}\label{fig:forest}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.38\linewidth}\centering
+\includegraphics[width=\linewidth]{figs/fig_typed_val.pdf}
+\caption{Validation primary, Laya minus the 9B SLM judge, for the frozen design and the three typed head seeds (guide v2 labels). Every typed seed clears the proposal's 9 point bar on every label set.}\label{fig:typedval}
+\end{minipage}
 \end{figure}
 
 {\tablestyle
@@ -302,17 +308,12 @@ Long context window (Qwen3 8B test) & Rerunning long context at 20,480 instead o
 \bottomrule
 \end{xltabular}}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\linewidth]{figs/fig_typed_val.pdf}
-\caption{Validation primary, Laya minus the 9B SLM judge, for the frozen design and the three typed head seeds (guide v2 labels). Every typed seed clears the proposal's 9 point bar on every label set.}\label{fig:typedval}
-\end{figure}
 
 \section{Evaluations}\label{sec:eval}
 \subsection{Task accuracy and cost on test}\label{sec:eval-live}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_live_test.pdf}
+\includegraphics[width=0.76\linewidth]{figs/fig_live_test.pdf}
 \caption{Live test, Qwen3.5 9B agent, rollback plus done check, 1,200 tasks per system. (a) Pass rate change against no judge, paired bootstrap over the 100 test scenarios. The typed head is compared with the no judge passes on the same rented GPU, the other rows with the Ada no judge run. (b) Pass rate against time per task on Ada.}\label{fig:live}
 \end{figure}
 
@@ -338,7 +339,7 @@ Typed Laya (rented GPU) & 63.3 & 40.3 & 33.3 & 62.0 & 49.8 & +3.2 [+0.4, +6.2] &
 \subsection{Detection: primary metric on test}\label{sec:eval-primary}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_primary_test.pdf}
+\includegraphics[width=0.76\linewidth]{figs/fig_primary_test.pdf}
 \caption{Primary metric on the 7,214 labelled test steps. (a) By label set; orange numbers are typed Laya minus the 9B judge, in F1 points. (b) Per class, on the steps where both annotators agree.}\label{fig:primary}
 \end{figure}
 
@@ -369,21 +370,18 @@ Both agree & 9B SLM judge & 0.23 (775) & 0.25 (49) & 0.240 & & \\
 \subsection{Why the agent fails}\label{sec:eval-fail}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.62\linewidth]{figs/fig_failures.pdf}
+\begin{minipage}[b]{0.55\linewidth}\centering
+\includegraphics[width=0.88\linewidth]{figs/fig_failures.pdf}
 \caption{Type of the first failed turn of each failed test task: 1,711 of the 3,200 no judge tasks, from the replay oracle.}\label{fig:failures}
-\end{figure}
-Most failures are unfinished turns: the agent stopped early (24.8\%), asked the user instead of acting (24.3\%) or said ``done'' when it was not (14.7\%). Only 32\% are bad steps that a step check can see: acting when it should have asked (16.8\%) and a wrong step (15.3\%). This is why the turn end check carries most of the gain, and why the typed head's off track class matters. When the agent is sent back, it often stops again. BFCL's scripted user gives no new information, so a bare ``not done, try again'' helps less than a specific hint would. Laya recovers 36\% of the oracle's gain by flagging alone. Going further means guiding, not just flagging: ``you forgot to send the email'' instead of ``not done''. The typed head is the first step, since it knows which kind of problem it saw.
-
-\subsection{Label quality}\label{sec:annot}
-\begin{figure}[H]
-\centering
-\begin{minipage}{0.44\linewidth}
-\includegraphics[width=\linewidth]{figs/fig_kappa.pdf}
 \end{minipage}\hfill
-\begin{minipage}{0.53\linewidth}
-\caption{LLM annotators against the human consensus on a fresh sample of 100 validation steps, kappa reweighted to the real mix. The shaded band is the proposal's ``label more steps'' range, the dashed line the 0.7 bar. Guide v3 was written from a separate 100 step pilot, so the fresh sample is the fair test.}\label{fig:kappa}
+\begin{minipage}[b]{0.38\linewidth}\centering
+\includegraphics[width=0.85\linewidth]{figs/fig_kappa.pdf}
+\caption{LLM annotators against the human consensus on a fresh sample of 100 validation steps, kappa reweighted to the real mix. Shaded band: the proposal's ``label more steps'' range; dashed line: the 0.7 bar. Guide v3 was written from a separate 100 step pilot, so the fresh sample is the fair test.}\label{fig:kappa}
 \end{minipage}
 \end{figure}
+Most failures are unfinished turns: the agent stopped early (24.8\%), asked the user instead of acting (24.3\%) or said ``done'' when it was not (14.7\%). Only 32\% are bad steps that a step check can see: acting when it should have asked (16.8\%) and a wrong step (15.3\%). This is why the turn end check carries most of the gain, and why the typed head's off track class matters. Sent back, the agent often stops again, and BFCL's scripted user gives no new information, so a bare ``not done'' helps less than a specific hint. Laya recovers 36\% of the oracle's gain by flagging alone; going further means guiding: ``you forgot to send the email'' instead of ``not done''. The typed head is the first step, since it knows which kind of problem it saw.
+
+\subsection{Label quality}\label{sec:annot}
 Swayam and Aaditya each labelled 200 sampled validation steps blind, half flagged by the annotators, and Pavan refereed their disagreements. After one guide rewrite, the annotators reach kappa 0.84 (A) and 0.71 (B) against the human consensus. The proposal's second round, a human check of 100 test steps, is also done, so the check covers 300 steps in all. A reaches the proposal's top band (above 0.8) and B the 0.7 bar. On the 7,214 test steps, the two annotators agree on 97.0\% of tool calls (kappa 0.57), 75.8\% of closing messages over the three scored classes (kappa 0.55), and 96.7\% on false claims (kappa 0.57). Every result is reported against each annotator separately and where both agree, and the conclusions hold under all three.
 
 \section{Limitations}\label{sec:limits}
@@ -397,41 +395,45 @@ Swayam and Aaditya each labelled 200 sampled validation steps blind, half flagge
 \end{itemize}
 
 \section{Conclusions}\label{sec:conclusion}
-A 0.4B classifier can replace a reasoning 9B judge inside a small local agent. On 1,200 held out BFCL tasks, Laya gives the same +3.7 point gain as the 9B judge, at zero judge tokens and a third of the time per task. On detection, the decisive design choice is the closing message. A capable small agent fails mostly by leaving turns unfinished, not by taking wrong steps. A binary done head misses those turns under the proposal's scoring and falls 17 points short of the judge. A typed head that separates ``forgot a step'' from ``false claim'' beats the judge by 13 to 19 F1 points on the same test steps. Finetuning matters: off the shelf, every small judge we tried blocked almost everything.
+A 0.4B classifier can replace a reasoning 9B judge inside a small local agent. On 1,200 held out BFCL tasks, Laya gives the same +3.7 point gain as the 9B judge, at zero judge tokens and a third of the time per task. On detection, the decisive choice is the closing message: a capable small agent fails mostly by leaving turns unfinished, which a binary done head cannot call off track, so it falls 17 points short of the judge. A typed head that separates ``forgot a step'' from ``false claim'' beats the judge by 13 to 19 F1 points on the same test steps. Finetuning matters: off the shelf, every small judge we tried blocked almost everything.
 
 \textbf{Future work.} (1) Confirm the typed head on fresh test passes. (2) Turn its typed answer into specific guidance for the agent, the most direct route to more of the oracle's +10.3 points. (3) Confidence-gated escalation of uncertain steps to the SLM judge. (4) Outside benchmarks with multi app tasks, such as AppWorld, and step-labelled sets such as AgentProcessBench.
 
 \section{Team}
-\begin{table}[H]
-\centering\tablestyle
-\caption{Main work of each member. All four wrote and revised the proposal.}\label{tab:roles}
-\begin{tabularx}{\linewidth}{P{0.16\linewidth}Y}
-\toprule
-\textbf{Shuban Biswas} & Harness and replay oracle. Qwen3 8B baselines on BFCL test and AgentDojo, Qwen3 8B and Qwen3.5 4B validation runs, correction action study, offline scorer for off the shelf judges and plain rules. \\
-\textbf{Ch Pavan Harshit} & Qwen3.5 9B agent runs, LLM annotation runs, Laya finetuning of the step and done heads, live checks and primary metric analysis, the 8 test passes, test labels and 9B judge on the rented GPU, the typed closing message head and its live run, referee of the human check. \\
-\textbf{Swayam Goyal} & Human check of the LLM annotations (with Aaditya), annotation guide v3, Gate 1 counts, step head seeds and threshold cross validation on Ada, the frozen heads, Laya on the Qwen3 8B test, and the live 9B test runs on Ada. \\
-\textbf{Aaditya Sharma} & Human check of the LLM annotations (with Swayam), review of disagreements by error type, final report and figures. \\
-\bottomrule
-\end{tabularx}
-\end{table}
+All four wrote and revised the proposal. Main work of each member:
+\begin{itemize}
+  \item \textbf{Shuban Biswas:} harness and replay oracle; Qwen3 8B baselines on BFCL test and AgentDojo; Qwen3 8B and Qwen3.5 4B validation runs; correction action study; offline scorer for off the shelf judges and plain rules.
+  \item \textbf{Ch Pavan Harshit:} Qwen3.5 9B agent runs; LLM annotation runs; Laya finetuning of the step and done heads; live checks and primary metric analysis; the 8 test passes, test labels and 9B judge on the rented GPU; the typed closing message head and its live run; referee of the human check.
+  \item \textbf{Swayam Goyal:} human check of the LLM annotations (with Aaditya); annotation guide v3; Gate 1 counts; step head seeds and threshold cross validation on Ada; the frozen heads; Laya on the Qwen3 8B test; the live 9B test runs on Ada.
+  \item \textbf{Aaditya Sharma:} human check of the LLM annotations (with Swayam); review of disagreements by error type; final report and figures.
+\end{itemize}
 
 \section{Reproducibility and repository}\label{sec:repo}
-\url{https://github.com/ch-pavan/lma-grp-project} holds all code, data and results, with a top level \code{README.md} that gives the setup and the command for every table and figure. Key folders: \code{shuban\_findings/} (harness, baselines, offline scorer), \code{analysis/} (oracle and step labels, annotation, Laya training and scoring, write ups), \code{human\_check/} (guides, samples, sheets, results), \code{runs/} (run outputs, labels, Laya datasets, GPU job scripts for Turing, Ada and the rented GPU) and \code{final\_report/} (this report, its figures and the number-to-source map). Laya weights are on the GitHub releases \code{laya-heads-frozen-2026-11-08} and \code{laya-typed-head-2026-11-09}.
+The repository holds all code, data and results; its \code{README.md} gives the setup and the command for every table and figure. Key folders: \code{shuban\_findings/} (harness, baselines, offline scorer), \code{analysis/} (oracle and step labels, annotation, Laya training and scoring, write ups), \code{human\_check/} (guides, samples, sheets, results), \code{runs/} (run outputs, labels, Laya datasets, GPU job scripts) and \code{final\_report/} (this report, figures, number-to-source map). Laya weights are on the GitHub releases \code{laya-heads-frozen-2026-11-08} and \code{laya-typed-head-2026-11-09}.
 
-{\footnotesize
-\begin{tabular}{@{}ll@{}}
+{\scriptsize\renewcommand{\arraystretch}{0.95}\noindent
+\begin{minipage}[t]{0.46\linewidth}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.6\linewidth}Y@{}}
 \code{python analysis/rb\_test\_results.py} & live test results (Table~\ref{tab:live}) \\
 \code{python analysis/live\_compare.py} & typed head live result \\
 \code{python analysis/primary\_test.py} & primary metric on test (Table~\ref{tab:primary}) \\
 \code{python analysis/oracle\_labels.py runs/raw/test9b/test} & failure types on test (Figure~\ref{fig:failures}) \\
+\end{tabularx}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.52\linewidth}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.67\linewidth}Y@{}}
 \code{python analysis/primary\_val.py} & primary metric on validation \\
 \code{python human\_check/score.py human\_check/val2 -{}-guide v3} & annotation check (Figure~\ref{fig:kappa}) \\
-\code{python final\_report/scripts/test\_agreement.py} & annotator agreement on test \\
-\code{python final\_report/scripts/live\_cost.py} & live cost and per version results \\
-\end{tabular}}
+\code{python final\_report/scripts/test\_agreement.py} & annotator agreement \\
+\code{python final\_report/scripts/live\_cost.py} & live cost, per version \\
+\end{tabularx}
+\end{minipage}}
 
+
+\begin{multicols}{2}
+\footnotesize\raggedright
 \begin{thebibliography}{99}
-\setlength{\itemsep}{0pt}\small
+\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
 \bibitem{critictool} CRITICTOOL: evaluating self critique of LLMs in tool calling error scenarios. arXiv 2506.13977.
 \bibitem{realtime} Real time detection and repair of LLM agent failures. arXiv 2608.02464.
 \bibitem{agenthallu} AgentHallu: benchmarking automated hallucination attribution of LLM based agents. arXiv 2601.06818.
@@ -465,5 +467,6 @@ A 0.4B classifier can replace a reasoning 9B judge inside a small local agent. O
 \bibitem{baltes} S.\ Baltes et al. Guidelines for empirical studies in software engineering involving large language models. arXiv 2508.15503.
 \bibitem{glm} GLM-5.3, model card. huggingface.co/zai-org.
 \end{thebibliography}
+\end{multicols}
 
 \end{document}
