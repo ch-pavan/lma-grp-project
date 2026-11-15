@@ -430,8 +430,9 @@ The repository holds all code, data and results; its \code{README.md} gives the 
 \end{minipage}}
 
 
-\begin{multicols}{2}
-\footnotesize\raggedright
+\setlength{\multicolsep}{0pt}
+\begin{multicols}{2}[\section*{References}\vspace{-2pt}]
+\footnotesize\raggedright\renewcommand{\section}[2]{}%
 \begin{thebibliography}{99}
 \setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
 \bibitem{critictool} CRITICTOOL: evaluating self critique of LLMs in tool calling error scenarios. arXiv 2506.13977.
